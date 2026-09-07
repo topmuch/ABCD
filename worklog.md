@@ -101,3 +101,32 @@ Stage Summary:
   - Message detail modal opens on click, shows full message + reply actions
   - VLM: "clean, professional, polished and intuitive"
 - APIs: /api/dashboard (aggregate stats) + /api/messages (paginated list) both return HTTP 200 with real DB data
+
+---
+Task ID: 5
+Agent: Main (Z.ai Code)
+Task: Add Clients, Équipe, SEO pages to dashboard + create GitHub repo
+
+Work Log:
+- Added Prisma models: Client, TeamMember, SeoSettings; ran db:push
+- Created API routes:
+  - /api/clients (GET list with search/status filter, POST create) + /api/clients/[id] (PUT update, DELETE)
+  - /api/team (GET list with search, POST create) + /api/team/[id] (PUT update, DELETE)
+  - /api/seo (GET singleton with auto-create defaults, PUT upsert)
+- Refactored dashboard with sidebar layout (layout.tsx): desktop sidebar + mobile drawer, 5 nav items (Vue d'ensemble, Clients, Équipe, Messages, Paramètres SEO)
+- Built Clients page (/dashboard/clients): 4 KPI stat cards (Total/Prospects/Actifs/Inactifs), searchable/filterable table, add/edit modal with full form (name, company, email, phone, country, service, status, notes), delete with confirm
+- Built Équipe page (/dashboard/equipe): member cards grid with initials avatars (color-coded), role/experience/email/phone, active toggle switch, add/edit modal, delete
+- Built Messages page (/dashboard/messages): dedicated full messages table with pagination, search, detail modal
+- Built SEO settings page (/dashboard/seo): form for site title, meta description (with char counters), keywords, Open Graph (title/description), Google Analytics ID, Twitter handle, live Google search preview, sticky save bar
+- Lint clean (0 errors, 0 warnings)
+- Verified via Agent Browser + VLM: all 4 pages render correctly, sidebar nav works, CRUD functional (added client "Fatou Sow" via UI: rows 2→3), seeded 2 clients + 2 team members, SEO page pre-filled with defaults
+- GitHub: created repo github.com/topmuch/ABCD (public), pushed code (5 commits)
+  - Untracked .env, db/custom.db, upload/ from git (added to .gitignore)
+  - Added .env.example for reference
+  - Verified NO secrets leaked in repo (.env, db, uploads all absent)
+
+Stage Summary:
+- Dashboard now has 5 sections accessible via sidebar: Vue d'ensemble, Clients, Équipe, Messages, Paramètres SEO
+- Full CRUD for Clients and Team, SEO settings singleton
+- GitHub repo: https://github.com/topmuch/ABCD (public, main branch)
+- SECURITY: token used for repo creation; user advised to revoke/regenerate it
