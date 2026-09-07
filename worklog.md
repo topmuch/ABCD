@@ -46,3 +46,25 @@ Stage Summary:
 - VLM visual analysis: "Excellent execution with no visible technical or design flaws" — professional navy/gold palette, coherent typography, no broken layouts
 - Final public assets: logo-abcd-transparent.png, hero-port.jpg, warehouse.jpg, truck.jpg, airfreight.jpg
 - Dev server runs on port 3000 (note: must be restarted if killed between sessions via `bun run dev`)
+
+---
+Task ID: 3
+Agent: Main (Z.ai Code)
+Task: Fix hero image (make 16:9) and fix invisible header menu
+
+Work Log:
+- Regenerated `/public/hero-port.jpg` at 1344x768 (16:9, supported size) with new cinematic Port of Dakar prompt
+- Changed Hero section from `min-h-[100svh]` (full screen) to `sm:aspect-[16/9]` with `min-h-[480px]` on mobile and `sm:max-h-[78vh]` cap — now displays in proper 16:9 on desktop, content-driven on mobile
+- Reduced hero content vertical spacing (pt/pb, mt-8 stats) and stat font sizes to fit 16:9 frame
+- Removed the "scroll cue" element (no longer needed with shorter hero)
+- Fixed invisible header menu: replaced `bg-transparent` (when not scrolled) with `bg-gradient-to-b from-[#0c1f4a]/85 via-[#0c1f4a]/45 to-transparent` — dark navy gradient at top ensures white nav text is always readable over any hero image
+- Verified via Agent Browser + VLM:
+  - Desktop: hero is 16:9, nav menu (Accueil/À propos/Services/Atouts/Contact + Demander un devis) clearly visible, logo visible top-left
+  - Mobile (390px): hero height reasonable, hamburger menu visible top-right, logo visible, text readable
+  - Lint clean, no console errors
+
+Stage Summary:
+- Two user-reported issues resolved:
+  1. Hero image too big → now 16:9 aspect ratio with newly generated image
+  2. Menu invisible on hero → now has dark gradient background making white nav text always readable
+- Dev server running on port 3000 (HTTP 200)

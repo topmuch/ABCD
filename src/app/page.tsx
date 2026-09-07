@@ -213,7 +213,7 @@ function Header() {
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
         scrolled
           ? "bg-background/90 backdrop-blur-md border-b border-border shadow-sm"
-          : "bg-transparent"
+          : "bg-gradient-to-b from-[#0c1f4a]/85 via-[#0c1f4a]/45 to-transparent"
       }`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -337,11 +337,10 @@ function Hero() {
   return (
     <section
       id="accueil"
-      className="relative min-h-[100svh] flex items-center overflow-hidden"
+      className="relative w-full sm:aspect-[16/9] min-h-[480px] sm:min-h-0 sm:max-h-[78vh] flex items-center overflow-hidden"
     >
-      {/* Background image */}
+      {/* Background image (16:9) */}
       <div className="absolute inset-0">
-        { }
         <img
           src="/hero-port.jpg"
           alt="Port de Dakar — logistique et transport maritime"
@@ -352,7 +351,7 @@ function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-28 pb-20 sm:pt-32 sm:pb-24">
+      <div className="relative mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 pt-24 pb-12 sm:pt-28 sm:pb-14">
         <div className="max-w-3xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -422,14 +421,14 @@ function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.35 }}
-            className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/10 rounded-xl overflow-hidden border border-white/15 max-w-2xl"
+            className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/10 rounded-xl overflow-hidden border border-white/15 max-w-2xl"
           >
             {STATS.map((s) => (
-              <div key={s.label} className="bg-[#0c1f4a]/60 backdrop-blur-sm p-4">
-                <div className="text-2xl sm:text-3xl font-extrabold text-white">
+              <div key={s.label} className="bg-[#0c1f4a]/60 backdrop-blur-sm p-3 sm:p-4">
+                <div className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white">
                   {s.value}
                 </div>
-                <div className="mt-1 text-xs sm:text-sm text-white/70 leading-tight">
+                <div className="mt-1 text-[11px] sm:text-sm text-white/70 leading-tight">
                   {s.label}
                 </div>
               </div>
@@ -438,17 +437,6 @@ function Hero() {
         </div>
       </div>
 
-      {/* Scroll cue */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2 text-white/60">
-        <span className="text-[11px] uppercase tracking-widest">Défiler</span>
-        <div className="h-9 w-5 rounded-full border border-white/40 flex items-start justify-center p-1">
-          <motion.span
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity }}
-            className="block h-1.5 w-1.5 rounded-full bg-accent"
-          />
-        </div>
-      </div>
     </section>
   );
 }
