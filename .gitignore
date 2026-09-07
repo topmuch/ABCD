@@ -52,3 +52,16 @@ prompt
 server.log
 # Skills directory
 /skills/
+
+# Database (local SQLite)
+/db/*.db
+/db/*.db-journal
+
+# User uploads (private documents)
+/upload/
+
+# Worklog / scratch files
+worklog.md
+verify-*.png
+v-*.png
+page1_img1.jpg

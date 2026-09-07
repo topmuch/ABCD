@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard,
-  ArrowLeft,
   Mail,
   Package,
   Globe2,
@@ -827,139 +825,101 @@ export default function DashboardPage() {
   }, [fetchDashboard]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-secondary/30">
-      {/* Top bar */}
-      <header className="sticky top-0 z-40 bg-background/90 backdrop-blur-md border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg overflow-hidden bg-white p-0.5 ring-1 ring-border shrink-0">
-                { }
-                <img
-                  src="/logo-abcd-transparent.png"
-                  alt="Logo ABCD Ltd"
-                  className="h-full w-full object-contain"
-                />
-              </div>
-              <div className="leading-none">
-                <div className="text-base sm:text-lg font-extrabold tracking-tight">
-                  ABCD <span className="text-accent">Ltd</span>
-                  <span className="ml-2 text-xs font-medium text-muted-foreground hidden sm:inline">
-                    Tableau de bord
-                  </span>
-                </div>
-                <div className="text-[10px] sm:text-xs text-muted-foreground mt-0.5">
-                  African Business Company for Development
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button asChild variant="outline" size="sm">
-                <Link href="/">
-                  <ArrowLeft className="mr-1.5 h-4 w-4" />
-                  <span className="hidden sm:inline">Retour au site</span>
-                  <span className="sm:hidden">Site</span>
-                </Link>
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={fetchDashboard}
-                title="Actualiser"
-              >
-                <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main */}
-      <main className="flex-1 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        {/* Title */}
-        <div className="mb-6 flex items-center gap-3">
+    <main className="flex-1 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      {/* Title */}
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
             <LayoutDashboard className="h-5 w-5 text-primary" />
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
-              Tableau de bord
+              Vue d'ensemble
             </h1>
             <p className="text-sm text-muted-foreground mt-0.5">
-              Vue d'ensemble des activités et demandes — {data ? new Date(data.generatedAt).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) : "—"}
+              {data ? new Date(data.generatedAt).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) : "—"}
             </p>
           </div>
         </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={fetchDashboard}
+          title="Actualiser"
+        >
+          <RefreshCw className={`mr-1.5 h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+          Actualiser
+        </Button>
+      </div>
 
-        {/* KPI cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <KpiCard
-            icon={Mail}
-            label="Messages reçus"
-            value={loading ? "—" : data?.stats.totalMessages ?? 0}
-            sub={`${data?.stats.messagesThisMonth ?? 0} ce mois-ci`}
-            accent="navy"
-            delay={0}
-          />
-          <KpiCard
-            icon={Package}
-            label="Services proposés"
-            value={loading ? "—" : data?.stats.servicesCount ?? 0}
-            sub="Transit • Transport • Logistique"
-            accent="gold"
-            delay={0.05}
-          />
-          <KpiCard
-            icon={Globe2}
-            label="Pays desservis"
-            value={loading ? "—" : data?.stats.countriesCount ?? 0}
-            sub="Depuis Dakar"
-            accent="teal"
-            delay={0.1}
-          />
-          <KpiCard
-            icon={Clock}
-            label="Années d'activité"
-            value={loading ? "—" : data?.stats.yearsActive ?? 0}
-            sub={`Depuis ${data?.stats.foundedYear ?? "2019"}`}
-            accent="green"
-            delay={0.15}
-          />
-        </div>
+      {/* KPI cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <KpiCard
+          icon={Mail}
+          label="Messages reçus"
+          value={loading ? "—" : data?.stats.totalMessages ?? 0}
+          sub={`${data?.stats.messagesThisMonth ?? 0} ce mois-ci`}
+          accent="navy"
+          delay={0}
+        />
+        <KpiCard
+          icon={Package}
+          label="Services proposés"
+          value={loading ? "—" : data?.stats.servicesCount ?? 0}
+          sub="Transit • Transport • Logistique"
+          accent="gold"
+          delay={0.05}
+        />
+        <KpiCard
+          icon={Globe2}
+          label="Pays desservis"
+          value={loading ? "—" : data?.stats.countriesCount ?? 0}
+          sub="Depuis Dakar"
+          accent="teal"
+          delay={0.1}
+        />
+        <KpiCard
+          icon={Clock}
+          label="Années d'activité"
+          value={loading ? "—" : data?.stats.yearsActive ?? 0}
+          sub={`Depuis ${data?.stats.foundedYear ?? "2019"}`}
+          accent="green"
+          delay={0.15}
+        />
+      </div>
 
-        {/* Charts row */}
-        <div className="grid lg:grid-cols-3 gap-4 mb-6">
-          <div className="lg:col-span-2">
-            <MessagesTrendChart data={data?.monthlyTrend || []} />
-          </div>
-          <ServicesDonut services={data?.services || []} />
+      {/* Charts row */}
+      <div className="grid lg:grid-cols-3 gap-4 mb-6">
+        <div className="lg:col-span-2">
+          <MessagesTrendChart data={data?.monthlyTrend || []} />
         </div>
+        <ServicesDonut services={data?.services || []} />
+      </div>
 
-        {/* Second charts row */}
-        <div className="grid lg:grid-cols-3 gap-4 mb-6">
-          <div className="lg:col-span-2">
-            <SubjectDistributionChart data={data?.subjectDistribution || []} />
-          </div>
-          <CountriesCoverage countries={data?.countries || []} />
+      {/* Second charts row */}
+      <div className="grid lg:grid-cols-3 gap-4 mb-6">
+        <div className="lg:col-span-2">
+          <SubjectDistributionChart data={data?.subjectDistribution || []} />
         </div>
+        <CountriesCoverage countries={data?.countries || []} />
+      </div>
 
-        {/* Messages table */}
-        <div className="mb-6">
-          <MessagesTable />
-        </div>
+      {/* Messages table */}
+      <div className="mb-6">
+        <MessagesTable />
+      </div>
 
-        {/* Footer */}
-        <div className="pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-muted-foreground">
-          <p>
-            © {new Date().getFullYear()} African Business Company for Development
-            SARL (A.B.C.D Ltd) — Tableau de bord interne
-          </p>
-          <p className="flex items-center gap-1.5">
-            <Calendar className="h-3.5 w-3.5" />
-            Données mises à jour le {data ? new Date(data.generatedAt).toLocaleString("fr-FR") : "—"}
-          </p>
-        </div>
-      </main>
-    </div>
+      {/* Footer */}
+      <div className="pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-muted-foreground">
+        <p>
+          © {new Date().getFullYear()} African Business Company for Development
+          SARL (A.B.C.D Ltd) — Tableau de bord interne
+        </p>
+        <p className="flex items-center gap-1.5">
+          <Calendar className="h-3.5 w-3.5" />
+          Données mises à jour le {data ? new Date(data.generatedAt).toLocaleString("fr-FR") : "—"}
+        </p>
+      </div>
+    </main>
   );
 }
