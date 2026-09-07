@@ -68,3 +68,36 @@ Stage Summary:
   1. Hero image too big → now 16:9 aspect ratio with newly generated image
   2. Menu invisible on hero → now has dark gradient background making white nav text always readable
 - Dev server running on port 3000 (HTTP 200)
+
+---
+Task ID: 4
+Agent: Main (Z.ai Code)
+Task: Create admin dashboard for ABCD Ltd
+
+Work Log:
+- Created `/api/dashboard/route.ts`: aggregate stats endpoint (totalMessages, messagesThisMonth, monthlyTrend for 6 months, recentMessages, subjectDistribution, services catalog, countries list)
+- Created `/api/messages/route.ts`: paginated messages list with search filter (name/email/subject/message)
+- Created `/dashboard/page.tsx`: full dashboard UI with:
+  - Sticky header (logo, title, "Retour au site" button, refresh)
+  - 4 KPI cards (Messages reçus, Services, Pays, Années d'activité) with brand-colored icons
+  - Messages trend AreaChart (6 months, recharts)
+  - Services donut PieChart (8 services with custom icons + color legend)
+  - Subject distribution horizontal BarChart
+  - Countries coverage grid (6 pays, Sénégal highlighted as base)
+  - Messages table (paginated, searchable, skeleton loading, empty state)
+  - Message detail modal (click row → name/date/email/phone/subject/message + "Répondre par email" + "Appeler" buttons)
+  - Footer with last-updated timestamp
+- Added dashboard link in main site footer ("Tableau de bord" with LayoutDashboard icon)
+- Lint clean (0 errors, 0 warnings)
+
+Stage Summary:
+- Dashboard accessible at /dashboard, linked from site footer
+- Verified via Agent Browser + VLM:
+  - Page loads HTTP 200, title correct, no console errors
+  - KPIs show real values (2 messages, 8 services, 6 pays, 7 years)
+  - All 3 charts render with data (area trend, donut services, bar subjects)
+  - Messages table loads 2 real records (Awa Ndiaye, Test Client)
+  - Search filter works
+  - Message detail modal opens on click, shows full message + reply actions
+  - VLM: "clean, professional, polished and intuitive"
+- APIs: /api/dashboard (aggregate stats) + /api/messages (paginated list) both return HTTP 200 with real DB data

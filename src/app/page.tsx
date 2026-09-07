@@ -25,6 +25,7 @@ import {
   CheckCircle2,
   Send,
   Languages,
+  LayoutDashboard,
   Building2,
   Route,
   HandshakeIcon,
@@ -1260,9 +1261,18 @@ function Footer() {
             © {new Date().getFullYear()} African Business Company for Development
             SARL (A.B.C.D Ltd). Tous droits réservés.
           </p>
-          <p className="text-xs text-white/55">
-            Dakar, Sénégal — Depuis 2019
-          </p>
+          <div className="flex items-center gap-4">
+            <a
+              href="/dashboard"
+              className="text-xs text-white/55 hover:text-accent transition-colors inline-flex items-center gap-1.5"
+            >
+              <LayoutDashboard className="h-3.5 w-3.5" />
+              Tableau de bord
+            </a>
+            <p className="text-xs text-white/55">
+              Dakar, Sénégal — Depuis 2019
+            </p>
+          </div>
         </div>
       </div>
     </footer>
