@@ -65,3 +65,6 @@ worklog.md
 verify-*.png
 v-*.png
 page1_img1.jpg
+
+# Runtime PID / process files
+.zscripts/
