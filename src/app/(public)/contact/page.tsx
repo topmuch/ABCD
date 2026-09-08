@@ -8,6 +8,8 @@ import {
   Mail,
   Languages,
   Send,
+  Navigation,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -267,6 +269,131 @@ export default function ContactPage() {
               </Card>
             </Reveal>
           </div>
+        </div>
+      </section>
+
+      {/* Carte & itinéraire */}
+      <section className="py-16 sm:py-24 bg-background">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <div className="text-center mb-10">
+              <Badge variant="outline" className="mb-4 text-primary border-primary/30">
+                <Navigation className="mr-1.5 h-3.5 w-3.5" />
+                Nous trouver
+              </Badge>
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
+                Cité keur Gorgui, Sacré Coeur — Dakar
+              </h2>
+              <p className="mt-3 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+                Notre bureau est situé à Dakar, au cœur de Sacré Coeur. Utilisez
+                la carte ci-dessous pour vous rendre chez nous.
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.05}>
+            <div className="grid lg:grid-cols-3 gap-5">
+              {/* Carte interactive */}
+              <div className="lg:col-span-2">
+                <div className="relative rounded-2xl overflow-hidden ring-1 ring-border shadow-lg h-[380px] sm:h-[460px] bg-secondary">
+                  <iframe
+                    title="Carte ABCD Ltd - Sacré Coeur, Dakar"
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=-17.4850%2C14.7000%2C-17.4450%2C14.7350&layer=mapnik&marker=14.7167%2C-17.4639"
+                    className="absolute inset-0 h-full w-full"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                  <div className="absolute top-4 left-4 z-10 bg-background/95 backdrop-blur-sm rounded-lg shadow-md ring-1 ring-border px-4 py-3 max-w-xs">
+                    <div className="flex items-center gap-2 text-sm font-bold text-foreground">
+                      <MapPin className="h-4 w-4 text-accent" />
+                      ABCD Ltd
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Cité keur Gorgui, Lot 01 villa 003<br />
+                      Sacré Coeur, Dakar, Sénégal
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Itinéraire & infos */}
+              <div className="space-y-4">
+                <Card className="ring-1 ring-border">
+                  <CardContent className="pt-6">
+                    <div className="flex items-start gap-3">
+                      <div className="h-11 w-11 rounded-lg bg-accent/15 flex items-center justify-center shrink-0">
+                        <Navigation className="h-5 w-5 text-accent" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-bold text-foreground">
+                          Obtenir l&apos;itinéraire
+                        </h3>
+                        <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                          Cliquez ci-dessous pour ouvrir l&apos;itinéraire vers
+                          notre bureau depuis votre position.
+                        </p>
+                      </div>
+                    </div>
+                    <Button
+                      asChild
+                      className="mt-4 w-full bg-accent text-accent-foreground hover:bg-accent/90"
+                    >
+                      <a
+                        href="https://www.google.com/maps/dir/?api=1&destination=Cit%C3%A9+keur+Gorgui+Sacr%C3%A9+Coeur+Dakar+S%C3%A9n%C3%A9gal"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Navigation className="mr-2 h-4 w-4" />
+                        Itinéraire Google Maps
+                        <ExternalLink className="ml-2 h-3.5 w-3.5" />
+                      </a>
+                    </Button>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="mt-2 w-full"
+                    >
+                      <a
+                        href="https://www.openstreetmap.org/?mlat=14.7167&mlon=-17.4639#map=15/14.7167/-17.4639"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <MapPin className="mr-2 h-4 w-4" />
+                        Voir sur OpenStreetMap
+                        <ExternalLink className="ml-2 h-3.5 w-3.5" />
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="ring-1 ring-border bg-primary text-primary-foreground">
+                  <CardContent className="pt-6">
+                    <h3 className="text-sm font-semibold uppercase tracking-wide text-white/80 flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-accent" />
+                      Coordonnées GPS
+                    </h3>
+                    <div className="mt-3 space-y-2 text-sm">
+                      <div className="flex items-center justify-between">
+                        <span className="text-white/70">Latitude</span>
+                        <span className="font-mono font-medium">14.7167° N</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-white/70">Longitude</span>
+                        <span className="font-mono font-medium">17.4639° W</span>
+                      </div>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-white/15">
+                      <p className="text-xs text-white/70 leading-relaxed">
+                        Le Sénégal (UTM/GMT) est dans le fuseau horaire GMT+0.
+                        Nos bureaux sont ouverts du lundi au vendredi.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
     </>
