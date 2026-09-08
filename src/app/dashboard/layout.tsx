@@ -72,8 +72,7 @@ export default function DashboardLayout({
       {/* Sidebar (desktop) */}
       <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-border bg-background">
         <div className="h-16 flex items-center gap-3 px-5 border-b border-border">
-          <div className="h-9 w-9 rounded-lg overflow-hidden bg-white p-0.5 ring-1 ring-border shrink-0">
-            { }
+          <div className="h-11 w-11 rounded-lg overflow-hidden bg-white p-1 ring-1 ring-border shrink-0">
             <img
               src="/logo-abcd-transparent.png"
               alt="Logo ABCD Ltd"
@@ -81,10 +80,7 @@ export default function DashboardLayout({
             />
           </div>
           <div className="leading-none">
-            <div className="text-sm font-extrabold tracking-tight">
-              ABCD <span className="text-accent">Ltd</span>
-            </div>
-            <div className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wide">
+            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
               Administration
             </div>
           </div>
@@ -115,17 +111,13 @@ export default function DashboardLayout({
       {/* Mobile top bar */}
       <div className="lg:hidden fixed top-0 inset-x-0 z-40 h-16 bg-background/90 backdrop-blur-md border-b border-border flex items-center justify-between px-4">
         <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-lg overflow-hidden bg-white p-0.5 ring-1 ring-border">
-            { }
+          <div className="h-10 w-10 rounded-lg overflow-hidden bg-white p-1 ring-1 ring-border">
             <img
               src="/logo-abcd-transparent.png"
               alt="Logo ABCD Ltd"
               className="h-full w-full object-contain"
             />
           </div>
-          <span className="text-sm font-extrabold">
-            ABCD <span className="text-accent">Ltd</span>
-          </span>
         </div>
         <button
           onClick={() => setMobileOpen(true)}
@@ -155,9 +147,18 @@ export default function DashboardLayout({
               className="lg:hidden fixed top-0 left-0 bottom-0 z-50 w-72 bg-background border-r border-border flex flex-col"
             >
               <div className="h-16 flex items-center justify-between px-5 border-b border-border">
-                <span className="text-sm font-extrabold">
-                  ABCD <span className="text-accent">Ltd</span> — Admin
-                </span>
+                <div className="flex items-center gap-2.5">
+                  <div className="h-9 w-9 rounded-lg overflow-hidden bg-white p-1 ring-1 ring-border">
+                    <img
+                      src="/logo-abcd-transparent.png"
+                      alt="Logo ABCD Ltd"
+                      className="h-full w-full object-contain"
+                    />
+                  </div>
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                    Administration
+                  </span>
+                </div>
                 <button
                   onClick={() => setMobileOpen(false)}
                   className="h-9 w-9 inline-flex items-center justify-center rounded-md hover:bg-secondary"

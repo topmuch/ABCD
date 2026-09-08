@@ -15,7 +15,7 @@ export function SiteFooter() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3">
-              <div className="h-11 w-11 rounded-lg overflow-hidden bg-white p-0.5">
+              <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-lg overflow-hidden bg-white p-1">
                 { }
                 <img
                   src="/logo-abcd-transparent.png"
@@ -23,13 +23,8 @@ export function SiteFooter() {
                   className="h-full w-full object-contain"
                 />
               </div>
-              <div>
-                <div className="text-lg font-extrabold leading-none">
-                  ABCD <span className="text-accent">Ltd</span>
-                </div>
-                <div className="text-xs text-white/60 mt-1">
-                  African Business Company for Development
-                </div>
+              <div className="text-xs text-white/60">
+                African Business Company for Development
               </div>
             </div>
             <p className="mt-5 text-sm text-white/70 leading-relaxed">

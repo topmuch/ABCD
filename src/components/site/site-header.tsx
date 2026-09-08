@@ -36,30 +36,14 @@ export function SiteHeader() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 sm:h-20 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative h-10 w-10 sm:h-11 sm:w-11 shrink-0 rounded-lg overflow-hidden bg-white p-0.5 ring-1 ring-border">
+          <Link href="/" className="flex items-center group" aria-label="ABCD Ltd - Accueil">
+            <div className="relative h-12 w-12 sm:h-16 sm:w-16 shrink-0 rounded-lg overflow-hidden bg-white p-1 ring-1 ring-border">
               { }
               <img
                 src="/logo-abcd-transparent.png"
                 alt="Logo ABCD Ltd"
-                className="h-full w-full object-contain"
+                className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-300"
               />
-            </div>
-            <div className="flex flex-col leading-none">
-              <span
-                className={`text-lg sm:text-xl font-extrabold tracking-tight transition-colors ${
-                  scrolled || !isHome ? "text-foreground" : "text-white"
-                }`}
-              >
-                ABCD <span className="text-accent">Ltd</span>
-              </span>
-              <span
-                className={`text-[10px] sm:text-xs font-medium tracking-wide uppercase transition-colors ${
-                  scrolled || !isHome ? "text-muted-foreground" : "text-white/70"
-                }`}
-              >
-                Transit • Douane • Logistique
-              </span>
             </div>
           </Link>
 

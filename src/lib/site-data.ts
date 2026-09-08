@@ -31,6 +31,7 @@ export type Service = {
   icon: LucideIcon;
   title: string;
   desc: string;
+  image: string;
 };
 
 export const SERVICES: Service[] = [
@@ -38,41 +39,49 @@ export const SERVICES: Service[] = [
     icon: Ship,
     title: "Transport Maritime",
     desc: "Fret maritime complet, FCL/LCL, groupage et rendu destination finale pour vos marchandises vers et depuis Dakar.",
+    image: "/svc-maritime.jpg",
   },
   {
     icon: Plane,
     title: "Transport Aérien",
     desc: "Solutions de fret aérien express avec suivi dédié, idéal pour les colis sensibles et urgents.",
+    image: "/svc-aerien.jpg",
   },
   {
     icon: Truck,
     title: "Transport Routier & Multimodal",
     desc: "Acheminement terrestre et solutions multimodales door-to-door vers le Mali, la Guinée, la Mauritanie et la Gambie.",
+    image: "/svc-routier.jpg",
   },
   {
     icon: FileCheck2,
     title: "Transit & Dédouanement",
     desc: "Commissionnaire en douane agréé : formalités douanières, dédouanement import/export et gestion des régimes particuliers.",
+    image: "/svc-transit.jpg",
   },
   {
     icon: Warehouse,
     title: "Entreposage sous Douane",
     desc: "Stockage en magasin ou à ciel ouvert, entrepôt sous douane et gestion d'inventaire sécurisée.",
+    image: "/svc-entrepot.jpg",
   },
   {
     icon: Boxes,
     title: "Supply Chain & Logistique",
     desc: "Optimisation globale de votre chaîne d'approvisionnement, de l'origine à la destination finale.",
+    image: "/svc-supplychain.jpg",
   },
   {
     icon: PackageCheck,
     title: "Manutention de Colis Lourd",
     desc: "Heavy lift oncarriage : manutention et transport de colis hors gabarit avec équipements adaptés.",
+    image: "/svc-colislourd.jpg",
   },
   {
     icon: Anchor,
     title: "Freight Forwarding",
     desc: "Organisation complète de vos flux de marchandises avec un réseau de sous-traitants agréés.",
+    image: "/svc-freight.jpg",
   },
 ];
 

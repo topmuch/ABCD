@@ -22,18 +22,30 @@ export default function ServicesPage() {
         subtitle="Du transport multimodal au dédouanement, nous couvrons l'ensemble de votre chaîne logistique avec des équipes spécialisées."
       />
 
-      {/* Services grid */}
+      {/* Services grid with real images */}
       <section className="py-20 sm:py-28 bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {SERVICES.map((s, i) => (
               <Reveal key={s.title} delay={i * 0.04}>
-                <Card className="group h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-border/80 hover:border-accent/50">
-                  <CardHeader>
-                    <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-accent/15 transition-colors">
-                      <s.icon className="h-6 w-6 text-primary group-hover:text-accent transition-colors" />
+                <Card className="group h-full overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-border/80 hover:border-accent/50 p-0">
+                  <div className="relative h-44 overflow-hidden">
+                    { }
+                    <img
+                      src={s.image}
+                      alt={s.title}
+                      className="absolute inset-0 h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0c1f4a]/85 via-[#0c1f4a]/30 to-transparent" />
+                    <div className="absolute bottom-3 left-3 right-3">
+                      <div className="inline-flex items-center gap-1.5 rounded-full bg-accent/90 text-accent-foreground px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide backdrop-blur-sm">
+                        <s.icon className="h-3 w-3" />
+                        Service
+                      </div>
                     </div>
-                    <CardTitle className="mt-4 text-lg">{s.title}</CardTitle>
+                  </div>
+                  <CardHeader className="pt-4">
+                    <CardTitle className="text-lg">{s.title}</CardTitle>
                     <CardDescription className="text-muted-foreground leading-relaxed">
                       {s.desc}
                     </CardDescription>
