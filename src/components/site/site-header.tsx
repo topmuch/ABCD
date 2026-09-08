@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NAV_LINKS } from "@/lib/site-data";
 
@@ -86,6 +86,22 @@ export function SiteHeader() {
               </Link>
             </Button>
 
+            <Button
+              asChild
+              size="sm"
+              variant="outline"
+              className={`hidden sm:inline-flex ${
+                scrolled || !isHome
+                  ? "border-border text-foreground hover:bg-secondary"
+                  : "border-white/30 text-white hover:bg-white/10 hover:text-white"
+              }`}
+            >
+              <Link href="/login">
+                <LogIn className="mr-1.5 h-4 w-4" />
+                Connexion
+              </Link>
+            </Button>
+
             {/* Mobile toggle */}
             <button
               onClick={() => setOpen((v) => !v)}
@@ -140,6 +156,12 @@ export function SiteHeader() {
               >
                 <Link href="/contact">
                   Demander un devis <ArrowRight className="ml-1.5 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/login">
+                  <LogIn className="mr-1.5 h-4 w-4" />
+                  Connexion
                 </Link>
               </Button>
             </nav>

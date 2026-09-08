@@ -68,3 +68,5 @@ page1_img1.jpg
 
 # Runtime PID / process files
 .zscripts/
+# Seed scripts (contain default credentials)
+seed-admin.ts

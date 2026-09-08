@@ -4,6 +4,7 @@ import {
   Phone,
   Mail,
   LayoutDashboard,
+  LogIn,
 } from "lucide-react";
 import { NAV_LINKS, SERVICES } from "@/lib/site-data";
 
@@ -108,6 +109,13 @@ export function SiteFooter() {
             SARL (A.B.C.D Ltd). Tous droits réservés.
           </p>
           <div className="flex items-center gap-4">
+            <Link
+              href="/login"
+              className="text-xs text-white/55 hover:text-accent transition-colors inline-flex items-center gap-1.5"
+            >
+              <LogIn className="h-3.5 w-3.5" />
+              Connexion
+            </Link>
             <Link
               href="/dashboard"
               className="text-xs text-white/55 hover:text-accent transition-colors inline-flex items-center gap-1.5"
