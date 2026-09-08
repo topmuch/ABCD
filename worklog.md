@@ -130,3 +130,43 @@ Stage Summary:
 - Full CRUD for Clients and Team, SEO settings singleton
 - GitHub repo: https://github.com/topmuch/ABCD (public, main branch)
 - SECURITY: token used for repo creation; user advised to revoke/regenerate it
+
+---
+Task ID: 6
+Agent: Main (Z.ai Code)
+Task: Sync GitHub with local + convert site to multi-page
+
+Work Log:
+GIT SYNC:
+- Configured git core.fileMode=false (removed noise from file mode changes 100644→100755)
+- Added .zscripts/ to .gitignore (runtime PID artifact), untracked .zscripts/dev.pid
+- Pushed 2 commits to origin/main; GitHub now up to date with local
+
+MULTI-PAGE CONVERSION:
+- Created shared data file src/lib/site-data.ts (SERVICES, COUNTRIES, STATS, WHY_US, PROCESS, FAQS, NAV_LINKS with typed exports)
+- Created shared components:
+  - src/components/site/site-header.tsx (client: mobile menu, scroll state, active link highlighting via usePathname, transparent header on home / solid on inner pages)
+  - src/components/site/site-footer.tsx (4-column: brand, navigation, services, contact + dashboard link)
+  - src/components/site/page-header.tsx (reusable PageHeader + Reveal for inner pages)
+- Created route group src/app/(public)/ with shared layout (header + footer + progress bar)
+- Pages created:
+  - (public)/page.tsx → / (Hero + TrustBar + About preview + Services preview + CTA)
+  - (public)/a-propos/page.tsx → /a-propos (Histoire + Situation géopolitique + Process + Atouts preview)
+  - (public)/services/page.tsx → /services (8 service cards + image highlights + detailed list + CTA)
+  - (public)/atouts/page.tsx → /atouts (Stats + WhyUs grid + FAQ accordion + CTA)
+  - (public)/contact/page.tsx → /contact (Contact info cards + working form)
+- Removed old src/app/page.tsx (moved to (public)/page.tsx)
+- Dashboard at /dashboard unchanged (own layout, no public header/footer)
+
+Stage Summary:
+- Site is now multi-page with 5 public routes: /, /a-propos, /services, /atouts, /contact
+- Navigation uses Next.js Link (client-side navigation, no full reload)
+- Shared header/footer across all public pages via (public) route group layout
+- Active nav link highlighting works
+- All routes return HTTP 200, verified via Agent Browser:
+  - Home: hero + nav links (Accueil/À propos/Services/Atouts/Contact) visible
+  - Client-side nav: / → /services works (URL + H1 update correctly)
+  - Contact form: submitted "Test Multi-Page" → DB record created
+  - VLM: pages validated as professional
+- Lint clean (0 errors, 0 warnings)
+- Need to commit + push to GitHub
