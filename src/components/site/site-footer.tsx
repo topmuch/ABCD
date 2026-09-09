@@ -5,14 +5,18 @@ import {
   Mail,
   LayoutDashboard,
   LogIn,
+  QrCode,
+  ExternalLink,
 } from "lucide-react";
 import { NAV_LINKS, SERVICES } from "@/lib/site-data";
+
+const SITE_URL = "https://abcdsenegal.com/";
 
 export function SiteFooter() {
   return (
     <footer className="bg-[#0c1f4a] text-white mt-auto">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3">
@@ -100,6 +104,40 @@ export function SiteFooter() {
                 </a>
               </li>
             </ul>
+          </div>
+
+          {/* QR Code (right) */}
+          <div className="flex flex-col items-center lg:items-end">
+            <h4 className="text-sm font-semibold uppercase tracking-wide text-white/90 flex items-center gap-2">
+              <QrCode className="h-4 w-4 text-accent" />
+              Scanner
+            </h4>
+            <a
+              href={SITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 group block rounded-xl bg-white p-3 shadow-lg ring-1 ring-white/20 hover:ring-accent/50 transition-all hover:scale-105"
+              aria-label="Scanner le QR code pour visiter abcdsenegal.com"
+            >
+              { }
+              <img
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=8&color=0c1f4a&bgcolor=ffffff&data=${encodeURIComponent(SITE_URL)}`}
+                alt="QR code vers abcdsenegal.com"
+                width={120}
+                height={120}
+                className="h-[120px] w-[120px]"
+                loading="lazy"
+              />
+            </a>
+            <a
+              href={SITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center gap-1.5 text-xs text-white/60 hover:text-accent transition-colors"
+            >
+              abcdsenegal.com
+              <ExternalLink className="h-3 w-3" />
+            </a>
           </div>
         </div>
 
