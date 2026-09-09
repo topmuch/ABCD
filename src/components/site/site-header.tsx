@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NAV_LINKS } from "@/lib/site-data";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -101,6 +102,9 @@ export function SiteHeader() {
                 Connexion
               </Link>
             </Button>
+
+            {/* Dark mode toggle */}
+            <ThemeToggle variant={scrolled || !isHome ? "light-header" : "dark-header"} />
 
             {/* Mobile toggle */}
             <button

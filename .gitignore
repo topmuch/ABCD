@@ -70,3 +70,6 @@ page1_img1.jpg
 .zscripts/
 # Seed scripts (contain default credentials)
 seed-admin.ts
+
+# Sub-agent tool results
+tool-results/

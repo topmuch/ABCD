@@ -10,6 +10,11 @@ import {
   Send,
   Navigation,
   ExternalLink,
+  CalendarDays,
+  Clock,
+  Building2,
+  User,
+  Calendar,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +28,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { PageHeader, Reveal } from "@/components/site/page-header";
 
@@ -74,6 +86,61 @@ export default function ContactPage() {
       });
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  const [booking, setBooking] = useState(false);
+  const [prefTime, setPrefTime] = useState("");
+
+  async function onBookingSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const payload = {
+      name: String(data.get("rdv-name") || "").trim(),
+      email: String(data.get("rdv-email") || "").trim(),
+      phone: String(data.get("rdv-phone") || "").trim(),
+      company: String(data.get("rdv-company") || "").trim(),
+      subject: String(data.get("rdv-subject") || "").trim(),
+      preferredDate: String(data.get("rdv-date") || "").trim(),
+      preferredTime: prefTime,
+      message: String(data.get("rdv-message") || "").trim(),
+    };
+
+    if (!payload.name || !payload.email || !payload.message) {
+      toast({
+        variant: "destructive",
+        title: "Champs requis",
+        description:
+          "Merci de renseigner votre nom, votre email et votre message.",
+      });
+      return;
+    }
+
+    setBooking(true);
+    try {
+      const res = await fetch("/api/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("Request failed");
+      toast({
+        title: "Demande envoyée",
+        description:
+          "Votre demande de rendez-vous a bien été transmise. Nous vous contacterons pour confirmer le créneau.",
+      });
+      form.reset();
+      setPrefTime("");
+    } catch {
+      toast({
+        variant: "destructive",
+        title: "Erreur d'envoi",
+        description:
+          "Une erreur est survenue. Vous pouvez nous appeler au +221 33 821 11 31.",
+      });
+    } finally {
+      setBooking(false);
     }
   }
 
@@ -261,6 +328,185 @@ export default function ContactPage() {
                       ) : (
                         <>
                           Envoyer la demande <Send className="ml-2 h-4 w-4" />
+                        </>
+                      )}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Demande de rendez-vous */}
+      <section className="relative py-20 sm:py-28 bg-primary text-primary-foreground overflow-hidden">
+        <div className="absolute inset-0 bg-dot-gold opacity-20" />
+        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-accent/15 blur-3xl" />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+            {/* Heading + benefits */}
+            <Reveal>
+              <Badge className="mb-4 bg-white/10 text-white border border-white/20 hover:bg-white/15">
+                <CalendarDays className="mr-1.5 h-3.5 w-3.5" />
+                Rendez-vous
+              </Badge>
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+                Prendre rendez-vous
+              </h2>
+              <p className="mt-4 text-base sm:text-lg text-white/80 leading-relaxed">
+                Planifiez un échange avec nos experts logistiques. Choisissez un
+                créneau et décrivez votre besoin : nous vous recontactons pour
+                confirmer le rendez-vous (en visio, par téléphone ou à notre
+                bureau de Dakar).
+              </p>
+
+              <div className="mt-8 space-y-3">
+                {[
+                  { icon: Clock, text: "Réponse sous 24h ouvrées" },
+                  { icon: User, text: "Échange avec un conseiller dédié" },
+                  { icon: Building2, text: "Sur place, en visio ou par téléphone" },
+                  { icon: Calendar, text: "Créneau confirmé par email" },
+                ].map((b) => (
+                  <div
+                    key={b.text}
+                    className="flex items-center gap-3 p-3 rounded-lg bg-white/5 ring-1 ring-white/10"
+                  >
+                    <div className="h-9 w-9 rounded-md bg-accent/20 flex items-center justify-center shrink-0">
+                      <b.icon className="h-4.5 w-4.5 text-accent" style={{ width: "1.125rem", height: "1.125rem" }} />
+                    </div>
+                    <span className="text-sm sm:text-base text-white/90">{b.text}</span>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+
+            {/* Form */}
+            <Reveal delay={0.1}>
+              <Card className="shadow-2xl border-border/80">
+                <CardHeader>
+                  <CardTitle className="text-xl flex items-center gap-2">
+                    <CalendarDays className="h-5 w-5 text-primary" />
+                    Demande de rendez-vous
+                  </CardTitle>
+                  <CardDescription>
+                    Les champs marqués d&apos;un astérisque (*) sont obligatoires.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={onBookingSubmit} className="space-y-4">
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="rdv-name">
+                          Nom complet <span className="text-destructive">*</span>
+                        </Label>
+                        <Input
+                          id="rdv-name"
+                          name="rdv-name"
+                          placeholder="Votre nom"
+                          autoComplete="name"
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="rdv-email">
+                          Email <span className="text-destructive">*</span>
+                        </Label>
+                        <Input
+                          id="rdv-email"
+                          name="rdv-email"
+                          type="email"
+                          placeholder="vous@exemple.com"
+                          autoComplete="email"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="rdv-phone">Téléphone</Label>
+                        <Input
+                          id="rdv-phone"
+                          name="rdv-phone"
+                          type="tel"
+                          placeholder="+221 ..."
+                          autoComplete="tel"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="rdv-company">Société</Label>
+                        <Input
+                          id="rdv-company"
+                          name="rdv-company"
+                          placeholder="Nom de votre entreprise"
+                          autoComplete="organization"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="rdv-subject">Sujet</Label>
+                      <Input
+                        id="rdv-subject"
+                        name="rdv-subject"
+                        placeholder="Ex : Fret maritime, transit, entreposage..."
+                      />
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="rdv-date">Date souhaitée</Label>
+                        <Input
+                          id="rdv-date"
+                          name="rdv-date"
+                          type="date"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="rdv-time">Heure souhaitée</Label>
+                        <Select value={prefTime} onValueChange={setPrefTime}>
+                          <SelectTrigger id="rdv-time">
+                            <SelectValue placeholder="Sélectionner un créneau" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="09:00">09:00</SelectItem>
+                            <SelectItem value="10:00">10:00</SelectItem>
+                            <SelectItem value="11:00">11:00</SelectItem>
+                            <SelectItem value="12:00">12:00</SelectItem>
+                            <SelectItem value="14:00">14:00</SelectItem>
+                            <SelectItem value="15:00">15:00</SelectItem>
+                            <SelectItem value="16:00">16:00</SelectItem>
+                            <SelectItem value="17:00">17:00</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="rdv-message">
+                        Message <span className="text-destructive">*</span>
+                      </Label>
+                      <Textarea
+                        id="rdv-message"
+                        name="rdv-message"
+                        rows={4}
+                        placeholder="Décrivez l'objet du rendez-vous : nature du besoin, contexte, points à aborder..."
+                        required
+                      />
+                    </div>
+                    <Button
+                      type="submit"
+                      disabled={booking}
+                      className="w-full bg-accent text-accent-foreground hover:bg-accent/90 shadow-md"
+                      size="lg"
+                    >
+                      {booking ? (
+                        <>
+                          <span className="h-4 w-4 mr-2 rounded-full border-2 border-accent-foreground/40 border-t-accent-foreground animate-spin" />
+                          Envoi en cours...
+                        </>
+                      ) : (
+                        <>
+                          Demander un rendez-vous{" "}
+                          <CalendarDays className="ml-2 h-4 w-4" />
                         </>
                       )}
                     </Button>

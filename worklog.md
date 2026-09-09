@@ -170,3 +170,110 @@ Stage Summary:
   - VLM: pages validated as professional
 - Lint clean (0 errors, 0 warnings)
 - Need to commit + push to GitHub
+
+---
+Task ID: 8
+Agent: Sub-agent (Email Settings Dashboard)
+Task: Create the Email & Notifications settings dashboard page at /dashboard/email
+
+Work Log:
+- Read worklog.md, /dashboard/seo/page.tsx (style reference), /dashboard/layout.tsx, /components/ui/switch.tsx, /components/ui/badge.tsx, and /api/email-settings/route.ts to confirm endpoint contract and existing patterns
+- Verified shadcn `switch.tsx` component exists in src/components/ui and `use-toast` hook exists in src/hooks
+- Created `/home/z/my-project/src/app/dashboard/email/page.tsx` ("use client"):
+  - Page header: Bell icon in primary/10 rounded square, title "Email & Notifications", subtitle, outline "Actualiser" button with spinning RefreshCw
+  - Loading state: centered Card with spinner + "Chargement des paramètres..." while fetching
+  - Card "Configuration SMTP" (Mail icon): smtpHost, smtpPort (number), smtpUser, smtpPassword (password type), fromEmail, fromName — laid out in responsive 2-col grid; status Badge showing "Configuré" (emerald CheckCircle2) or "Non configuré" (destructive ShieldAlert)
+  - Card "Notifications" (Bell icon): notifyEmail input + two Switch toggles inside bordered rows:
+      * "Notifier à la réception d'un message de contact" (notifyOnContact)
+      * "Notifier à la demande de rendez-vous" (notifyOnAppointment)
+  - Sticky save bar at bottom (z-30, sticky bottom-4): last updated date with CheckCircle2, "Réinitialiser" (outline, calls fetchSettings) and "Enregistrer" (accent color) buttons
+- State management: useState<EmailSettings> initialized with EMPTY defaults (port 587, toggles true), fetch on mount via useEffect+useCallback, fetchSettings reused for refresh and post-save reload
+- Validation: fromEmail and notifyEmail required (destructive toast if missing); smtpPort coerced to Number
+- Toast feedback: success ("Paramètres enregistrés") on save; destructive variants on fetch/save errors and validation failures
+- PUT body matches API contract: smtpHost, smtpPort (Number), smtpUser, smtpPassword, fromEmail, fromName, notifyEmail, notifyOnContact (boolean), notifyOnAppointment (boolean)
+- Imports used: shadcn Card/CardHeader/CardTitle/CardDescription/CardContent, Input, Label, Button, Badge, Switch + lucide-react Bell, Mail, Save, RefreshCw, CheckCircle2, Server, ShieldAlert + useToast from @/hooks/use-toast
+- Ran `bunx eslint src/app/dashboard/email/page.tsx` — 0 errors, 0 warnings (clean)
+
+Stage Summary:
+- New page `/dashboard/email` (sidebar item "Email & Notifications" already wired in layout.tsx NAV_ITEMS)
+- Page is a "use client" component matching SEO page patterns: max-w-5xl main wrapper, header with icon + refresh, two Cards, sticky save bar
+- Endpoint integration: GET /api/email-settings on mount (handles null coalescing for nullable DB fields), PUT /api/email-settings on submit (sends full form object, Number-coerces smtpPort)
+- Notifications use shadcn Switch component (@/components/ui/switch) for notifyOnContact and notifyOnAppointment toggles
+- Lint clean — ready for use
+
+---
+Task ID: 5
+Agent: Sub Agent (Stats Dashboard)
+Task: Create the Statistics dashboard page (/dashboard/stats) consuming /api/stats with multicolor (blue/yellow) KPI cards and recharts visualizations
+
+Work Log:
+- Read worklog to understand prior context: dashboard sidebar already lists "/dashboard/stats" route (Task 5 prior agent); /api/stats endpoint already returns the required JSON shape (stats + topPages + referrers + devices + browsers + daily + monthly + generatedAt)
+- Reviewed existing dashboard pages (overview, clients) to match layout wrapper pattern: `<main className="flex-1 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">` (sidebar already provided by dashboard/layout.tsx)
+- Created `/home/z/my-project/src/app/dashboard/stats/page.tsx` — a "use client" page with:
+  - Page header: "Statistiques" title with BarChart3 icon (in primary/10 chip), subtitle showing last-updated timestamp (formatDateTime from generatedAt), refresh Button (RefreshCw icon, spins while refreshing)
+  - Error banner (Card with AlertCircle) + useToast error toast on fetch failure
+  - 8 KPI cards in a responsive 2/3/4-col grid, alternating solid backgrounds: Visiteurs uniques (30j) [navy], Pages vues (total) [gold], Vues aujourd'hui [navy], Formulaires envoyés [gold], Demandes de RDV [navy], Clics WhatsApp [gold], Clics téléphone [navy], Total clics [gold] — white text, white/20 icon chip, value.toLocaleString("fr-FR")
+  - Skeleton cards (8 pulse placeholders) while loading
+  - Row 1 (lg:grid-cols-3): left 2/3 = AreaChart "Évolution des visites (7 derniers jours)" using daily data, BLUE area with navy gradient fill (#1e3a8a); right 1/3 = PieChart "Appareils utilisés" multicolor (PIE_COLORS palette) + custom legend with device-type icons (Monitor/Smartphone/Tablet)
+  - Row 2: left 2/3 = horizontal BarChart "Pages les plus consultées" with YELLOW bars (#ca8a04); right 1/3 = PieChart "Navigateurs" multicolor + custom legend
+  - Row 3 (full width): BarChart "Visites mensuelles (6 mois)" with BLUE vertical bars (navy, rounded top corners)
+  - Row 4: two side-by-side Cards containing shadcn Tables — "Sources du trafic" (referrers, hostname extracted via URL parsing) and "Pages consultées" (topPages) — each with loading skeletons + empty states + count Badge
+  - fetchStats via useCallback + useEffect on mount; refreshing flag drives the spinner; loading flag drives initial skeletons
+  - framer-motion `whileInView` (with viewport={{ once: true, margin: "-50px" }}) on every section + each KPI card with staggered delay
+  - recharts imports: ResponsiveContainer, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip
+  - shadcn/ui imports: Card/CardContent/CardHeader/CardTitle/CardDescription, Button, Badge, Table/TableHeader/TableBody/TableRow/TableCell/TableHead
+  - lucide-react: BarChart3, RefreshCw, Users, Eye, CalendarDays, Send, CalendarClock, MessageCircle, Phone, MousePointerClick, Globe2, FileText, Monitor, Smartphone, Tablet, AlertCircle, ExternalLink, TrendingUp
+- Verified lint: `bunx eslint src/app/dashboard/stats/page.tsx` → exit code 0, no errors/warnings
+- Verified types: `bunx tsc --noEmit` → no errors specific to stats page
+- Did NOT modify any other files; did NOT create test files
+
+Stage Summary:
+- New file created: `/home/z/my-project/src/app/dashboard/stats/page.tsx` (~570 lines)
+- Page is reachable via the existing sidebar nav item "Statistiques" (already wired in dashboard/layout.tsx)
+- Brand colors enforced: KPI cards alternate navy #1e3a8a / gold #ca8a04; area chart and monthly bar chart are navy; top-pages bar chart is gold; pie charts use multicolor palette starting with navy+gold
+- Layout matches other dashboard pages (same main wrapper, no full-page wrapper since dashboard layout provides sidebar)
+- Loading + error states handled gracefully; reveal animations via framer-motion whileInView
+- Lint clean (0 errors, 0 warnings); TypeScript clean
+
+---
+Task ID: 6 & 7
+Agent: Sub-agent (general-purpose)
+Task: Build Rendez-vous feature — public contact page appointment form + dashboard appointment management page
+
+Work Log:
+- Read worklog.md, existing contact page (`src/app/(public)/contact/page.tsx`), existing dashboard clients page (`src/app/dashboard/clients/page.tsx`) for style reference, dashboard layout.tsx (sidebar already had "Rendez-vous" nav item pointing to /dashboard/rendez-vous with CalendarDays icon), and verified the `/api/appointments` GET/POST and `/api/appointments/[id]` PUT/DELETE endpoints already existed with the documented contract.
+
+FILE 1 — Contact page (`src/app/(public)/contact/page.tsx`):
+- Preserved ALL existing code (PageHeader, contact info cards, "Demande de devis" form, and the map section).
+- Added lucide-react imports: CalendarDays, Clock, Building2, User, Calendar.
+- Added shadcn/ui Select imports (Select, SelectContent, SelectItem, SelectTrigger, SelectValue).
+- Added new `booking` state + `prefTime` state + `onBookingSubmit` handler that POSTs to `/api/appointments` with the documented body shape ({ name, email, phone?, company?, subject?, preferredDate?, preferredTime?, message }), shows a success/error toast via `useToast`, and resets the form + Select on success.
+- Inserted a new `<section>` BETWEEN the existing contact form section (`</section>` after the Devis form) and the map section (`{/* Carte & itinéraire */}`). New section features:
+  - Navy `bg-primary` background with `bg-dot-gold` overlay + accent blur (matches PageHeader styling).
+  - Two-column layout: left side = Badge "Rendez-vous" + h2 "Prendre rendez-vous" + explanatory subtitle + 4 benefit rows (Clock/User/Building2/Calendar icons).
+  - Right side = Card with CardHeader (title with CalendarDays icon + description), CardContent form.
+  - Form fields: Nom complet*, Email* (grid 2 cols), Téléphone, Société (grid 2 cols), Sujet (full width), Date souhaitée (date input), Heure souhaitée (Select with 09:00–17:00 slots), Message* (Textarea rows=4).
+  - Submit Button "Demander un rendez-vous" with CalendarDays icon; spinner state when submitting.
+
+FILE 2 — Dashboard rendez-vous page (`src/app/dashboard/rendez-vous/page.tsx`):
+- New client component mirroring the clients page pattern (`<main className="flex-1 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">`).
+- Title "Rendez-vous" with CalendarDays icon + "Actualiser" refresh button (RefreshCw with spin while loading).
+- 4 KPI stat cards (multicolor as specified): Total (blue), En attente (amber/yellow), Confirmés (emerald/green), Annulés (slate/grey). Each card has icon, ring, colored bg, large numeric value. KPIs are always computed against the FULL dataset (global counts) regardless of active filter, so they remain accurate while navigating.
+- Filter buttons (Tous / En attente / Confirmés / Annulés) as a pill tab strip with per-status count chips; active tab uses `bg-primary text-primary-foreground`.
+- Search input with Search icon (debounced 300ms client-side filter on name/email/phone/company/subject/message).
+- Table (shadcn/ui) with columns: Demandeur (name+company+initial avatar), Contact (email+phone), Date souhaitée, Heure, Sujet (Badge), Statut (StatusBadge with colored dot), Actions (Search/CheckCircle2/XCircle/Trash2 icon buttons). Clicking a row opens the detail modal; clicking action buttons stops propagation.
+- StatusBadge helper with amber/emerald/slate colors + colored dot.
+- Detail modal (framer-motion AnimatePresence, max-w-2xl): sticky header with avatar, name, received date, status badge, close X. Body shows Coordonnées (email/phone/company as clickable mailto:/tel: cards), Créneau souhaité (date/time/sujet grid), and Message (whitespace-pre-wrap). Sticky footer with "Répondre par email" (mailto), "Appeler" (tel if phone), "Supprimer" (DELETE), "Annuler" (PUT status cancelled), "Confirmer" (PUT status confirmed, emerald button). Buttons hidden/disabled when not applicable (e.g. Confirmer hidden if already confirmed).
+- Loading skeleton (5 rows × colSpan 7 pulse), empty state ("Aucune demande…") that adapts to active filter and search.
+- useToast for all feedback; optimistic local state updates for confirm/cancel/delete so UI feels instant.
+- Fetches `/api/appointments` (no status param) and filters client-side so KPIs always reflect global counts; `cache: "no-store"` ensures fresh data on refresh.
+
+Lint / type-check:
+- `bunx eslint "src/app/(public)/contact/page.tsx" "src/app/dashboard/rendez-vous/page.tsx"` → EXIT_CODE=0, 0 errors, 0 warnings.
+- `bunx tsc --noEmit --skipLibCheck` filtered for the two files → no type errors.
+
+Stage Summary:
+- Public `/contact` page now offers a "Demande de rendez-vous" section between the existing devis form and the map. Submissions are stored via POST /api/appointments.
+- Dashboard `/dashboard/rendez-vous` is the management console: KPIs (Total/Pending/Confirmed/Cancelled), filter tabs + search, sortable table, detail modal with Confirmer/Annuler/Supprimer actions wired to PUT/DELETE endpoints. Sidebar link already existed in layout.tsx.
+- Both files lint-clean and type-clean. APIs already existed; no schema changes needed.
+- Recommended next: seed one or two appointment rows via the public form (or directly) and verify end-to-end via the Agent Browser, then commit + push to GitHub.

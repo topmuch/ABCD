@@ -84,3 +84,53 @@ model SeoSettings {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  referrer  String?
+  country   String?
+  city      String?
+  device    String   // desktop | mobile | tablet
+  browser   String?
+  sessionId String
+  createdAt DateTime @default(now())
+}
+
+model ClickEvent {
+  id        String   @id @default(cuid())
+  type      String   // whatsapp | phone | email
+  page      String
+  sessionId String
+  createdAt DateTime @default(now())
+}
+
+model Appointment {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  subject     String?
+  preferredDate String?
+  preferredTime String?
+  message     String
+  status      String   @default("pending") // pending | confirmed | cancelled
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model EmailSettings {
+  id                String   @id @default("singleton")
+  smtpHost          String?
+  smtpPort          Int?
+  smtpUser          String?
+  smtpPassword      String?
+  fromEmail         String?
+  fromName          String?
+  notifyEmail       String?  // email to receive notifications
+  notifyOnContact   Boolean  @default(true)
+  notifyOnAppointment Boolean @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}

@@ -183,36 +183,68 @@ function KpiCard({
   accent?: "navy" | "gold" | "teal" | "green";
   delay?: number;
 }) {
+  // Multicolor solid backgrounds: blue + yellow alternating (per user request)
   const accentMap = {
-    navy: "bg-primary/10 text-primary",
-    gold: "bg-accent/15 text-accent-foreground",
-    teal: "bg-cyan-500/10 text-cyan-600",
-    green: "bg-emerald-500/10 text-emerald-600",
+    navy: {
+      bg: "bg-primary",
+      text: "text-primary-foreground",
+      iconWrap: "bg-white/20",
+      iconText: "text-white",
+      valueText: "text-white",
+      labelText: "text-white/80",
+      subText: "text-white/60",
+    },
+    gold: {
+      bg: "bg-accent",
+      text: "text-accent-foreground",
+      iconWrap: "bg-black/10",
+      iconText: "text-accent-foreground",
+      valueText: "text-accent-foreground",
+      labelText: "text-accent-foreground/80",
+      subText: "text-accent-foreground/60",
+    },
+    teal: {
+      bg: "bg-cyan-500",
+      text: "text-white",
+      iconWrap: "bg-white/20",
+      iconText: "text-white",
+      valueText: "text-white",
+      labelText: "text-white/80",
+      subText: "text-white/60",
+    },
+    green: {
+      bg: "bg-emerald-500",
+      text: "text-white",
+      iconWrap: "bg-white/20",
+      iconText: "text-white",
+      valueText: "text-white",
+      labelText: "text-white/80",
+      subText: "text-white/60",
+    },
   };
+  const c = accentMap[accent || "navy"];
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
     >
-      <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+      <Card className={`overflow-hidden hover:shadow-xl hover:-translate-y-0.5 transition-all ${c.bg} border-0`}>
         <CardContent className="pt-6">
           <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{label}</p>
-              <p className="mt-2 text-3xl font-extrabold tracking-tight text-foreground">
+            <div className="min-w-0">
+              <p className={`text-sm font-medium ${c.labelText}`}>{label}</p>
+              <p className={`mt-2 text-3xl font-extrabold tracking-tight ${c.valueText}`}>
                 {value}
               </p>
               {sub && (
-                <p className="mt-1 text-xs text-muted-foreground">{sub}</p>
+                <p className={`mt-1 text-xs ${c.subText}`}>{sub}</p>
               )}
             </div>
             <div
-              className={`h-12 w-12 rounded-xl flex items-center justify-center shrink-0 ${
-                accentMap[accent || "navy"]
-              }`}
+              className={`h-12 w-12 rounded-xl flex items-center justify-center shrink-0 ${c.iconWrap}`}
             >
-              <Icon className="h-6 w-6" />
+              <Icon className={`h-6 w-6 ${c.iconText}`} />
             </div>
           </div>
         </CardContent>
@@ -852,7 +884,7 @@ export default function DashboardPage() {
         </Button>
       </div>
 
-      {/* KPI cards */}
+      {/* KPI cards - multicolores bleu/jaune alternés */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <KpiCard
           icon={Mail}
@@ -875,7 +907,7 @@ export default function DashboardPage() {
           label="Pays desservis"
           value={loading ? "—" : data?.stats.countriesCount ?? 0}
           sub="Depuis Dakar"
-          accent="teal"
+          accent="navy"
           delay={0.1}
         />
         <KpiCard
@@ -883,7 +915,7 @@ export default function DashboardPage() {
           label="Années d'activité"
           value={loading ? "—" : data?.stats.yearsActive ?? 0}
           sub={`Depuis ${data?.stats.foundedYear ?? "2019"}`}
-          accent="green"
+          accent="gold"
           delay={0.15}
         />
       </div>

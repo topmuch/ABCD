@@ -12,16 +12,23 @@ import {
   ArrowLeft,
   Menu,
   X,
+  BarChart3,
+  CalendarDays,
+  Bell,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { UserMenu } from "@/components/dashboard/user-menu";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Vue d'ensemble", icon: LayoutDashboard, exact: true },
+  { href: "/dashboard/stats", label: "Statistiques", icon: BarChart3 },
   { href: "/dashboard/clients", label: "Clients", icon: Users },
   { href: "/dashboard/equipe", label: "Équipe", icon: Users },
   { href: "/dashboard/messages", label: "Messages", icon: Mail },
+  { href: "/dashboard/rendez-vous", label: "Rendez-vous", icon: CalendarDays },
+  { href: "/dashboard/email", label: "Email & Notifications", icon: Bell },
   { href: "/dashboard/seo", label: "Paramètres SEO", icon: Settings },
 ];
 
