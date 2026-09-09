@@ -1,0 +1,68 @@
+# Dependencies (reinstalled in Docker)
+node_modules
+.pnp
+.pnp.*
+.yarn/*
+
+# Next.js build output (rebuilt in Docker)
+.next
+out
+build
+
+# Git
+.git
+.gitignore
+
+# Environment files (provided by Coolify at runtime)
+.env
+.env.*
+!.env.example
+
+# Database (local dev only)
+db/*.db
+db/*.db-journal
+
+# User uploads (private documents)
+upload
+
+# Logs & runtime
+*.log
+dev.log
+server.log
+dev.out.log
+dev-server.log
+
+# Coolify / Docker
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# IDE & OS
+.DS_Store
+.vscode
+.idea
+*.swp
+
+# Documentation
+README.md
+worklog.md
+
+# Skills (not needed in production)
+skills
+
+# Mini-services (separate deployments)
+mini-services
+
+# Scripts / scratch
+.zscripts
+.claude
+.z-ai-config
+verify-*.png
+v-*.png
+page1_img1.jpg
+download
+examples
+tests
+
+# Old seed (contains hardcoded credentials)
+seed-admin.ts
