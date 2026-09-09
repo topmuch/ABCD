@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { UserMenu } from "@/components/dashboard/user-menu";
+import { UserMenu, LogoutButton } from "@/components/dashboard/user-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 const NAV_ITEMS = [
@@ -105,15 +105,19 @@ export default function DashboardLayout({
         </nav>
 
         <div className="border-t border-border">
-          <div className="p-3">
-            <Button asChild variant="outline" size="sm" className="w-full">
+          <UserMenu />
+          <div className="px-3 pb-3 space-y-1.5">
+            <Button asChild variant="outline" size="sm" className="w-full justify-start">
               <Link href="/">
-                <ArrowLeft className="mr-1.5 h-4 w-4" />
+                <ArrowLeft className="mr-2 h-4 w-4" />
                 Retour au site
               </Link>
             </Button>
+            <div className="flex items-center gap-1.5">
+              <LogoutButton />
+              <ThemeToggle />
+            </div>
           </div>
-          <UserMenu />
         </div>
       </aside>
 
@@ -189,15 +193,19 @@ export default function DashboardLayout({
                 ))}
               </nav>
               <div className="border-t border-border">
-                <div className="p-3">
-                  <Button asChild variant="outline" size="sm" className="w-full">
+                <UserMenu />
+                <div className="px-3 pb-3 space-y-1.5">
+                  <Button asChild variant="outline" size="sm" className="w-full justify-start">
                     <Link href="/" onClick={() => setMobileOpen(false)}>
-                      <ArrowLeft className="mr-1.5 h-4 w-4" />
+                      <ArrowLeft className="mr-2 h-4 w-4" />
                       Retour au site
                     </Link>
                   </Button>
+                  <div className="flex items-center gap-1.5">
+                    <LogoutButton />
+                    <ThemeToggle />
+                  </div>
                 </div>
-                <UserMenu />
               </div>
             </motion.aside>
           </>
