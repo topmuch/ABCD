@@ -90,10 +90,10 @@ export function SiteHeader() {
               asChild
               size="sm"
               variant="outline"
-              className={`hidden sm:inline-flex ${
+              className={`hidden sm:inline-flex border ${
                 scrolled || !isHome
-                  ? "border-border text-foreground hover:bg-secondary"
-                  : "border-white/30 text-white hover:bg-white/10 hover:text-white"
+                  ? "bg-background border-border text-foreground hover:bg-secondary"
+                  : "bg-white/10 border-white/30 text-white hover:bg-white/20 hover:text-white backdrop-blur-sm"
               }`}
             >
               <Link href="/login">

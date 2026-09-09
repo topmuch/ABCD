@@ -271,23 +271,25 @@ export default function HomePage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {SERVICES.slice(0, 4).map((s, i) => (
               <Reveal key={s.title} delay={i * 0.05}>
-                <Card className="group h-full overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-border/80 hover:border-accent/50 p-0">
-                  <div className="relative h-36 overflow-hidden">
-                    { }
-                    <img
-                      src={s.image}
-                      alt={s.title}
-                      className="absolute inset-0 h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0c1f4a]/85 via-[#0c1f4a]/30 to-transparent" />
-                  </div>
-                  <CardHeader className="pt-4">
-                    <CardTitle className="text-lg">{s.title}</CardTitle>
-                    <CardDescription className="text-muted-foreground leading-relaxed">
-                      {s.desc}
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
+                <Link href={`/services/${s.slug}`} className="group block h-full">
+                  <Card className="group h-full overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-border/80 hover:border-accent/50 p-0 cursor-pointer">
+                    <div className="relative h-36 overflow-hidden">
+                      { }
+                      <img
+                        src={s.image}
+                        alt={s.title}
+                        className="absolute inset-0 h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c1f4a]/85 via-[#0c1f4a]/30 to-transparent" />
+                    </div>
+                    <CardHeader className="pt-4">
+                      <CardTitle className="text-lg group-hover:text-accent transition-colors">{s.title}</CardTitle>
+                      <CardDescription className="text-muted-foreground leading-relaxed">
+                        {s.desc}
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
+                </Link>
               </Reveal>
             ))}
           </div>

@@ -60,9 +60,9 @@ export function SiteFooter() {
             </h4>
             <ul className="mt-4 space-y-2.5">
               {SERVICES.slice(0, 5).map((s) => (
-                <li key={s.title}>
+                <li key={s.slug}>
                   <Link
-                    href="/services"
+                    href={`/services/${s.slug}`}
                     className="text-sm text-white/70 hover:text-accent transition-colors"
                   >
                     {s.title}

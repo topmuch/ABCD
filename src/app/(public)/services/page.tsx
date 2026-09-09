@@ -28,29 +28,32 @@ export default function ServicesPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {SERVICES.map((s, i) => (
               <Reveal key={s.title} delay={i * 0.04}>
-                <Card className="group h-full overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-border/80 hover:border-accent/50 p-0">
-                  <div className="relative h-44 overflow-hidden">
-                    { }
-                    <img
-                      src={s.image}
-                      alt={s.title}
-                      className="absolute inset-0 h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0c1f4a]/85 via-[#0c1f4a]/30 to-transparent" />
-                    <div className="absolute bottom-3 left-3 right-3">
-                      <div className="inline-flex items-center gap-1.5 rounded-full bg-accent/90 text-accent-foreground px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide backdrop-blur-sm">
-                        <s.icon className="h-3 w-3" />
-                        Service
+                <Link href={`/services/${s.slug}`} className="group block h-full">
+                  <Card className="group h-full overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-border/80 hover:border-accent/50 p-0 cursor-pointer">
+                    <div className="relative h-44 overflow-hidden">
+                      { }
+                      <img
+                        src={s.image}
+                        alt={s.title}
+                        className="absolute inset-0 h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c1f4a]/85 via-[#0c1f4a]/30 to-transparent" />
+                      <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                        <div className="inline-flex items-center gap-1.5 rounded-full bg-accent/90 text-accent-foreground px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide backdrop-blur-sm">
+                          <s.icon className="h-3 w-3" />
+                          Service
+                        </div>
+                        <ArrowUpRight className="h-4 w-4 text-white/70 group-hover:text-accent transition-colors" />
                       </div>
                     </div>
-                  </div>
-                  <CardHeader className="pt-4">
-                    <CardTitle className="text-lg">{s.title}</CardTitle>
-                    <CardDescription className="text-muted-foreground leading-relaxed">
-                      {s.desc}
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
+                    <CardHeader className="pt-4">
+                      <CardTitle className="text-lg group-hover:text-accent transition-colors">{s.title}</CardTitle>
+                      <CardDescription className="text-muted-foreground leading-relaxed">
+                        {s.desc}
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
+                </Link>
               </Reveal>
             ))}
           </div>
