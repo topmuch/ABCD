@@ -105,14 +105,14 @@ export async function fetchInbox(opts: {
   try {
     const lock = await client.getMailboxLock(folder);
     try {
-      // Search for messages
+      // Search for messages — exclude deleted messages
       let searchCriteria;
       if (opts.unreadOnly) {
-        searchCriteria = { seen: false };
+        searchCriteria = { seen: false, not: { deleted: true } };
       } else if (opts.search) {
-        searchCriteria = { OR: [{ from: opts.search }, { subject: opts.search }, { body: opts.search }] };
+        searchCriteria = { OR: [{ from: opts.search }, { subject: opts.search }, { body: opts.search }], not: { deleted: true } };
       } else {
-        searchCriteria = { all: true };
+        searchCriteria = { all: true, not: { deleted: true } };
       }
       const uids = await client.search(searchCriteria, { uid: true });
       const total = uids.length;
@@ -232,21 +232,36 @@ export async function deleteEmail(uid: number, folder = "INBOX"): Promise<void> 
   }
   const client = await createImapClient(config);
   try {
-    // Use getMailboxLock with expunge: true to allow permanent deletion
-    const lock = await client.getMailboxLock(folder, { expunge: true });
+    // Try the direct messageDelete method first (cleanest approach)
+    let deleted = false;
     try {
-      // Mark the message as \Deleted
-      const result = await client.messageFlagsAdd(uid, ["\\Deleted"], { uid: true });
-      if (!result) {
-        console.warn(`[imap] deleteEmail: message ${uid} not found (already deleted?)`);
+      // ImapFlow has a messageDelete method that marks + expunges in one call
+      const result = await (client as unknown as {
+        messageDelete: (range: number, opts?: { uid?: boolean }) => Promise<boolean>;
+      }).messageDelete(uid, { uid: true });
+      deleted = Boolean(result);
+    } catch (e) {
+      console.warn("[imap] messageDelete failed, falling back to flag+expunge:", e);
+    }
+
+    // Fallback: mark as \Deleted then expunge manually
+    if (!deleted) {
+      const lock = await client.getMailboxLock(folder);
+      try {
+        await client.messageFlagsAdd(uid, ["\\Deleted"], { uid: true });
+        // Try to call expunge if the method exists
+        const clientWithExpunge = client as unknown as {
+          expunge?: () => Promise<unknown>;
+          mailboxExpunge?: () => Promise<unknown>;
+        };
+        if (typeof clientWithExpunge.expunge === "function") {
+          await clientWithExpunge.expunge();
+        } else if (typeof clientWithExpunge.mailboxExpunge === "function") {
+          await clientWithExpunge.mailboxExpunge();
+        }
+      } finally {
+        lock.release();
       }
-      // The lock with expunge:true will handle expunge on release,
-      // but we also call it explicitly if available
-      if (typeof (client as unknown as { expunge?: () => Promise<unknown> }).expunge === "function") {
-        await (client as unknown as { expunge: () => Promise<unknown> }).expunge();
-      }
-    } finally {
-      lock.release();
     }
   } catch (err) {
     console.error("[imap] deleteEmail error:", err);

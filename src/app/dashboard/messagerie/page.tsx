@@ -207,13 +207,19 @@ export default function MessageriePage() {
 
   const handleDelete = useCallback(async () => {
     if (!selectedUid) return;
+    const uidToDelete = selectedUid;
     setDeleting(true);
     try {
-      const res = await fetch(`/api/email/${selectedUid}?folder=${FOLDER}`, { method: "DELETE" });
+      const res = await fetch(`/api/email/${uidToDelete}?folder=${FOLDER}`, { method: "DELETE" });
       const json = await res.json();
       if (json.ok) {
-        toast({ title: "Email supprimé", description: "L'email a été supprimé." });
-        setSelectedUid(null); setSelectedEmail(null); fetchInbox();
+        toast({ title: "Email supprimé", description: "L'email a été supprimé de la boîte de réception." });
+        // Immediately remove from the list (optimistic UI)
+        setEmails((prev) => prev.filter((e) => e.uid !== uidToDelete));
+        setSelectedUid(null);
+        setSelectedEmail(null);
+        // Also refresh from server to sync any other changes
+        fetchInbox();
       } else {
         toast({ variant: "destructive", title: "Erreur", description: json.error || "Suppression impossible." });
       }
