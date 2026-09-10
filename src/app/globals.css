@@ -207,3 +207,57 @@
     oklch(0.20 0.06 258 / 0.55) 100%
   );
 }
+
+/* Premium: gold gradient text */
+.text-gradient-gold {
+  background: linear-gradient(135deg, oklch(0.82 0.14 75) 0%, oklch(0.72 0.16 65) 50%, oklch(0.85 0.12 80) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Premium: glassmorphism card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Premium: shimmer animation for badges */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(202, 138, 4, 0.15) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Premium: gold border glow */
+.glow-gold {
+  box-shadow: 0 0 0 1px rgba(202, 138, 4, 0.3), 0 8px 32px -8px rgba(202, 138, 4, 0.25);
+}
+
+/* Premium: floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Premium: gradient border card */
+.gradient-border {
+  position: relative;
+  background: linear-gradient(var(--background), var(--background)) padding-box,
+    linear-gradient(135deg, rgba(202, 138, 4, 0.4), rgba(30, 58, 138, 0.3)) border-box;
+  border: 1px solid transparent;
+}
