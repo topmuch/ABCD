@@ -37,6 +37,8 @@ import {
   SERVICES,
   SERVICE_HIGHLIGHTS,
   COUNTRIES,
+  REFERENCES,
+  PARTNER,
 } from "@/lib/site-data";
 
 const TRUST_ITEMS = [
@@ -310,12 +312,31 @@ export default function HomePage() {
                     <div className="text-xs text-muted-foreground mt-0.5">ans d&apos;expérience</div>
                   </div>
                   <div className="border-l-2 border-accent pl-3">
-                    <div className="text-2xl font-extrabold text-foreground">8</div>
+                    <div className="text-2xl font-extrabold text-foreground">11</div>
                     <div className="text-xs text-muted-foreground mt-0.5">services spécialisés</div>
                   </div>
                   <div className="border-l-2 border-accent pl-3">
                     <div className="text-2xl font-extrabold text-foreground">100%</div>
                     <div className="text-xs text-muted-foreground mt-0.5">sur mesure</div>
+                  </div>
+                </div>
+              </Reveal>
+
+              {/* ARS Rental partner paragraph */}
+              <Reveal delay={0.22}>
+                <div className="mt-8 rounded-2xl bg-secondary/60 ring-1 ring-border p-5">
+                  <div className="flex items-start gap-3">
+                    <div className="h-10 w-10 rounded-lg bg-accent/15 flex items-center justify-center shrink-0">
+                      <HandshakeIcon className="h-5 w-5 text-accent" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold text-foreground mb-1">
+                        Partenaire {PARTNER.name}
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {PARTNER.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </Reveal>
@@ -582,6 +603,54 @@ export default function HomePage() {
               ))}
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      {/* ============ NOS RÉFÉRENCES ============ */}
+      <section className="py-20 sm:py-28 bg-background">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto text-center mb-12">
+            <Reveal>
+              <Badge variant="outline" className="mb-4 text-primary border-primary/30 bg-primary/5">
+                <Star className="mr-1.5 h-3.5 w-3.5" />
+                Nos références
+              </Badge>
+            </Reveal>
+            <Reveal delay={0.05}>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground">
+                Ils nous font confiance
+              </h2>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="mt-5 text-base sm:text-lg text-muted-foreground">
+                Organisations internationales, institutions publiques et partenaires
+                qui s&apos;appuient sur l&apos;expertise d&apos;ABCD Ltd.
+              </p>
+            </Reveal>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            {REFERENCES.map((ref, i) => (
+              <Reveal key={ref.name} delay={i * 0.06}>
+                <div className="group h-full flex flex-col items-center justify-center text-center rounded-2xl bg-card ring-1 ring-border hover:ring-accent/40 hover:shadow-lg transition-all p-6 hover:-translate-y-1">
+                  <div className="h-20 w-20 sm:h-24 sm:w-24 flex items-center justify-center mb-4 bg-white rounded-xl p-3 ring-1 ring-border overflow-hidden">
+                    { }
+                    <img
+                      src={ref.logo}
+                      alt={`Logo ${ref.name}`}
+                      className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <h3 className="text-sm font-bold text-foreground leading-tight">
+                    {ref.name}
+                  </h3>
+                  <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                    {ref.desc}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 

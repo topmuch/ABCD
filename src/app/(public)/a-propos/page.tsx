@@ -12,12 +12,19 @@ import {
   HandshakeIcon,
   Users,
   ArrowUpRight,
+  Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { PageHeader, Reveal } from "@/components/site/page-header";
-import { COUNTRIES, PROCESS, WHY_US } from "@/lib/site-data";
+import {
+  COUNTRIES,
+  PARTNER,
+  PROCESS,
+  REFERENCES,
+  WHY_US,
+} from "@/lib/site-data";
 
 export default function AProposPage() {
   return (
@@ -100,6 +107,18 @@ export default function AProposPage() {
                 </p>
               </Reveal>
               <Reveal delay={0.25}>
+                <div className="mt-6 rounded-xl bg-secondary/60 ring-1 ring-border p-4 flex items-start gap-3">
+                  <div className="h-10 w-10 rounded-lg bg-accent/15 flex items-center justify-center shrink-0">
+                    <HandshakeIcon className="h-5 w-5 text-accent" />
+                  </div>
+                  <p className="text-sm sm:text-base text-foreground/90 leading-relaxed">
+                    <strong className="text-foreground">{PARTNER.name}</strong>
+                    {" — "}
+                    {PARTNER.description}
+                  </p>
+                </div>
+              </Reveal>
+              <Reveal delay={0.3}>
                 <ul className="mt-7 space-y-3">
                   {[
                     "Transit et commissionnaire en douane agréé",
@@ -268,6 +287,52 @@ export default function AProposPage() {
                 Voir tous nos atouts <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Nos références */}
+      <section className="py-20 sm:py-28 bg-background">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto text-center mb-12">
+            <Reveal>
+              <Badge variant="outline" className="mb-4 text-primary border-primary/30">
+                <Star className="mr-1.5 h-3.5 w-3.5 text-accent" />
+                Nos références
+              </Badge>
+            </Reveal>
+            <Reveal delay={0.05}>
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
+                Ils nous font confiance
+              </h2>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="mt-4 text-base sm:text-lg text-muted-foreground">
+                Ils s&apos;appuient sur notre expertise logistique pour leurs
+                opérations en Afrique de l&apos;Ouest.
+              </p>
+            </Reveal>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            {REFERENCES.map((ref, i) => (
+              <Reveal key={ref.name} delay={i * 0.06}>
+                <div className="bg-white rounded-2xl ring-1 ring-border hover:ring-accent/40 hover:shadow-lg transition-all p-5 flex flex-col items-center text-center h-full">
+                  <div className="h-20 w-full flex items-center justify-center">
+                    <img
+                      src={ref.logo}
+                      alt={`Logo ${ref.name}`}
+                      className="max-h-20 max-w-full object-contain"
+                    />
+                  </div>
+                  <div className="mt-4 text-sm font-bold text-foreground">
+                    {ref.name}
+                  </div>
+                  <div className="mt-1 text-xs text-muted-foreground">
+                    {ref.desc}
+                  </div>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>

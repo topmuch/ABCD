@@ -277,3 +277,92 @@ Stage Summary:
 - Dashboard `/dashboard/rendez-vous` is the management console: KPIs (Total/Pending/Confirmed/Cancelled), filter tabs + search, sortable table, detail modal with Confirmer/Annuler/Supprimer actions wired to PUT/DELETE endpoints. Sidebar link already existed in layout.tsx.
 - Both files lint-clean and type-clean. APIs already existed; no schema changes needed.
 - Recommended next: seed one or two appointment rows via the public form (or directly) and verify end-to-end via the Agent Browser, then commit + push to GitHub.
+
+---
+Task ID: contact-update
+Agent: Sub-agent (general-purpose)
+Task: Update contact page address & coordinates to new SICAP Liberté 1 location
+
+Work Log:
+- Read worklog.md (project context) and `src/app/(public)/contact/page.tsx` (648 lines, full content read in chunks)
+- Verified `COMPANY` is exported from `src/lib/site-data.ts` with the required fields: addressLine1="Immeuble Kalimo Consulting Group", addressLine2="Villa 2105, SICAP Liberté 1", city="Dakar", country="Sénégal", phone="+221 33 821 11 31", phoneHref="+221338211131", email="abcdev@gmail.com", founded="2019"
+- Applied 18 atomic edits to `src/app/(public)/contact/page.tsx` via MultiEdit:
+  1. Added `import { COMPANY } from "@/lib/site-data";` after the page-header import (line 40)
+  2. Converted devis-form error toast to template literal using `${COMPANY.email}` (line 86)
+  3. Converted booking-form error toast to template literal using `${COMPANY.phone}` (line 141)
+  4. Updated intro paragraph "au cœur de Sacré Coeur" → "au cœur de SICAP Liberté 1" (line 173)
+  5. Updated Google Maps search URL `q=` to "Immeuble+Kalimo+Consulting+Group+SICAP+Liberté+1+Dakar" (line 182)
+  6. Replaced first address block with `{COMPANY.addressLine1}<br/>{COMPANY.addressLine2}, {COMPANY.city}, {COMPANY.country}` (lines 195-197)
+  7. Updated phone `href` to `{`tel:${COMPANY.phoneHref}`}` (line 203)
+  8. Updated phone display to `{COMPANY.phone}` (line 214)
+  9. Updated email `href` to `{`mailto:${COMPANY.email}`}` (line 220)
+  10. Updated email display to `{COMPANY.email}` (line 231)
+  11. Updated card title "Cité keur Gorgui, Sacré Coeur — Dakar" → "SICAP Liberté 1 — Dakar" (line 532)
+  12. Updated subtitle "au cœur de Sacré Coeur" → "au cœur de SICAP Liberté 1" (line 535)
+  13. Updated iframe `title` to "Carte ABCD Ltd - SICAP Liberté 1, Dakar" (line 547)
+  14. Updated OpenStreetMap iframe `src` with new bbox/marker around 14.6980, -17.4480 (line 548): `bbox=-17.4680%2C14.6880%2C-17.4280%2C14.7080&layer=mapnik&marker=14.6980%2C-17.4480`
+  15. Replaced second address block in map overlay with COMPANY fields (lines 560-561)
+  16. Updated Google Maps directions destination to "Immeuble+Kalimo+Consulting+Group+SICAP+Liberté+1+Dakar+Sénégal" (line 590)
+  17. Updated OpenStreetMap view link to `?mlat=14.6980&mlon=-17.4480#map=16/14.6980/-17.4480` (line 605)
+  18. Updated GPS card: latitude 14.7167 → 14.6980° N (line 626); longitude 17.4639 → 17.4480° W (line 630)
+
+Lint / type-check:
+- `bunx eslint "src/app/(public)/contact/page.tsx"` → EXIT_CODE=0, 0 errors, 0 warnings
+- `bunx tsc --noEmit --skipLibCheck` filtered for contact page → no errors
+- `rg` sweep confirms ZERO remaining occurrences of: "Sacré Coeur", "Cité keur Gorgui", "14.7167", "17.4639", old bbox coords (17.4850/14.7000/17.4450/14.7350), `abcdev@gmail.com` literal, `tel:+221338211131`, `mailto:abcdev`
+
+Stage Summary:
+- Contact page now reflects ABCD Ltd's new address (Immeuble Kalimo Consulting Group, Villa 2105, SICAP Liberté 1, Dakar, Sénégal) and new GPS coordinates (14.6980° N, 17.4480° W).
+- All address text, phone, email, and map links now pull from the shared `COMPANY` constant in `src/lib/site-data.ts`, so future address changes only need to update that one file.
+- OpenStreetMap iframe and external links (Google Maps search + directions, OSM view) all point at the new SICAP Liberté 1 location.
+- File lints clean and type-checks clean — ready to commit/push to GitHub.
+
+---
+Task ID: about-update
+Agent: Sub-agent (general-purpose)
+Task: Update About page (/a-propos) with ARS Rental partner paragraph and "Nos références" section
+
+Work Log:
+- Read worklog.md for context, `src/app/(public)/a-propos/page.tsx` (277 lines), and `src/lib/site-data.ts` to confirm `PARTNER` and `REFERENCES` constants exist with the documented shape (PARTNER = { name, description }, REFERENCES = array of { name, logo, desc } with 4 entries: UNICEF, ITS Sénégal, Ministère de la Santé, PATH International)
+- Verified all 4 reference logo assets exist in /public: ref-unicef.png, ref-its.png, ref-mshp.jpg, ref-path.png
+- Baseline eslint check on the page → exit 0, clean (HandshakeIcon was already imported and lints clean)
+- Applied 3 atomic edits to `src/app/(public)/a-propos/page.tsx` via MultiEdit:
+
+  EDIT 1 — Imports:
+  - Added `Star` to the lucide-react import list (HandshakeIcon was already imported)
+  - Replaced single-line `import { COUNTRIES, PROCESS, WHY_US } from "@/lib/site-data";` with a multi-line import that adds `PARTNER` and `REFERENCES` (alphabetically ordered)
+
+  EDIT 2 — ARS Rental partner block:
+  - Inserted AFTER the "cahiers de charges avec des obligations de part et d'autre" paragraph (the main "Notre histoire" paragraph) and BEFORE the existing `<ul>` list of bullets
+  - Wrapped in `<Reveal delay={0.25}>` (and bumped the existing `<ul>` Reveal from delay={0.25} to delay={0.3} to maintain staggered animation order)
+  - Markup: `<div className="mt-6 rounded-xl bg-secondary/60 ring-1 ring-border p-4 flex items-start gap-3">`
+    - Inside: a `h-10 w-10 rounded-lg bg-accent/15` icon chip containing `<HandshakeIcon className="h-5 w-5 text-accent" />`
+    - A `<p>` with `<strong>{PARTNER.name}</strong> — {PARTNER.description}` styled with `text-sm sm:text-base text-foreground/90 leading-relaxed`
+  - Matches the visual language of the existing accent/15 icon chips used in the Atouts cards
+
+  EDIT 3 — "Nos références" section:
+  - Placed AFTER the "Atouts preview" section (the WHY_US section with the "Voir tous nos atouts" button) and BEFORE the closing `</>` of the page
+  - Uses the same `py-20 sm:py-28 bg-background` section padding and `max-w-7xl` wrapper as sibling sections
+  - Centered header: Badge (outline, primary text/border) containing `<Star className="mr-1.5 h-3.5 w-3.5 text-accent" />` + "Nos références"; h2 "Ils nous font confiance"; subtitle paragraph
+  - Grid: `grid grid-cols-2 lg:grid-cols-4 gap-5` mapping over REFERENCES
+  - Each card: `bg-white rounded-2xl ring-1 ring-border hover:ring-accent/40 hover:shadow-lg transition-all p-5 flex flex-col items-center text-center h-full`
+    - Logo container: `h-20 w-full flex items-center justify-center` holding a native `<img>` with `max-h-20 max-w-full object-contain` (per task spec — using <img> for runtime logo flexibility)
+    - Name: `mt-4 text-sm font-bold text-foreground`
+    - Description: `mt-1 text-xs text-muted-foreground`
+  - All Reveal wrappers with staggered delay (i * 0.06)
+
+Lint / type-check:
+- Initial eslint after edits → 1 warning: "Unused eslint-disable directive" for the `@next/next/no-img-element` comment I had added above the `<img>` (the project's eslint config does not flag plain <img> for this Next.js setup)
+- Ran `bunx eslint "src/app/(public)/a-propos/page.tsx" --fix` → removed the comment but left a stray `{ }` empty JSX expression container
+- Manually removed the stray `{ }` to keep the JSX clean
+- Final `bunx eslint "src/app/(public)/a-propos/page.tsx"` → EXIT_CODE=0, 0 errors, 0 warnings
+- `bunx tsc --noEmit --skipLibCheck` filtered for a-propos page → no type errors
+
+Stage Summary:
+- /a-propos page now contains:
+  1. The ARS Rental partner paragraph (with HandshakeIcon chip + PARTNER.description text) right after the "Notre histoire" main paragraph — gives proper visibility to the ARS Rental représentativité partnership
+  2. A new "Nos références" section at the bottom of the page (after Atouts preview) showing the 4 client logos (UNICEF, ITS Sénégal, Ministère de la Santé et de l'Hygiène Publique, PATH International) in a responsive grid of cards with white rounded containers and object-contain logos
+- Both additions follow the existing page patterns: Reveal scroll animations with staggered delays, Badge + h2 header style, accent/15 icon chips, and ring-1 ring-border card styling
+- Lint clean (0 errors, 0 warnings); TypeScript clean
+- All 4 reference logo assets already exist in /public; no asset additions needed
+- Ready to commit + push to GitHub

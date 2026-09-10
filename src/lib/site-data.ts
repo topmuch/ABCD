@@ -14,6 +14,9 @@ import {
   Route,
   HandshakeIcon,
   Sparkles,
+  ShoppingCart,
+  Wrench,
+  Ship as ShipIcon,
   type LucideIcon,
 } from "lucide-react";
 
@@ -240,6 +243,81 @@ export const SERVICES: Service[] = [
       { title: "Bout en bout", desc: "De l'origine à la destination finale" },
     ],
   },
+  {
+    slug: "vente-transport",
+    icon: ShoppingCart,
+    title: "Vente de Transport",
+    shortTitle: "Vente Transport",
+    desc: "Vente de solutions de transport adaptées à vos besoins, avec un accompagnement complet.",
+    image: "/svc-routier.jpg",
+    longDesc:
+      "ABCD Ltd propose la vente de solutions de transport adaptées aux besoins spécifiques de chaque client. Grâce à notre contrat de représentativité en Afrique de l'Ouest avec ARS Rental, nous mettons à votre disposition des engins et du matériel de manutention et transport de dernière génération. Que vous ayez besoin d'acquérir un véhicule utilitaire, un camion ou un équipement de transport spécialisé, nous vous accompagnons dans votre choix avec des solutions techniques et financières sur mesure.",
+    features: [
+      "Vente de véhicules utilitaires et camions",
+      "Matériel de transport de dernière génération",
+      "Solutions techniques adaptées",
+      "Accompagnement dans le choix d'équipement",
+      "Contrat de représentativité ARS Rental",
+      "Solutions financières sur mesure",
+      "Conseil en acquisition",
+      "Suivi après-vente",
+    ],
+    highlights: [
+      { title: "ARS Rental", desc: "Représentant officiel en Afrique de l'Ouest" },
+      { title: "Dernière génération", desc: "Engins et matériel récents" },
+      { title: "Sur mesure", desc: "Solutions adaptées à chaque besoin" },
+    ],
+  },
+  {
+    slug: "location-materiel-manutention",
+    icon: Wrench,
+    title: "Location Matériel de Manutention",
+    shortTitle: "Location Manutention",
+    desc: "Vente ou location longue durée de matériel de manutention de dernière génération.",
+    image: "/svc-entrepot.jpg",
+    longDesc:
+      "En partenariat avec ARS Rental, ABCD Ltd propose la vente ou la location longue durée de matériel de manutention de dernière génération. Notre catalogue comprend chariots élévateurs, transpalettes, grues mobiles, nacelles élévatrices et tout équipement nécessaire à la manutention de vos marchandises. La location longue durée vous offre la flexibilité d'un équipement récent et maintenu sans les contraintes de la propriété, avec des conditions adaptées à votre activité.",
+    features: [
+      "Chariots élévateurs et transpalettes",
+      "Grues mobiles et nacelles élévatrices",
+      "Location longue durée flexible",
+      "Vente d'équipement neuf et récent",
+      "Matériel de dernière génération",
+      "Maintenance incluse en location",
+      "Contrat ARS Rental",
+      "Solutions adaptées à votre activité",
+    ],
+    highlights: [
+      { title: "Longue durée", desc: "Vente ou location flexible" },
+      { title: "Partenaire ARS Rental", desc: "Représentant exclusif Afrique de l'Ouest" },
+      { title: "Maintenance", desc: "Incluse en location longue durée" },
+    ],
+  },
+  {
+    slug: "location-materiel-portuaire",
+    icon: ShipIcon,
+    title: "Location Matériel Portuaire",
+    shortTitle: "Location Portuaire",
+    desc: "Vente ou location longue durée de matériel portuaire pour vos opérations au Port de Dakar.",
+    image: "/svc-maritime.jpg",
+    longDesc:
+      "ABCD Ltd, en tant que représentant d'ARS Rental en Afrique de l'Ouest, propose la vente ou la location longue durée de matériel portuaire de dernière génération. Notre offre couvre les grues de port, les reach stackers, les tracteurs portuaires, les chariots cavaliers et tout le matériel nécessaire à la manutention portuaire. Ces équipements sont indispensables pour les opérations de chargement et déchargement des navires, la manipulation des conteneurs et l'optimisation des flux dans les terminaux portuaires de Dakar.",
+    features: [
+      "Grues de port et reach stackers",
+      "Tracteurs portuaires et chariots cavaliers",
+      "Vente ou location longue durée",
+      "Matériel portuaire de dernière génération",
+      "Optimisation des opérations portuaires",
+      "Maintenance et support technique",
+      "Contrat ARS Rental",
+      "Adapté au Port de Dakar",
+    ],
+    highlights: [
+      { title: "Matériel portuaire", desc: "Grues, reach stackers, tracteurs" },
+      { title: "Port de Dakar", desc: "Adapté aux opérations locales" },
+      { title: "ARS Rental", desc: "Représentant officiel en Afrique de l'Ouest" },
+    ],
+  },
 ];
 
 export const SERVICE_HIGHLIGHTS = [
@@ -350,5 +428,54 @@ export const FAQS = [
   {
     q: "Comment obtenir un devis ?",
     a: "Utilisez le formulaire de contact de la page Contact ou écrivez-nous à abcdev@gmail.com. Nos équipes vous répondront avec une proposition sur mesure dans les meilleurs délais.",
+  },
+];
+
+// ---- Coordonnées de l'entreprise ----
+export const COMPANY = {
+  addressLine1: "Immeuble Kalimo Consulting Group",
+  addressLine2: "Villa 2105, SICAP Liberté 1",
+  city: "Dakar",
+  country: "Sénégal",
+  phone: "+221 33 821 11 31",
+  phoneHref: "+221338211131",
+  email: "abcdev@gmail.com",
+  founded: "2019",
+};
+
+// ---- Partenaire ARS Rental ----
+export const PARTNER = {
+  name: "ARS Rental",
+  description:
+    "Grâce à notre contrat de représentativité en Afrique de l'Ouest avec ARS Rental, nous sommes en mesure de fournir en location ou à la vente des engins et du matériel de manutention et transport de dernière génération.",
+};
+
+// ---- Références clients ----
+export type Reference = {
+  name: string;
+  logo: string;
+  desc: string;
+};
+
+export const REFERENCES: Reference[] = [
+  {
+    name: "UNICEF",
+    logo: "/ref-unicef.png",
+    desc: "Fonds des Nations Unies pour l'enfance",
+  },
+  {
+    name: "ITS Sénégal",
+    logo: "/ref-its.png",
+    desc: "Institut de Technologies du Sénégal",
+  },
+  {
+    name: "Ministère de la Santé et de l'Hygiène Publique",
+    logo: "/ref-mshp.jpg",
+    desc: "Ministère de la Santé et de l'Hygiène Publique",
+  },
+  {
+    name: "PATH International",
+    logo: "/ref-path.png",
+    desc: "Organisation mondiale de santé publique",
   },
 ];

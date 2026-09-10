@@ -8,7 +8,7 @@ import {
   QrCode,
   ExternalLink,
 } from "lucide-react";
-import { NAV_LINKS, SERVICES } from "@/lib/site-data";
+import { NAV_LINKS, SERVICES, COMPANY } from "@/lib/site-data";
 
 const SITE_URL = "https://abcdsenegal.com/";
 
@@ -85,22 +85,23 @@ export function SiteFooter() {
               <li className="flex items-start gap-2.5 text-sm text-white/70">
                 <MapPin className="h-4 w-4 text-accent mt-0.5 shrink-0" />
                 <span>
-                  Cité keur Gorgui, Lot 01 villa 003 Sacré Coeur, Dakar, Sénégal
+                  {COMPANY.addressLine1}<br />
+                  {COMPANY.addressLine2}, {COMPANY.city}, {COMPANY.country}
                 </span>
               </li>
               <li className="flex items-center gap-2.5 text-sm text-white/70">
                 <Phone className="h-4 w-4 text-accent shrink-0" />
-                <a href="tel:+221338211131" className="hover:text-accent transition-colors">
-                  +221 33 821 11 31
+                <a href={`tel:${COMPANY.phoneHref}`} className="hover:text-accent transition-colors">
+                  {COMPANY.phone}
                 </a>
               </li>
               <li className="flex items-center gap-2.5 text-sm text-white/70">
                 <Mail className="h-4 w-4 text-accent shrink-0" />
                 <a
-                  href="mailto:abcdev@gmail.com"
+                  href={`mailto:${COMPANY.email}`}
                   className="hover:text-accent transition-colors"
                 >
-                  abcdev@gmail.com
+                  {COMPANY.email}
                 </a>
               </li>
             </ul>

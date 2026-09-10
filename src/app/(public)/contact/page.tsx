@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { PageHeader, Reveal } from "@/components/site/page-header";
+import { COMPANY } from "@/lib/site-data";
 
 export default function ContactPage() {
   const { toast } = useToast();
@@ -82,7 +83,7 @@ export default function ContactPage() {
         variant: "destructive",
         title: "Erreur d'envoi",
         description:
-          "Une erreur est survenue. Vous pouvez nous écrire directement à abcdev@gmail.com.",
+          `Une erreur est survenue. Vous pouvez nous écrire directement à ${COMPANY.email}.`,
       });
     } finally {
       setSubmitting(false);
@@ -137,7 +138,7 @@ export default function ContactPage() {
         variant: "destructive",
         title: "Erreur d'envoi",
         description:
-          "Une erreur est survenue. Vous pouvez nous appeler au +221 33 821 11 31.",
+          `Une erreur est survenue. Vous pouvez nous appeler au ${COMPANY.phone}.`,
       });
     } finally {
       setBooking(false);
@@ -169,7 +170,7 @@ export default function ContactPage() {
               </Reveal>
               <Reveal delay={0.1}>
                 <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
-                  Nous sommes basés à Dakar, au cœur de Sacré Coeur. Nos équipes
+                  Nous sommes basés à Dakar, au cœur de SICAP Liberté 1. Nos équipes
                   sont disponibles pour étudier votre demande et vous proposer
                   une solution adaptée.
                 </p>
@@ -178,7 +179,7 @@ export default function ContactPage() {
               <Reveal delay={0.15}>
                 <div className="mt-8 space-y-4">
                   <a
-                    href="https://maps.google.com/?q=Cité+keur+Gorgui+Sacré+Coeur+Dakar"
+                    href="https://maps.google.com/?q=Immeuble+Kalimo+Consulting+Group+SICAP+Liberté+1+Dakar"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-start gap-4 p-4 rounded-xl bg-background ring-1 ring-border hover:ring-accent/40 transition-all group"
@@ -191,15 +192,15 @@ export default function ContactPage() {
                         Adresse
                       </div>
                       <div className="text-sm text-muted-foreground mt-0.5">
-                        Cité keur Gorgui, Lot 01 villa 003 Sacré Coeur
+                        {COMPANY.addressLine1}
                         <br />
-                        Dakar, Sénégal
+                        {COMPANY.addressLine2}, {COMPANY.city}, {COMPANY.country}
                       </div>
                     </div>
                   </a>
 
                   <a
-                    href="tel:+221338211131"
+                    href={`tel:${COMPANY.phoneHref}`}
                     className="flex items-start gap-4 p-4 rounded-xl bg-background ring-1 ring-border hover:ring-accent/40 transition-all group"
                   >
                     <div className="h-11 w-11 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-accent/15 transition-colors">
@@ -210,13 +211,13 @@ export default function ContactPage() {
                         Téléphone
                       </div>
                       <div className="text-sm text-muted-foreground mt-0.5">
-                        +221 33 821 11 31
+                        {COMPANY.phone}
                       </div>
                     </div>
                   </a>
 
                   <a
-                    href="mailto:abcdev@gmail.com"
+                    href={`mailto:${COMPANY.email}`}
                     className="flex items-start gap-4 p-4 rounded-xl bg-background ring-1 ring-border hover:ring-accent/40 transition-all group"
                   >
                     <div className="h-11 w-11 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-accent/15 transition-colors">
@@ -227,7 +228,7 @@ export default function ContactPage() {
                         Email
                       </div>
                       <div className="text-sm text-muted-foreground mt-0.5">
-                        abcdev@gmail.com
+                        {COMPANY.email}
                       </div>
                     </div>
                   </a>
@@ -528,10 +529,10 @@ export default function ContactPage() {
                 Nous trouver
               </Badge>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
-                Cité keur Gorgui, Sacré Coeur — Dakar
+                SICAP Liberté 1 — Dakar
               </h2>
               <p className="mt-3 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-                Notre bureau est situé à Dakar, au cœur de Sacré Coeur. Utilisez
+                Notre bureau est situé à Dakar, au cœur de SICAP Liberté 1. Utilisez
                 la carte ci-dessous pour vous rendre chez nous.
               </p>
             </div>
@@ -543,8 +544,8 @@ export default function ContactPage() {
               <div className="lg:col-span-2">
                 <div className="relative rounded-2xl overflow-hidden ring-1 ring-border shadow-lg h-[380px] sm:h-[460px] bg-secondary">
                   <iframe
-                    title="Carte ABCD Ltd - Sacré Coeur, Dakar"
-                    src="https://www.openstreetmap.org/export/embed.html?bbox=-17.4850%2C14.7000%2C-17.4450%2C14.7350&layer=mapnik&marker=14.7167%2C-17.4639"
+                    title="Carte ABCD Ltd - SICAP Liberté 1, Dakar"
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=-17.4680%2C14.6880%2C-17.4280%2C14.7080&layer=mapnik&marker=14.6980%2C-17.4480"
                     className="absolute inset-0 h-full w-full"
                     style={{ border: 0 }}
                     loading="lazy"
@@ -556,8 +557,8 @@ export default function ContactPage() {
                       ABCD Ltd
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Cité keur Gorgui, Lot 01 villa 003<br />
-                      Sacré Coeur, Dakar, Sénégal
+                      {COMPANY.addressLine1}<br />
+                      {COMPANY.addressLine2}, {COMPANY.city}, {COMPANY.country}
                     </p>
                   </div>
                 </div>
@@ -586,7 +587,7 @@ export default function ContactPage() {
                       className="mt-4 w-full bg-accent text-accent-foreground hover:bg-accent/90"
                     >
                       <a
-                        href="https://www.google.com/maps/dir/?api=1&destination=Cit%C3%A9+keur+Gorgui+Sacr%C3%A9+Coeur+Dakar+S%C3%A9n%C3%A9gal"
+                        href="https://www.google.com/maps/dir/?api=1&destination=Immeuble+Kalimo+Consulting+Group+SICAP+Liberté+1+Dakar+Sénégal"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -601,7 +602,7 @@ export default function ContactPage() {
                       className="mt-2 w-full"
                     >
                       <a
-                        href="https://www.openstreetmap.org/?mlat=14.7167&mlon=-17.4639#map=15/14.7167/-17.4639"
+                        href="https://www.openstreetmap.org/?mlat=14.6980&mlon=-17.4480#map=16/14.6980/-17.4480"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -622,11 +623,11 @@ export default function ContactPage() {
                     <div className="mt-3 space-y-2 text-sm">
                       <div className="flex items-center justify-between">
                         <span className="text-white/70">Latitude</span>
-                        <span className="font-mono font-medium">14.7167° N</span>
+                        <span className="font-mono font-medium">14.6980° N</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-white/70">Longitude</span>
-                        <span className="font-mono font-medium">17.4639° W</span>
+                        <span className="font-mono font-medium">17.4480° W</span>
                       </div>
                     </div>
                     <div className="mt-4 pt-4 border-t border-white/15">
