@@ -211,7 +211,12 @@ export default function ContactPage() {
                         Téléphone
                       </div>
                       <div className="text-sm text-muted-foreground mt-0.5">
-                        {COMPANY.phone}
+                        <a href={`tel:${COMPANY.phoneHref}`} className="hover:text-accent transition-colors block">
+                          {COMPANY.phone}
+                        </a>
+                        <a href={`tel:${COMPANY.phoneSecondaryHref}`} className="hover:text-accent transition-colors block text-xs">
+                          {COMPANY.phoneSecondary}
+                        </a>
                       </div>
                     </div>
                   </a>

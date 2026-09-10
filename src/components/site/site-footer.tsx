@@ -91,9 +91,14 @@ export function SiteFooter() {
               </li>
               <li className="flex items-center gap-2.5 text-sm text-white/70">
                 <Phone className="h-4 w-4 text-accent shrink-0" />
-                <a href={`tel:${COMPANY.phoneHref}`} className="hover:text-accent transition-colors">
-                  {COMPANY.phone}
-                </a>
+                <div className="flex flex-col">
+                  <a href={`tel:${COMPANY.phoneHref}`} className="hover:text-accent transition-colors">
+                    {COMPANY.phone}
+                  </a>
+                  <a href={`tel:${COMPANY.phoneSecondaryHref}`} className="hover:text-accent transition-colors text-xs text-white/60">
+                    {COMPANY.phoneSecondary}
+                  </a>
+                </div>
               </li>
               <li className="flex items-center gap-2.5 text-sm text-white/70">
                 <Mail className="h-4 w-4 text-accent shrink-0" />

@@ -38,7 +38,6 @@ import {
   SERVICE_HIGHLIGHTS,
   COUNTRIES,
   REFERENCES,
-  PARTNER,
 } from "@/lib/site-data";
 
 const TRUST_ITEMS = [
@@ -318,25 +317,6 @@ export default function HomePage() {
                   <div className="border-l-2 border-accent pl-3">
                     <div className="text-2xl font-extrabold text-foreground">100%</div>
                     <div className="text-xs text-muted-foreground mt-0.5">sur mesure</div>
-                  </div>
-                </div>
-              </Reveal>
-
-              {/* ARS Rental partner paragraph */}
-              <Reveal delay={0.22}>
-                <div className="mt-8 rounded-2xl bg-secondary/60 ring-1 ring-border p-5">
-                  <div className="flex items-start gap-3">
-                    <div className="h-10 w-10 rounded-lg bg-accent/15 flex items-center justify-center shrink-0">
-                      <HandshakeIcon className="h-5 w-5 text-accent" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold text-foreground mb-1">
-                        Partenaire {PARTNER.name}
-                      </div>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {PARTNER.description}
-                      </p>
-                    </div>
                   </div>
                 </div>
               </Reveal>

@@ -1,0 +1,116 @@
+"use client";
+
+import Link from "next/link";
+import { ArrowRight, HandshakeIcon, Sparkles, ShieldCheck, Users, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { PageHeader, Reveal } from "@/components/site/page-header";
+import { PARTNERS } from "@/lib/site-data";
+
+export default function PartenairesPage() {
+  return (
+    <>
+      <PageHeader
+        badge="Nos partenaires"
+        title="Des partenariats stratégiques au service de vos opérations"
+        subtitle="ABCD Ltd s'associe à des acteurs de référence pour vous offrir des solutions complètes de transport, manutention et location de matériel de dernière génération."
+      />
+
+      {/* Partners grid */}
+      <section className="py-20 sm:py-28 bg-background">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-8 lg:gap-10">
+            {PARTNERS.map((p, i) => (
+              <Reveal key={p.name} delay={i * 0.08}>
+                <Card className="overflow-hidden border-border/80 hover:shadow-xl transition-shadow">
+                  <CardContent className="p-0">
+                    <div className="grid md:grid-cols-3 gap-0">
+                      {/* Logo side */}
+                      <div className="relative bg-secondary/40 flex items-center justify-center p-8 md:p-12 min-h-[280px]">
+                        <div className="absolute inset-0 bg-grid-navy opacity-20" />
+                        <div className="relative bg-white rounded-2xl p-6 shadow-lg ring-1 ring-border w-full max-w-[240px] aspect-square flex items-center justify-center">
+                          { }
+                          <img
+                            src={p.logo}
+                            alt={`Logo ${p.name}`}
+                            className="max-h-full max-w-full object-contain"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Content side */}
+                      <div className="md:col-span-2 p-8 md:p-10">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Badge variant="outline" className="text-accent border-accent/30 bg-accent/5">
+                            <HandshakeIcon className="mr-1.5 h-3.5 w-3.5" />
+                            {p.role}
+                          </Badge>
+                        </div>
+                        <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+                          {p.name}
+                        </h2>
+                        <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
+                          {p.description}
+                        </p>
+
+                        {/* Benefits */}
+                        <div className="mt-6 grid sm:grid-cols-2 gap-3">
+                          {[
+                            { icon: Sparkles, text: "Matériel de dernière génération" },
+                            { icon: ShieldCheck, text: "Location ou vente flexible" },
+                            { icon: Users, text: "Représentant officiel Afrique de l'Ouest" },
+                            { icon: HandshakeIcon, text: "Engins de manutention et transport" },
+                          ].map((b) => (
+                            <div key={b.text} className="flex items-center gap-2.5 text-sm text-foreground/80">
+                              <div className="h-8 w-8 rounded-lg bg-accent/15 flex items-center justify-center shrink-0">
+                                <b.icon className="h-4 w-4 text-accent" />
+                              </div>
+                              {b.text}
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="mt-7">
+                          <Button asChild>
+                            <Link href="/contact">
+                              Demander un devis
+                              <ArrowRight className="ml-2 h-4 w-4" />
+                            </Link>
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Reveal>
+            ))}
+          </div>
+
+          {/* Become a partner CTA */}
+          <Reveal delay={0.1}>
+            <div className="mt-12 rounded-2xl bg-primary text-primary-foreground p-8 sm:p-10 text-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-dot-gold opacity-30" />
+              <div className="absolute -top-16 -right-16 h-56 w-56 rounded-full bg-accent/15 blur-3xl" />
+              <div className="relative">
+                <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                  Vous souhaitez devenir partenaire ?
+                </h3>
+                <p className="mt-3 text-base text-white/80 max-w-2xl mx-auto leading-relaxed">
+                  ABCD Ltd développe des partenariats stratégiques avec des acteurs
+                  de référence. Contactez-nous pour explorer une collaboration.
+                </p>
+                <Button asChild size="lg" className="mt-6 bg-accent text-accent-foreground hover:bg-accent/90">
+                  <Link href="/contact">
+                    Nous contacter
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+    </>
+  );
+}

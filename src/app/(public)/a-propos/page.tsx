@@ -20,7 +20,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { PageHeader, Reveal } from "@/components/site/page-header";
 import {
   COUNTRIES,
-  PARTNER,
   PROCESS,
   REFERENCES,
   WHY_US,
@@ -107,16 +106,28 @@ export default function AProposPage() {
                 </p>
               </Reveal>
               <Reveal delay={0.25}>
-                <div className="mt-6 rounded-xl bg-secondary/60 ring-1 ring-border p-4 flex items-start gap-3">
-                  <div className="h-10 w-10 rounded-lg bg-accent/15 flex items-center justify-center shrink-0">
-                    <HandshakeIcon className="h-5 w-5 text-accent" />
+                <Link
+                  href="/partenaires"
+                  className="mt-6 group block rounded-xl bg-secondary/60 ring-1 ring-border p-4 hover:ring-accent/40 transition-all"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="h-10 w-10 rounded-lg bg-accent/15 flex items-center justify-center shrink-0">
+                      <HandshakeIcon className="h-5 w-5 text-accent" />
+                    </div>
+                    <div>
+                      <p className="text-sm sm:text-base text-foreground/90 leading-relaxed">
+                        <strong className="text-foreground">Nos partenaires stratégiques</strong>
+                        {" — "}ABCD Ltd s&apos;associe à des acteurs de référence pour
+                        vous offrir des solutions complètes de transport, manutention
+                        et location de matériel de dernière génération.
+                      </p>
+                      <span className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-accent group-hover:gap-2 transition-all">
+                        Découvrir nos partenaires
+                        <ArrowRight className="h-4 w-4" />
+                      </span>
+                    </div>
                   </div>
-                  <p className="text-sm sm:text-base text-foreground/90 leading-relaxed">
-                    <strong className="text-foreground">{PARTNER.name}</strong>
-                    {" — "}
-                    {PARTNER.description}
-                  </p>
-                </div>
+                </Link>
               </Reveal>
               <Reveal delay={0.3}>
                 <ul className="mt-7 space-y-3">

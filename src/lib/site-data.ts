@@ -27,6 +27,7 @@ export const NAV_LINKS: NavLink[] = [
   { href: "/a-propos", label: "À propos" },
   { href: "/services", label: "Services" },
   { href: "/atouts", label: "Atouts" },
+  { href: "/partenaires", label: "Partenaires" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -437,18 +438,31 @@ export const COMPANY = {
   addressLine2: "Villa 2105, SICAP Liberté 1",
   city: "Dakar",
   country: "Sénégal",
-  phone: "+221 33 821 11 31",
-  phoneHref: "+221338211131",
+  phone: "+221 33 864 52 41",
+  phoneHref: "+221338645241",
+  phoneSecondary: "+221 33 821 11 31",
+  phoneSecondaryHref: "+221338211131",
   email: "abcdev@gmail.com",
   founded: "2019",
 };
 
-// ---- Partenaire ARS Rental ----
-export const PARTNER = {
-  name: "ARS Rental",
-  description:
-    "Grâce à notre contrat de représentativité en Afrique de l'Ouest avec ARS Rental, nous sommes en mesure de fournir en location ou à la vente des engins et du matériel de manutention et transport de dernière génération.",
+// ---- Nos partenaires ----
+export type Partner = {
+  name: string;
+  logo: string;
+  role: string;
+  description: string;
 };
+
+export const PARTNERS: Partner[] = [
+  {
+    name: "ARS Rental",
+    logo: "/partner-ars-rental.png",
+    role: "Représentant officiel en Afrique de l'Ouest",
+    description:
+      "Grâce à notre contrat de représentativité en Afrique de l'Ouest avec ARS Rental, nous sommes en mesure de fournir en location ou à la vente des engins et du matériel de manutention et transport de dernière génération.",
+  },
+];
 
 // ---- Références clients ----
 export type Reference = {
