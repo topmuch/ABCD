@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { sendContactNotification } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -33,6 +34,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Store in DB
+    let recordId: string | null = null;
     try {
       const record = await db.contactMessage.create({
         data: {
@@ -43,14 +46,20 @@ export async function POST(req: NextRequest) {
           message,
         },
       });
-      return NextResponse.json({ ok: true, id: record.id });
+      recordId = record.id;
     } catch (dbErr) {
-      // If DB is unavailable, fall back gracefully (log + success)
       console.error("[contact] DB write failed:", dbErr);
-      return NextResponse.json(
-        { ok: true, id: null, note: "Message reçu (stockage DB indisponible)." }
-      );
     }
+
+    // Send email notification (non-blocking, failures don't break the response)
+    sendContactNotification({ name, email, phone: phone || null, subject: subject || null, message })
+      .then((sent) => {
+        if (sent) console.log("[contact] Email notification sent");
+        else console.log("[contact] Email notification not sent (disabled or config missing)");
+      })
+      .catch((e) => console.error("[contact] Email send error:", e));
+
+    return NextResponse.json({ ok: true, id: recordId });
   } catch (err) {
     console.error("[contact] Unexpected error:", err);
     return NextResponse.json(

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { sendAppointmentNotification } from "@/lib/email";
 
 export async function GET(req: NextRequest) {
   try {
@@ -63,6 +64,28 @@ export async function POST(req: NextRequest) {
         status: "pending",
       },
     });
+
+    // Send email notification (non-blocking)
+    const phone = body.phone?.trim() || null;
+    const company = body.company?.trim() || null;
+    const subjectField = body.subject?.trim() || null;
+    const preferredDate = body.preferredDate?.trim() || null;
+    const preferredTime = body.preferredTime?.trim() || null;
+    sendAppointmentNotification({
+      name,
+      email,
+      phone,
+      company,
+      subject: subjectField,
+      preferredDate,
+      preferredTime,
+      message,
+    })
+      .then((sent) => {
+        if (sent) console.log("[appointments] Email notification sent");
+        else console.log("[appointments] Email notification not sent (disabled or config missing)");
+      })
+      .catch((e) => console.error("[appointments] Email send error:", e));
 
     return NextResponse.json({ ok: true, id: created.id });
   } catch (err) {

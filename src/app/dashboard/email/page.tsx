@@ -55,6 +55,7 @@ export default function EmailPage() {
   const [data, setData] = useState<EmailSettings>(EMPTY);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [testing, setTesting] = useState(false);
 
   const fetchSettings = useCallback(async () => {
     setLoading(true);
@@ -136,6 +137,46 @@ export default function EmailPage() {
       });
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleTest() {
+    if (!data.smtpHost || !data.smtpUser) {
+      toast({
+        variant: "destructive",
+        title: "Configuration incomplète",
+        description: "Renseignez et enregistrez l'hôte et l'utilisateur SMTP avant de tester.",
+      });
+      return;
+    }
+    setTesting(true);
+    try {
+      const res = await fetch("/api/email-test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to: data.notifyEmail }),
+      });
+      const json = await res.json();
+      if (json.ok) {
+        toast({
+          title: "Email de test envoyé ✅",
+          description: `Un email a été envoyé à ${json.sentTo}. Vérifiez votre boîte de réception (et les spams).`,
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Échec de l'envoi",
+          description: json.error || "Erreur inconnue lors de l'envoi de l'email de test.",
+        });
+      }
+    } catch {
+      toast({
+        variant: "destructive",
+        title: "Erreur",
+        description: "Impossible de contacter le serveur pour l'envoi de test.",
+      });
+    } finally {
+      setTesting(false);
     }
   }
 
@@ -358,7 +399,16 @@ export default function EmailPage() {
                     ? `Dernière modification : ${new Date(data.updatedAt).toLocaleString("fr-FR")}`
                     : "Aucune modification enregistrée"}
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleTest}
+                    disabled={testing || saving || loading || !isConfigured}
+                  >
+                    <Mail className="mr-1.5 h-4 w-4" />
+                    {testing ? "Envoi..." : "Tester l'envoi"}
+                  </Button>
                   <Button
                     type="button"
                     variant="outline"
