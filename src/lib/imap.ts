@@ -232,19 +232,21 @@ export async function deleteEmail(uid: number, folder = "INBOX"): Promise<void> 
   }
   const client = await createImapClient(config);
   try {
-    // Open mailbox directly (not via lock) so we can expunge
-    await client.mailboxOpen(folder);
+    // Use getMailboxLock with expunge: true to allow permanent deletion
+    const lock = await client.getMailboxLock(folder, { expunge: true });
     try {
       // Mark the message as \Deleted
       const result = await client.messageFlagsAdd(uid, ["\\Deleted"], { uid: true });
       if (!result) {
-        // Message not found by UID — maybe already deleted
         console.warn(`[imap] deleteEmail: message ${uid} not found (already deleted?)`);
       }
-      // Expunge to permanently remove deleted messages
-      await client.expunge();
+      // The lock with expunge:true will handle expunge on release,
+      // but we also call it explicitly if available
+      if (typeof (client as unknown as { expunge?: () => Promise<unknown> }).expunge === "function") {
+        await (client as unknown as { expunge: () => Promise<unknown> }).expunge();
+      }
     } finally {
-      await client.mailboxClose();
+      lock.release();
     }
   } catch (err) {
     console.error("[imap] deleteEmail error:", err);

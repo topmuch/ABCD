@@ -304,11 +304,13 @@ export default function EmailPage() {
                     type="password"
                     value={data.smtpPassword}
                     onChange={(e) => setData({ ...data, smtpPassword: e.target.value })}
-                    placeholder="••••••••••••"
+                    placeholder={data.smtpPassword ? "•••••••• (conservé, ne pas re-saisir)" : "••••••••••••"}
                     autoComplete="new-password"
                   />
                   <p className="text-xs text-muted-foreground">
-                    Pour Gmail, utilisez un mot de passe d&apos;application.
+                    {data.smtpPassword
+                      ? "✓ Mot de passe déjà configuré. Laissez vide pour le conserver."
+                      : "Pour Gmail, utilisez un mot de passe d'application (16 caractères)."}
                   </p>
                 </div>
 
@@ -387,8 +389,14 @@ export default function EmailPage() {
                     type="password"
                     value={data.imapPassword}
                     onChange={(e) => setData({ ...data, imapPassword: e.target.value })}
-                    placeholder="••••••••"
+                    placeholder={data.imapPassword ? "•••••••• (conservé, ne pas re-saisir)" : "••••••••"}
+                    autoComplete="new-password"
                   />
+                  {data.imapPassword && (
+                    <p className="text-xs text-emerald-600 dark:text-emerald-400">
+                      ✓ Mot de passe déjà configuré. Laissez vide pour le conserver.
+                    </p>
+                  )}
                 </div>
               </div>
               <p className="text-xs text-muted-foreground">

@@ -70,7 +70,8 @@ export async function PUT(req: NextRequest) {
       smtpHost: typeof body.smtpHost === "string" ? body.smtpHost.trim() || null : undefined,
       smtpPort: typeof body.smtpPort === "number" ? body.smtpPort : undefined,
       smtpUser: typeof body.smtpUser === "string" ? body.smtpUser.trim() || null : undefined,
-      smtpPassword: typeof body.smtpPassword === "string" ? (body.smtpPassword === "" ? null : body.smtpPassword) : undefined,
+      // Password: only update if non-empty (don't overwrite with empty when user didn't re-enter)
+      smtpPassword: typeof body.smtpPassword === "string" && body.smtpPassword !== "" ? body.smtpPassword : undefined,
       fromEmail: typeof body.fromEmail === "string" ? body.fromEmail.trim() || null : undefined,
       fromName: typeof body.fromName === "string" ? body.fromName.trim() || null : undefined,
       notifyEmail: typeof body.notifyEmail === "string" ? body.notifyEmail.trim() || null : undefined,
@@ -79,10 +80,11 @@ export async function PUT(req: NextRequest) {
       imapHost: typeof body.imapHost === "string" ? body.imapHost.trim() || null : undefined,
       imapPort: typeof body.imapPort === "number" ? body.imapPort : undefined,
       imapUser: typeof body.imapUser === "string" ? body.imapUser.trim() || null : undefined,
-      imapPassword: typeof body.imapPassword === "string" ? (body.imapPassword === "" ? null : body.imapPassword) : undefined,
+      // Password: only update if non-empty (don't overwrite with empty when user didn't re-enter)
+      imapPassword: typeof body.imapPassword === "string" && body.imapPassword !== "" ? body.imapPassword : undefined,
     };
 
-    // Remove undefined keys
+    // Remove undefined keys (fields not provided or empty passwords)
     const cleanData = Object.fromEntries(Object.entries(data).filter(([, v]) => v !== undefined));
 
     const updated = await db.emailSettings.upsert({
