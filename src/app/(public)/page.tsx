@@ -104,7 +104,7 @@ export default function HomePage() {
       {/* ============ HERO PREMIUM ============ */}
       <section
         id="accueil"
-        className="relative min-h-[100svh] flex items-center overflow-hidden"
+        className="relative min-h-[72vh] sm:min-h-[640px] flex items-center overflow-hidden"
       >
         {/* Background image + overlays */}
         <div className="absolute inset-0">
@@ -116,16 +116,13 @@ export default function HomePage() {
           />
           <div className="absolute inset-0 hero-overlay" />
           <div className="absolute inset-0 bg-grid-navy opacity-20" />
-          {/* Bottom fade to background for smooth transition */}
-          <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-background to-transparent" />
         </div>
 
-        {/* Decorative floating orbs */}
+        {/* Decorative floating orb */}
         <div className="absolute top-1/4 right-10 h-64 w-64 rounded-full bg-accent/10 blur-3xl animate-float hidden lg:block" />
-        <div className="absolute bottom-1/4 left-10 h-48 w-48 rounded-full bg-primary-foreground/5 blur-3xl hidden lg:block" />
 
         {/* Content */}
-        <div className="relative mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 pt-28 pb-20 sm:pt-32 sm:pb-28">
+        <div className="relative mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 pt-28 pb-14 sm:pt-32 sm:pb-16">
           <div className="max-w-3xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -144,7 +141,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.08 }}
-              className="mt-6 text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white leading-[1.05] tracking-tight"
+              className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.08] tracking-tight"
             >
               Votre partenaire
               <br />
@@ -157,7 +154,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.18 }}
-              className="mt-6 text-lg sm:text-xl text-white/80 leading-relaxed max-w-2xl"
+              className="mt-5 text-base sm:text-lg text-white/80 leading-relaxed max-w-2xl"
             >
               ABCD Ltd conçoit des solutions sur mesure de transit, transport et
               logistique — de l&apos;origine à la destination finale — depuis Dakar
@@ -196,15 +193,15 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.38 }}
-              className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl"
+              className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl"
             >
               {STATS.map((s) => (
                 <div
                   key={s.label}
-                  className="glass-card rounded-xl p-4 text-center"
+                  className="glass-card rounded-xl p-3 sm:p-4 text-center"
                 >
-                  <s.icon className="h-5 w-5 text-accent mx-auto mb-2" />
-                  <div className="text-2xl lg:text-3xl font-extrabold text-white">
+                  <s.icon className="h-4 w-4 sm:h-5 sm:w-5 text-accent mx-auto mb-1.5" />
+                  <div className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white">
                     {s.value}
                   </div>
                   <div className="mt-1 text-[11px] sm:text-xs text-white/70 leading-tight">
@@ -213,18 +210,6 @@ export default function HomePage() {
                 </div>
               ))}
             </motion.div>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2 text-white/50">
-          <span className="text-[10px] uppercase tracking-[0.2em]">Défiler</span>
-          <div className="h-9 w-5 rounded-full border border-white/30 flex items-start justify-center p-1">
-            <motion.span
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 1.6, repeat: Infinity }}
-              className="block h-1.5 w-1.5 rounded-full bg-accent"
-            />
           </div>
         </div>
       </section>

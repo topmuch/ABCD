@@ -35,10 +35,10 @@ export function SiteHeader() {
       }`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 sm:h-20 items-center justify-between">
+        <div className="flex h-20 sm:h-24 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center group" aria-label="ABCD Ltd - Accueil">
-            <div className="relative h-12 w-12 sm:h-16 sm:w-16 shrink-0 rounded-lg overflow-hidden bg-white p-1 ring-1 ring-border">
+            <div className="relative h-16 w-16 sm:h-20 sm:w-20 shrink-0 rounded-lg overflow-hidden bg-white p-1.5 ring-1 ring-border">
               { }
               <img
                 src="/logo-abcd-transparent.png"
