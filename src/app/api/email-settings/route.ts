@@ -40,6 +40,8 @@ function format(s: {
   smtpUser: string | null; smtpPassword: string | null; fromEmail: string | null;
   fromName: string | null; notifyEmail: string | null;
   notifyOnContact: boolean; notifyOnAppointment: boolean;
+  imapHost: string | null; imapPort: number | null;
+  imapUser: string | null; imapPassword: string | null;
   updatedAt: Date;
 }) {
   return {
@@ -53,6 +55,10 @@ function format(s: {
     notifyEmail: s.notifyEmail || "",
     notifyOnContact: s.notifyOnContact,
     notifyOnAppointment: s.notifyOnAppointment,
+    imapHost: s.imapHost || "",
+    imapPort: s.imapPort || 993,
+    imapUser: s.imapUser || "",
+    imapPassword: s.imapPassword || "",
     updatedAt: s.updatedAt.toISOString(),
   };
 }
@@ -70,6 +76,10 @@ export async function PUT(req: NextRequest) {
       notifyEmail: typeof body.notifyEmail === "string" ? body.notifyEmail.trim() || null : undefined,
       notifyOnContact: typeof body.notifyOnContact === "boolean" ? body.notifyOnContact : undefined,
       notifyOnAppointment: typeof body.notifyOnAppointment === "boolean" ? body.notifyOnAppointment : undefined,
+      imapHost: typeof body.imapHost === "string" ? body.imapHost.trim() || null : undefined,
+      imapPort: typeof body.imapPort === "number" ? body.imapPort : undefined,
+      imapUser: typeof body.imapUser === "string" ? body.imapUser.trim() || null : undefined,
+      imapPassword: typeof body.imapPassword === "string" ? (body.imapPassword === "" ? null : body.imapPassword) : undefined,
     };
 
     // Remove undefined keys
@@ -88,6 +98,10 @@ export async function PUT(req: NextRequest) {
         notifyEmail: body.notifyEmail || "abcdev@gmail.com",
         notifyOnContact: body.notifyOnContact ?? true,
         notifyOnAppointment: body.notifyOnAppointment ?? true,
+        imapHost: body.imapHost || null,
+        imapPort: typeof body.imapPort === "number" ? body.imapPort : 993,
+        imapUser: body.imapUser || null,
+        imapPassword: body.imapPassword || null,
       },
       update: cleanData,
     });

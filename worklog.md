@@ -366,3 +366,34 @@ Stage Summary:
 - Lint clean (0 errors, 0 warnings); TypeScript clean
 - All 4 reference logo assets already exist in /public; no asset additions needed
 - Ready to commit + push to GitHub
+
+---
+Task ID: messagerie-page
+Agent: Sub-agent (general-purpose)
+Task: Build the Messagerie (email inbox) dashboard page at /dashboard/messagerie
+
+Work Log:
+- Read `worklog.md`, the existing `/dashboard/messages` page, `/dashboard/email` page, the email API routes (`/api/email/inbox`, `/api/email/[id]`, `/api/email/[id]/read`, `/api/email/send`), the IMAP lib (`src/lib/imap.ts`), the dashboard `layout.tsx`, and shadcn/ui primitives (Card, Button, Input, Textarea, Label, Badge, Skeleton, Separator, ScrollArea) to align with the project's conventions and verify the real email data shape (uid, from, fromAddress, to, subject, preview, date, isRead, hasAttachments + bodyHtml/bodyText/attachments).
+- Created `/home/z/my-project/src/app/dashboard/messagerie/page.tsx` (908 lines, `"use client"`):
+  - **Header**: "Messagerie" title with Mail icon, subtitle showing total + unread counts, "Nouvel email" button (accent gold) and "Actualiser" outline button.
+  - **Error banner**: amber warning Card shown when the inbox API returns `ok: false` (e.g. IMAP non configuré), with a link button to `/dashboard/email`.
+  - **Layout**: `grid lg:grid-cols-3` — left column (1/3) holds the email list + filters; right column (2/3) holds the detail panel or composer area. On mobile each panel toggles visibility via `selectedUid` (list shows by default; selecting an email reveals the detail with a "Retour à la liste" back button visible only on `< lg`).
+  - **Filters**: pill-style tabs ("Tous" | "Non lus") that toggle `unreadOnly`, plus a debounced search input (350 ms) feeding `debouncedSearch`. Page resets to 1 when filters change.
+  - **Email list**: clickable cards showing `from` (bold when unread), subject, preview, relative date, blue unread dot, and a Paperclip indicator when `hasAttachments` is true. Loading state shows 6 skeleton rows. Empty state adapts to search/unreadOnly context.
+  - **Detail panel**: default empty state "Sélectionnez un email"; when loaded, shows subject (h2), from/fromAddress/to, full date, action buttons (Répondre, Supprimer), the email body rendered via `dangerouslySetInnerHTML` inside a `.email-content` div with `style={{ lineHeight: 1.6 }}` and `max-h-[55vh] overflow-y-auto`. Falls back to escaped `bodyText` wrapped in `<pre>` when `bodyHtml` is empty. Attachments are listed (filename + human-readable size Badge).
+  - **Composer modal**: framer-motion animated modal (bottom-sheet on mobile, centered on desktop) with Destinataire (required), Cc (optional), Objet (required) and Message textarea. The textarea body is converted to HTML with `escapeHtml` + newline-to-`<br/>` wrapping via `textToHtml`. Sends to `POST /api/email/send`, shows toast on success/error, closes the modal on success. "Répondre" pre-fills `to` = sender address and `subject` = `Re: ...`.
+  - **Pagination**: "Précédent" / "Suivant" icon buttons with page indicator, disabled at boundaries.
+  - **Relative date helper**: `relativeTime(iso)` returns "à l'instant" (<1 min), "il y a X min" (<60 min), "il y a X h" (<24 h), "hier" (1 day), or `dd/mm/yyyy` otherwise.
+  - **State**: useState for emails, total, totalPages, page, loading, error, unreadOnly, search, debouncedSearch, selectedUid, selectedEmail, detailLoading, deleting, composerOpen, sending, and the four composer form fields (formTo/formCc/formSubject/formBody).
+  - **Styling**: relies on the project's brand tokens (primary navy + accent gold). Injects scoped `.email-content` CSS via a `<style dangerouslySetInnerHTML>` tag at the bottom of the main element (no styled-jsx dependency), providing prose-like defaults for p/h1-4/a/ul/ol/img/blockquote/table/pre/code/hr/strong.
+  - Selecting an email also optimistically marks it as read in the list; the IMAP library also flags the message `\Seen` server-side when the detail is fetched.
+- Ran `bunx eslint src/app/dashboard/messagerie/page.tsx` → exit code 0 (no warnings/errors). Also ran `bunx tsc --noEmit` and confirmed no messagerie-specific TypeScript errors.
+- Removed an unused `composerPrefill` state object after initial draft to keep the component lean (the form state alone is sufficient).
+
+Files Changed:
+- Created: `src/app/dashboard/messagerie/page.tsx` (908 lines, "use client")
+
+Next Actions:
+- The dashboard sidebar (`src/app/dashboard/layout.tsx`) does not currently include a "Messagerie" link — to surface this page in the admin UI, add a nav item like `{ href: "/dashboard/messagerie", label: "Messagerie", icon: Inbox }` (or reuse `Mail`). Out of scope for this task but recommended.
+- Optionally add a download endpoint for attachments (current page lists them display-only as specified).
+- Optionally persist the selected email across inbox refreshes by re-fetching detail after `fetchInbox` if `selectedUid` still exists in the new list.

@@ -131,6 +131,10 @@ model EmailSettings {
   notifyEmail       String?  // email to receive notifications
   notifyOnContact   Boolean  @default(true)
   notifyOnAppointment Boolean @default(true)
+  imapHost          String?  // IMAP server (e.g. imap.gmail.com)
+  imapPort          Int?     // usually 993
+  imapUser          String?  // often same as smtpUser
+  imapPassword      String?  // often same as smtpPassword
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }

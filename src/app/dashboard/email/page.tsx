@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   Server,
   ShieldAlert,
+  Inbox,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,6 +36,10 @@ type EmailSettings = {
   notifyEmail: string;
   notifyOnContact: boolean;
   notifyOnAppointment: boolean;
+  imapHost: string;
+  imapPort: number;
+  imapUser: string;
+  imapPassword: string;
   updatedAt?: string;
 };
 
@@ -48,6 +53,10 @@ const EMPTY: EmailSettings = {
   notifyEmail: "",
   notifyOnContact: true,
   notifyOnAppointment: true,
+  imapHost: "",
+  imapPort: 993,
+  imapUser: "",
+  imapPassword: "",
 };
 
 export default function EmailPage() {
@@ -117,6 +126,10 @@ export default function EmailPage() {
           notifyEmail: data.notifyEmail,
           notifyOnContact: data.notifyOnContact,
           notifyOnAppointment: data.notifyOnAppointment,
+          imapHost: data.imapHost,
+          imapPort: Number(data.imapPort) || 993,
+          imapUser: data.imapUser,
+          imapPassword: data.imapPassword,
         }),
       });
       const json = await res.json();
@@ -320,6 +333,68 @@ export default function EmailPage() {
                   />
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* IMAP (boîte de réception) */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Inbox className="h-5 w-5 text-accent" />
+                Réception (IMAP)
+              </CardTitle>
+              <CardDescription>
+                Configuration pour consulter la boîte de réception dans la Messagerie.
+                Souvent identiques à SMTP (ex: Gmail utilise les mêmes identifiants).
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="imapHost">Hôte IMAP</Label>
+                  <Input
+                    id="imapHost"
+                    value={data.imapHost}
+                    onChange={(e) => setData({ ...data, imapHost: e.target.value })}
+                    placeholder="imap.gmail.com"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="imapPort">Port IMAP</Label>
+                  <Input
+                    id="imapPort"
+                    type="number"
+                    value={data.imapPort}
+                    onChange={(e) => setData({ ...data, imapPort: Number(e.target.value) })}
+                    placeholder="993"
+                  />
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="imapUser">Utilisateur IMAP</Label>
+                  <Input
+                    id="imapUser"
+                    value={data.imapUser}
+                    onChange={(e) => setData({ ...data, imapUser: e.target.value })}
+                    placeholder="contact@abcdsenegal.com"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="imapPassword">Mot de passe IMAP</Label>
+                  <Input
+                    id="imapPassword"
+                    type="password"
+                    value={data.imapPassword}
+                    onChange={(e) => setData({ ...data, imapPassword: e.target.value })}
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Pour Gmail, utilisez le même mot de passe d&apos;application (16 caractères) que pour SMTP.
+                La Messagerie du dashboard lit cette boîte via IMAP.
+              </p>
             </CardContent>
           </Card>
 

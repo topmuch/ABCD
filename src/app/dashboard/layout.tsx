@@ -15,6 +15,7 @@ import {
   BarChart3,
   CalendarDays,
   Bell,
+  Inbox,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -27,6 +28,7 @@ const NAV_ITEMS = [
   { href: "/dashboard/clients", label: "Clients", icon: Users },
   { href: "/dashboard/equipe", label: "Équipe", icon: Users },
   { href: "/dashboard/messages", label: "Messages", icon: Mail },
+  { href: "/dashboard/messagerie", label: "Messagerie", icon: Inbox },
   { href: "/dashboard/rendez-vous", label: "Rendez-vous", icon: CalendarDays },
   { href: "/dashboard/email", label: "Email & Notifications", icon: Bell },
   { href: "/dashboard/seo", label: "Paramètres SEO", icon: Settings },
