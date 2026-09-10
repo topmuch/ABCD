@@ -77,19 +77,23 @@ export default function DashboardLayout({
     <div className="min-h-screen flex bg-secondary/30">
       {/* Sidebar (desktop) */}
       <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-border bg-background">
-        <div className="h-16 flex items-center gap-3 px-5 border-b border-border">
-          <div className="h-11 w-11 rounded-lg overflow-hidden bg-white p-1 ring-1 ring-border shrink-0">
-            <img
-              src="/logo-abcd-transparent.png"
-              alt="Logo ABCD Ltd"
-              className="h-full w-full object-contain"
-            />
-          </div>
-          <div className="leading-none">
-            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-              Administration
+        <div className="h-16 flex items-center justify-between gap-3 px-5 border-b border-border">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="h-11 w-11 rounded-lg overflow-hidden bg-white p-1 ring-1 ring-border shrink-0">
+              { }
+              <img
+                src="/logo-abcd-transparent.png"
+                alt="Logo ABCD Ltd"
+                className="h-full w-full object-contain"
+              />
+            </div>
+            <div className="leading-none min-w-0">
+              <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                Administration
+              </div>
             </div>
           </div>
+          <ThemeToggle />
         </div>
 
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
@@ -118,9 +122,6 @@ export default function DashboardLayout({
 
         <div className="border-t border-border">
           <UserMenu />
-          <div className="px-3 pb-3">
-            <ThemeToggle />
-          </div>
         </div>
       </aside>
 
@@ -128,6 +129,7 @@ export default function DashboardLayout({
       <div className="lg:hidden fixed top-0 inset-x-0 z-40 h-16 bg-background/90 backdrop-blur-md border-b border-border flex items-center justify-between px-4">
         <div className="flex items-center gap-2.5">
           <div className="h-10 w-10 rounded-lg overflow-hidden bg-white p-1 ring-1 ring-border">
+            { }
             <img
               src="/logo-abcd-transparent.png"
               alt="Logo ABCD Ltd"
@@ -135,13 +137,16 @@ export default function DashboardLayout({
             />
           </div>
         </div>
-        <button
-          onClick={() => setMobileOpen(true)}
-          className="inline-flex items-center justify-center h-10 w-10 rounded-md hover:bg-secondary"
-          aria-label="Ouvrir le menu"
-        >
-          <Menu className="h-5 w-5" />
-        </button>
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <button
+            onClick={() => setMobileOpen(true)}
+            className="inline-flex items-center justify-center h-10 w-10 rounded-md hover:bg-secondary"
+            aria-label="Ouvrir le menu"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
       {/* Mobile sidebar drawer */}
@@ -165,6 +170,7 @@ export default function DashboardLayout({
               <div className="h-16 flex items-center justify-between px-5 border-b border-border">
                 <div className="flex items-center gap-2.5">
                   <div className="h-9 w-9 rounded-lg overflow-hidden bg-white p-1 ring-1 ring-border">
+                    { }
                     <img
                       src="/logo-abcd-transparent.png"
                       alt="Logo ABCD Ltd"
@@ -175,13 +181,16 @@ export default function DashboardLayout({
                     Administration
                   </span>
                 </div>
-                <button
-                  onClick={() => setMobileOpen(false)}
-                  className="h-9 w-9 inline-flex items-center justify-center rounded-md hover:bg-secondary"
-                  aria-label="Fermer"
-                >
-                  <X className="h-5 w-5" />
-                </button>
+                <div className="flex items-center gap-1">
+                  <ThemeToggle />
+                  <button
+                    onClick={() => setMobileOpen(false)}
+                    className="h-9 w-9 inline-flex items-center justify-center rounded-md hover:bg-secondary"
+                    aria-label="Fermer"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
               <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
                 {NAV_ITEMS.map((item) => (
@@ -209,9 +218,6 @@ export default function DashboardLayout({
               </nav>
               <div className="border-t border-border">
                 <UserMenu />
-                <div className="px-3 pb-3">
-                  <ThemeToggle />
-                </div>
               </div>
             </motion.aside>
           </>
