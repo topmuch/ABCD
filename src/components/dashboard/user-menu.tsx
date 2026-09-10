@@ -109,7 +109,7 @@ export function LogoutButton() {
       disabled={loggingOut}
       variant="ghost"
       size="sm"
-      className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
+      className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-secondary"
     >
       <LogOut className="mr-2 h-4 w-4" />
       {loggingOut ? "Déconnexion..." : "Se déconnecter"}

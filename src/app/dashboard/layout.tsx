@@ -92,7 +92,7 @@ export default function DashboardLayout({
           </div>
         </div>
 
-        <nav className="flex-1 p-3 space-y-1">
+        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {NAV_ITEMS.map((item) => (
             <SidebarLink
               key={item.href}
@@ -102,21 +102,24 @@ export default function DashboardLayout({
               active={isActive(item.href, item.exact)}
             />
           ))}
+
+          {/* Séparateur */}
+          <div className="my-2 border-t border-border" />
+
+          {/* Retour au site & Déconnexion — sous Paramètres SEO */}
+          <Button asChild variant="ghost" size="sm" className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-secondary">
+            <Link href="/">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Retour au site
+            </Link>
+          </Button>
+          <LogoutButton />
         </nav>
 
         <div className="border-t border-border">
           <UserMenu />
-          <div className="px-3 pb-3 space-y-1.5">
-            <Button asChild variant="outline" size="sm" className="w-full justify-start">
-              <Link href="/">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Retour au site
-              </Link>
-            </Button>
-            <div className="flex items-center gap-1.5">
-              <LogoutButton />
-              <ThemeToggle />
-            </div>
+          <div className="px-3 pb-3">
+            <ThemeToggle />
           </div>
         </div>
       </aside>
@@ -180,7 +183,7 @@ export default function DashboardLayout({
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              <nav className="flex-1 p-3 space-y-1">
+              <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
                 {NAV_ITEMS.map((item) => (
                   <SidebarLink
                     key={item.href}
@@ -191,20 +194,23 @@ export default function DashboardLayout({
                     onClick={() => setMobileOpen(false)}
                   />
                 ))}
+
+                {/* Séparateur */}
+                <div className="my-2 border-t border-border" />
+
+                {/* Retour au site & Déconnexion — sous Paramètres SEO */}
+                <Button asChild variant="ghost" size="sm" className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-secondary">
+                  <Link href="/" onClick={() => setMobileOpen(false)}>
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Retour au site
+                  </Link>
+                </Button>
+                <LogoutButton />
               </nav>
               <div className="border-t border-border">
                 <UserMenu />
-                <div className="px-3 pb-3 space-y-1.5">
-                  <Button asChild variant="outline" size="sm" className="w-full justify-start">
-                    <Link href="/" onClick={() => setMobileOpen(false)}>
-                      <ArrowLeft className="mr-2 h-4 w-4" />
-                      Retour au site
-                    </Link>
-                  </Button>
-                  <div className="flex items-center gap-1.5">
-                    <LogoutButton />
-                    <ThemeToggle />
-                  </div>
+                <div className="px-3 pb-3">
+                  <ThemeToggle />
                 </div>
               </div>
             </motion.aside>
