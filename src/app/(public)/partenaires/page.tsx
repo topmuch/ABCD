@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, HandshakeIcon, Sparkles, ShieldCheck, Users, ExternalLink } from "lucide-react";
+import { ArrowRight, HandshakeIcon, Sparkles, ShieldCheck, Users, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { PageHeader, Reveal } from "@/components/site/page-header";
-import { PARTNERS } from "@/lib/site-data";
+import { PARTNERS, REFERENCES } from "@/lib/site-data";
 
 export default function PartenairesPage() {
   return (
@@ -85,6 +85,52 @@ export default function PartenairesPage() {
                 </Card>
               </Reveal>
             ))}
+          </div>
+
+          {/* ============ Nos références (clients) ============ */}
+          <div className="mt-20">
+            <div className="text-center mb-10">
+              <Reveal>
+                <Badge variant="outline" className="mb-4 text-primary border-primary/30 bg-primary/5">
+                  <Star className="mr-1.5 h-3.5 w-3.5" />
+                  Nos références
+                </Badge>
+              </Reveal>
+              <Reveal delay={0.05}>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground">
+                  Ils nous font confiance
+                </h2>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <p className="mt-4 text-base text-muted-foreground max-w-2xl mx-auto">
+                  Organisations internationales, institutions publiques et partenaires
+                  qui s&apos;appuient sur l&apos;expertise d&apos;ABCD Ltd.
+                </p>
+              </Reveal>
+            </div>
+
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+              {REFERENCES.map((ref, i) => (
+                <Reveal key={ref.name} delay={i * 0.06}>
+                  <div className="group h-full flex flex-col items-center justify-center text-center rounded-2xl bg-card ring-1 ring-border hover:ring-accent/40 hover:shadow-lg transition-all p-6 hover:-translate-y-1">
+                    <div className="h-20 w-20 sm:h-24 sm:w-24 flex items-center justify-center mb-4 bg-white rounded-xl p-3 ring-1 ring-border overflow-hidden">
+                      { }
+                      <img
+                        src={ref.logo}
+                        alt={`Logo ${ref.name}`}
+                        className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <h3 className="text-sm font-bold text-foreground leading-tight">
+                      {ref.name}
+                    </h3>
+                    <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                      {ref.desc}
+                    </p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
           </div>
 
           {/* Become a partner CTA */}
