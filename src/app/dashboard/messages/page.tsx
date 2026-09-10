@@ -9,6 +9,7 @@ import {
   FileCheck2,
   ExternalLink,
   Inbox,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -71,6 +72,7 @@ export default function MessagesPage() {
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [selected, setSelected] = useState<MessageRow | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchMessages = useCallback(async () => {
     setLoading(true);
@@ -104,6 +106,46 @@ export default function MessagesPage() {
   useEffect(() => {
     setPage(1);
   }, [search]);
+
+  const handleDelete = useCallback(
+    async (id: string, fromModal = false) => {
+      if (!confirm("Supprimer ce message ? Cette action est irréversible.")) return;
+      setDeleting(true);
+      try {
+        const res = await fetch(`/api/messages/${id}`, { method: "DELETE" });
+        const json = await res.json();
+        if (json.ok) {
+          toast({
+            title: "Message supprimé",
+            description: "Le message a été supprimé de la boîte de réception.",
+          });
+          // Remove from list immediately (optimistic UI)
+          setMessages((prev) => prev.filter((m) => m.id !== id));
+          if (fromModal) {
+            setSelected(null);
+          }
+          setTotal((prev) => Math.max(0, prev - 1));
+          // Refresh to sync pagination
+          fetchMessages();
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Erreur",
+            description: json.error || "Suppression impossible.",
+          });
+        }
+      } catch {
+        toast({
+          variant: "destructive",
+          title: "Erreur",
+          description: "Suppression impossible.",
+        });
+      } finally {
+        setDeleting(false);
+      }
+    },
+    [toast, fetchMessages]
+  );
 
   return (
     <main className="flex-1 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
@@ -211,17 +253,32 @@ export default function MessagesPage() {
                           {relativeTime(m.createdAt)}
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelected(m);
-                            }}
-                          >
-                            Voir
-                            <ExternalLink className="ml-1 h-3.5 w-3.5" />
-                          </Button>
+                          <div className="flex justify-end gap-1">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelected(m);
+                              }}
+                            >
+                              Voir
+                              <ExternalLink className="ml-1 h-3.5 w-3.5" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDelete(m.id);
+                              }}
+                              disabled={deleting}
+                              title="Supprimer"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))
@@ -310,11 +367,11 @@ export default function MessagesPage() {
                       {selected.message}
                     </div>
                   </div>
-                  <div className="mt-6 flex gap-2">
+                  <div className="mt-6 flex flex-wrap gap-2">
                     <Button asChild className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90">
                       <a href={`mailto:${selected.email}?subject=Re: ${encodeURIComponent(selected.subject || "Votre demande")}`}>
                         <Mail className="mr-2 h-4 w-4" />
-                        Répondre par email
+                        Répondre
                       </a>
                     </Button>
                     {selected.phone && (
@@ -325,6 +382,15 @@ export default function MessagesPage() {
                         </a>
                       </Button>
                     )}
+                    <Button
+                      variant="outline"
+                      className="text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/30"
+                      onClick={() => handleDelete(selected.id, true)}
+                      disabled={deleting}
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      {deleting ? "Suppression..." : "Supprimer"}
+                    </Button>
                   </div>
                 </div>
               </motion.div>
