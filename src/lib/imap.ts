@@ -53,6 +53,39 @@ export type EmailDetail = InboxEmail & {
   attachments: { filename: string; contentType: string; size: number }[];
 };
 
+async function createImapClient(config: EmailSettings): Promise<ImapFlow> {
+  const client = new ImapFlow({
+    host: config.imapHost,
+    port: config.imapPort || 993,
+    secure: true,
+    auth: {
+      user: config.imapUser,
+      pass: config.imapPassword,
+    },
+    logger: false,
+  });
+  try {
+    await client.connect();
+    return client;
+  } catch (err) {
+    // ImapFlow errors often have additional fields like responseText, executedCommand
+    const errObj = err as { message?: string; responseText?: string; executedCommand?: string; code?: string };
+    const msg = errObj.message || String(err);
+    const extra = [errObj.responseText, errObj.executedCommand].filter(Boolean).join(" | ");
+    const fullMsg = extra ? `${msg} (${extra})` : msg;
+    console.error("[imap] connect error:", fullMsg, err);
+
+    if (/AUTHENTICATE|authentication|login|BadCredentials|Invalid login/i.test(fullMsg)) {
+      throw new Error("Authentification IMAP échouée. Vérifiez l'utilisateur et le mot de passe IMAP dans Dashboard → Email & Notifications. Pour Gmail, utilisez un mot de passe d'application (16 caractères), pas votre mot de passe habituel.");
+    }
+    if (/ECONNREFUSED|ETIMEDOUT|ENOTFOUND|connect/i.test(fullMsg)) {
+      throw new Error(`Connexion IMAP impossible à ${config.imapHost}:${config.imapPort || 993}. Vérifiez l'hôte et le port IMAP dans les paramètres email.`);
+    }
+    // Generic fallback with full detail for debugging
+    throw new Error(`Connexion IMAP échouée (${config.imapHost}:${config.imapPort || 993}): ${fullMsg}. Vérifiez vos paramètres IMAP dans Dashboard → Email & Notifications.`);
+  }
+}
+
 export async function fetchInbox(opts: {
   page?: number;
   limit?: number;
@@ -67,18 +100,8 @@ export async function fetchInbox(opts: {
   const page = opts.page || 1;
   const limit = opts.limit || 20;
   const folder = opts.folder || "INBOX";
-  const client = new ImapFlow({
-    host: config.imapHost,
-    port: config.imapPort || 993,
-    secure: true,
-    auth: {
-      user: config.imapUser,
-      pass: config.imapPassword,
-    },
-    logger: false,
-  });
+  const client = await createImapClient(config);
 
-  await client.connect();
   try {
     const lock = await client.getMailboxLock(folder);
     try {
@@ -136,15 +159,8 @@ export async function fetchEmailDetail(uid: number, folder = "INBOX"): Promise<E
   if (!config || !config.imapHost || !config.imapUser || !config.imapPassword) {
     throw new Error("IMAP non configuré.");
   }
-  const client = new ImapFlow({
-    host: config.imapHost,
-    port: config.imapPort || 993,
-    secure: true,
-    auth: { user: config.imapUser, pass: config.imapPassword },
-    logger: false,
-  });
+  const client = await createImapClient(config);
 
-  await client.connect();
   try {
     const lock = await client.getMailboxLock(folder);
     try {
@@ -196,14 +212,7 @@ export async function markEmailRead(uid: number, folder = "INBOX"): Promise<void
   if (!config || !config.imapHost || !config.imapUser || !config.imapPassword) {
     throw new Error("IMAP non configuré.");
   }
-  const client = new ImapFlow({
-    host: config.imapHost,
-    port: config.imapPort || 993,
-    secure: true,
-    auth: { user: config.imapUser, pass: config.imapPassword },
-    logger: false,
-  });
-  await client.connect();
+  const client = await createImapClient(config);
   try {
     const lock = await client.getMailboxLock(folder);
     try {
@@ -221,22 +230,25 @@ export async function deleteEmail(uid: number, folder = "INBOX"): Promise<void> 
   if (!config || !config.imapHost || !config.imapUser || !config.imapPassword) {
     throw new Error("IMAP non configuré.");
   }
-  const client = new ImapFlow({
-    host: config.imapHost,
-    port: config.imapPort || 993,
-    secure: true,
-    auth: { user: config.imapUser, pass: config.imapPassword },
-    logger: false,
-  });
-  await client.connect();
+  const client = await createImapClient(config);
   try {
-    const lock = await client.getMailboxLock(folder);
+    // Open mailbox directly (not via lock) so we can expunge
+    await client.mailboxOpen(folder);
     try {
-      await client.messageFlagsAdd(uid, ["\\Deleted"], { uid: true });
+      // Mark the message as \Deleted
+      const result = await client.messageFlagsAdd(uid, ["\\Deleted"], { uid: true });
+      if (!result) {
+        // Message not found by UID — maybe already deleted
+        console.warn(`[imap] deleteEmail: message ${uid} not found (already deleted?)`);
+      }
+      // Expunge to permanently remove deleted messages
       await client.expunge();
     } finally {
-      lock.release();
+      await client.mailboxClose();
     }
+  } catch (err) {
+    console.error("[imap] deleteEmail error:", err);
+    throw new Error(`Impossible de supprimer l'email: ${err instanceof Error ? err.message : "erreur IMAP"}`);
   } finally {
     await client.logout();
   }
