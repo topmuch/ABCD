@@ -38,6 +38,7 @@ import {
   SERVICE_HIGHLIGHTS,
   COUNTRIES,
 } from "@/lib/site-data";
+import { useLanguage } from "@/lib/i18n";
 
 const TRUST_ITEMS = [
   "Transit & Commissionnaire en Douane agréé",
@@ -99,6 +100,7 @@ function Reveal({
 }
 
 export default function HomePage() {
+  const { t, lang } = useLanguage();
   return (
     <>
       {/* ============ HERO PREMIUM ============ */}
@@ -131,9 +133,9 @@ export default function HomePage() {
             >
               <div className="inline-flex items-center gap-2 rounded-full glass-card px-4 py-1.5 text-xs font-medium text-white shimmer">
                 <ShieldCheck className="h-3.5 w-3.5 text-accent" />
-                Commissionnaire en douane agréé
+                {t("hero.badge")}
                 <span className="mx-1 h-1 w-1 rounded-full bg-accent" />
-                Dakar, Sénégal
+                {t("hero.badge.location")}
               </div>
             </motion.div>
 
@@ -143,11 +145,11 @@ export default function HomePage() {
               transition={{ duration: 0.7, delay: 0.08 }}
               className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.08] tracking-tight"
             >
-              Votre partenaire
+              {t("hero.title1")}
               <br />
-              logistique au cœur de
+              {t("hero.title2")}
               <br />
-              l&apos;<span className="text-gradient-gold">Afrique de l&apos;Ouest</span>
+              {t("hero.title3")}
             </motion.h1>
 
             <motion.p
@@ -156,9 +158,7 @@ export default function HomePage() {
               transition={{ duration: 0.7, delay: 0.18 }}
               className="mt-5 text-base sm:text-lg text-white/80 leading-relaxed max-w-2xl"
             >
-              ABCD Ltd conçoit des solutions sur mesure de transit, transport et
-              logistique — de l&apos;origine à la destination finale — depuis Dakar
-              vers le Mali, la Guinée, la Mauritanie et au-delà.
+              {t("hero.desc")}
             </motion.p>
 
             <motion.div
@@ -173,7 +173,7 @@ export default function HomePage() {
                 className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20 glow-gold text-base h-12 px-7"
               >
                 <Link href="/services">
-                  Découvrir nos services
+                  {t("hero.cta1")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -183,7 +183,7 @@ export default function HomePage() {
                 className="glass-card text-white border-white/20 hover:bg-white/15 hover:text-white text-base h-12 px-7"
               >
                 <Link href="/contact">
-                  Demander un devis
+                  {t("hero.cta2")}
                 </Link>
               </Button>
             </motion.div>
@@ -218,10 +218,10 @@ export default function HomePage() {
       <section className="relative border-y border-border bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm font-medium text-muted-foreground">
-            {TRUST_ITEMS.map((t) => (
-              <span key={t} className="inline-flex items-center gap-2">
+            {TRUST_ITEMS.map((item, idx) => (
+              <span key={idx} className="inline-flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-accent" />
-                {t}
+                {t(`trust.${idx + 1}`)}
               </span>
             ))}
           </div>

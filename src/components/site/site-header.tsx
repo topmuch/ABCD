@@ -6,14 +6,25 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { NAV_LINKS } from "@/lib/site-data";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
+import { useLanguage } from "@/lib/i18n";
+import { NAV_LINKS } from "@/lib/site-data";
+
+const NAV_LABEL_KEYS: Record<string, string> = {
+  "/": "nav.home",
+  "/a-propos": "nav.about",
+  "/services": "nav.services",
+  "/atouts": "nav.atouts",
+  "/partenaires": "nav.partners",
+  "/contact": "nav.contact",
+};
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -22,7 +33,6 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Determine if we're on the home page (hero present → needs transparent header)
   const isHome = pathname === "/";
 
   return (
@@ -38,9 +48,8 @@ export function SiteHeader() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 sm:h-24 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center group" aria-label="ABCD Ltd - Accueil">
+          <Link href="/" className="flex items-center group" aria-label="ABCD Ltd">
             <div className="relative h-16 w-16 sm:h-20 sm:w-20 shrink-0 rounded-lg overflow-hidden bg-white p-1.5 ring-1 ring-border">
-              { }
               <img
                 src="/logo-abcd-transparent.png"
                 alt="Logo ABCD Ltd"
@@ -70,7 +79,7 @@ export function SiteHeader() {
                         }`
                   }`}
                 >
-                  {link.label}
+                  {t(NAV_LABEL_KEYS[link.href] || "nav.home")}
                 </Link>
               );
             })}
@@ -83,7 +92,7 @@ export function SiteHeader() {
               className="hidden sm:inline-flex bg-accent text-accent-foreground hover:bg-accent/90 shadow-sm"
             >
               <Link href="/contact">
-                Demander un devis
+                {t("header.getQuote")}
                 <ArrowRight className="ml-1.5 h-4 w-4" />
               </Link>
             </Button>
@@ -100,15 +109,13 @@ export function SiteHeader() {
             >
               <Link href="/login">
                 <LogIn className="mr-1.5 h-4 w-4" />
-                Connexion
+                {t("header.login")}
               </Link>
             </Button>
 
-            {/* Dark mode toggle */}
             <LanguageToggle />
             <ThemeToggle variant={scrolled || !isHome ? "light-header" : "dark-header"} />
 
-            {/* Mobile toggle */}
             <button
               onClick={() => setOpen((v) => !v)}
               className={`lg:hidden inline-flex items-center justify-center h-10 w-10 rounded-md transition-colors ${
@@ -152,7 +159,7 @@ export function SiteHeader() {
                         : "text-foreground/80 hover:bg-secondary hover:text-foreground"
                     }`}
                   >
-                    {link.label}
+                    {t(NAV_LABEL_KEYS[link.href] || "nav.home")}
                   </Link>
                 );
               })}
@@ -161,13 +168,13 @@ export function SiteHeader() {
                 className="mt-2 bg-accent text-accent-foreground hover:bg-accent/90"
               >
                 <Link href="/contact">
-                  Demander un devis <ArrowRight className="ml-1.5 h-4 w-4" />
+                  {t("header.getQuote")} <ArrowRight className="ml-1.5 h-4 w-4" />
                 </Link>
               </Button>
               <Button asChild variant="outline">
                 <Link href="/login">
                   <LogIn className="mr-1.5 h-4 w-4" />
-                  Connexion
+                  {t("header.login")}
                 </Link>
               </Button>
             </nav>
