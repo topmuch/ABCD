@@ -272,33 +272,27 @@ export default function HomePage() {
               <Reveal>
                 <Badge variant="outline" className="mb-4 text-primary border-primary/30 bg-primary/5">
                   <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-                  À propos d&apos;ABCD Ltd
+                  {t("about.badge")}
                 </Badge>
               </Reveal>
               <Reveal delay={0.05}>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
-                  Une expertise logistique
-                  <span className="text-gradient-gold"> ancrée à Dakar</span>
+                  {t("about.title1")}
+                  <span className="text-gradient-gold">{t("about.title2")}</span>
                 </h2>
               </Reveal>
               <Reveal delay={0.1}>
                 <p className="mt-6 text-base sm:text-lg text-muted-foreground leading-relaxed">
-                  Depuis sa création le 12 janvier 2019, l&apos;activité d&apos;
+                  {t("about.desc1.pre")}
                   <strong className="text-foreground">
                     African Business Company for Development SARL
-                  </strong>{" "}
-                  (A.B.C.D Ltd) s&apos;est construite autour du transport pour le
-                  compte des compagnies maritimes de la place. Aujourd&apos;hui,
-                  établissement de Transit et commissionnaire en Douane agréé,
-                  ABCD Ltd étend son portefeuille d&apos;activité à l&apos;échelle
-                  locale et dans les pays voisins.
+                  </strong>
+                  {t("about.desc1.post")}
                 </p>
               </Reveal>
               <Reveal delay={0.15}>
                 <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
-                  Notre objectif&nbsp;: offrir une solution sur mesure à chaque
-                  client, depuis l&apos;origine jusqu&apos;à la destination finale,
-                  avec une approche proactive.
+                  {t("about.desc2")}
                 </p>
               </Reveal>
 
@@ -307,15 +301,15 @@ export default function HomePage() {
                 <div className="mt-8 grid grid-cols-3 gap-4">
                   <div className="border-l-2 border-accent pl-3">
                     <div className="text-2xl font-extrabold text-foreground">5–20</div>
-                    <div className="text-xs text-muted-foreground mt-0.5">ans d&apos;expérience</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">{t("about.ministat1")}</div>
                   </div>
                   <div className="border-l-2 border-accent pl-3">
                     <div className="text-2xl font-extrabold text-foreground">11</div>
-                    <div className="text-xs text-muted-foreground mt-0.5">services spécialisés</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">{t("about.ministat2")}</div>
                   </div>
                   <div className="border-l-2 border-accent pl-3">
                     <div className="text-2xl font-extrabold text-foreground">100%</div>
-                    <div className="text-xs text-muted-foreground mt-0.5">sur mesure</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">{t("about.ministat3")}</div>
                   </div>
                 </div>
               </Reveal>
@@ -324,7 +318,7 @@ export default function HomePage() {
                 <div className="mt-8">
                   <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
                     <Link href="/a-propos">
-                      En savoir plus sur nous
+                      {t("about.cta")}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
@@ -343,19 +337,18 @@ export default function HomePage() {
           <div className="max-w-2xl mx-auto text-center mb-16">
             <Reveal>
               <Badge variant="outline" className="mb-4 text-primary border-primary/30 bg-primary/5">
-                Nos services
+                {t("section.services")}
               </Badge>
             </Reveal>
             <Reveal delay={0.05}>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground">
-                Un large éventail de
-                <span className="text-gradient-gold"> solutions logistiques</span>
+                {t("section.servicesTitle1")}
+                <span className="text-gradient-gold">{t("section.servicesTitle2")}</span>
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-5 text-base sm:text-lg text-muted-foreground">
-                Du transport multimodal au dédouanement, nous couvrons l&apos;ensemble
-                de votre chaîne logistique avec des équipes spécialisées.
+                {t("section.servicesDesc")}
               </p>
             </Reveal>
           </div>
@@ -426,7 +419,7 @@ export default function HomePage() {
           <div className="mt-12 text-center">
             <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 glow-gold text-base h-12 px-7">
               <Link href="/services">
-                Voir tous nos services
+                {t("section.servicesCta")}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -444,18 +437,17 @@ export default function HomePage() {
           <div className="max-w-2xl mx-auto text-center mb-16">
             <Reveal>
               <Badge className="mb-4 bg-white/10 text-white border border-white/20 hover:bg-white/15">
-                Notre méthode
+                {t("section.process")}
               </Badge>
             </Reveal>
             <Reveal delay={0.05}>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
-                De l&apos;origine à la destination finale
+                {t("section.processTitle")}
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-5 text-base sm:text-lg text-white/80 leading-relaxed">
-                Une démarche structurée et proactive pour sécuriser chacune de vos
-                opérations logistiques.
+                {t("section.processDesc")}
               </p>
             </Reveal>
           </div>
@@ -473,10 +465,10 @@ export default function HomePage() {
                     )}
                   </div>
                   <h3 className="text-lg font-bold text-white">
-                    {p.title}
+                    {t(`process.${i + 1}`)}
                   </h3>
                   <p className="mt-2 text-sm text-white/70 leading-relaxed">
-                    {p.desc}
+                    {t(`process.${i + 1}.desc`)}
                   </p>
                 </div>
               </Reveal>
@@ -493,28 +485,25 @@ export default function HomePage() {
             <div className="lg:sticky lg:top-28">
               <Reveal>
                 <Badge variant="outline" className="mb-4 text-primary border-primary/30 bg-primary/5">
-                  Pourquoi nous choisir
+                  {t("section.whyUs")}
                 </Badge>
               </Reveal>
               <Reveal delay={0.05}>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
-                  Des équipes confirmées,
-                  <span className="text-gradient-gold"> une approche sur mesure</span>
+                  {t("section.whyUsTitle1")}
+                  <span className="text-gradient-gold">{t("section.whyUsTitle2")}</span>
                 </h2>
               </Reveal>
               <Reveal delay={0.1}>
                 <p className="mt-5 text-base sm:text-lg text-muted-foreground leading-relaxed">
-                  Nous disposons d&apos;une équipe qualifiée et confirmée. Bon nombre
-                  de nos collaborateurs capitalisent entre 5 et 20 ans d&apos;expérience
-                  dans des opérations de tous types, à l&apos;échelle nationale et
-                  internationale.
+                  {t("section.whyUsDesc")}
                 </p>
               </Reveal>
               <Reveal delay={0.15}>
                 <div className="mt-7">
                   <Button asChild variant="outline" size="lg">
                     <Link href="/atouts">
-                      Découvrir nos atouts
+                      {t("section.whyUsCta")}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
@@ -532,10 +521,10 @@ export default function HomePage() {
                         <w.icon className="h-6 w-6 text-accent group-hover:text-accent-foreground transition-colors" />
                       </div>
                       <h3 className="text-base font-bold text-foreground">
-                        {w.title}
+                        {t(`whyus.${i}.title`)}
                       </h3>
                       <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                        {w.desc}
+                        {t(`whyus.${i}.desc`)}
                       </p>
                     </CardContent>
                   </Card>
@@ -553,12 +542,12 @@ export default function HomePage() {
             <Reveal>
               <Badge variant="outline" className="mb-4 text-primary border-primary/30 bg-primary/5">
                 <Globe2 className="mr-1.5 h-3.5 w-3.5" />
-                Couverture géographique
+                {t("section.coverage")}
               </Badge>
             </Reveal>
             <Reveal delay={0.05}>
               <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
-                Dakar, hub stratégique de l&apos;Afrique de l&apos;Ouest
+                {t("section.coverageTitle")}
               </h2>
             </Reveal>
           </div>
@@ -576,7 +565,7 @@ export default function HomePage() {
                   <span className="inline-flex items-center gap-1.5">
                     <MapPin className="h-3.5 w-3.5" />
                     {c.name}
-                    {c.base && <span className="text-[10px] uppercase tracking-wide opacity-80">Base</span>}
+                    {c.base && <span className="text-[10px] uppercase tracking-wide opacity-80">{t("country.base")}</span>}
                   </span>
                 </div>
               ))}
@@ -602,29 +591,28 @@ export default function HomePage() {
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
-              Prêt à expédier votre
+              {t("section.ctaTitle1")}
               <br />
-              prochaine marchandise ?
+              {t("section.ctaTitle2")}
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-5 text-base sm:text-lg text-white/80 leading-relaxed max-w-2xl mx-auto">
-              Obtenez un devis sur mesure en quelques minutes. Nos équipes vous
-              répondent avec une solution proactive adaptée à votre besoin.
+              {t("section.ctaDesc")}
             </p>
           </Reveal>
           <Reveal delay={0.15}>
             <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg glow-gold text-base h-12 px-8">
                 <Link href="/contact">
-                  Demander un devis
+                  {t("section.ctaBtn")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button asChild size="lg" className="glass-card text-white border-white/20 hover:bg-white/15 hover:text-white text-base h-12 px-8">
                 <a href="tel:+221338211131">
                   <Phone className="mr-2 h-4 w-4" />
-                  +221 33 821 11 31
+                  {t("section.ctaCall")}: +221 33 821 11 31
                 </a>
               </Button>
             </div>

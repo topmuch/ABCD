@@ -457,3 +457,184 @@ Stage Summary:
 - The dashboard sidebar already links to `/dashboard/maintenance`; no nav change needed.
 - When `enabled=true` is saved in the dashboard, the middleware will redirect public visitors to `/maintenance` (the redirect behavior lives in `src/middleware.ts`, already in place per prior worklog entries).
 - Recommended next: smoke-test the full flow with the Agent Browser — toggle maintenance on from `/dashboard/maintenance`, visit `/` as an anonymous visitor to confirm the redirect + countdown render correctly, then toggle off. Then commit + push to GitHub.
+
+---
+Task ID: i18n-home
+Agent: Sub-agent (general-purpose)
+Task: Translate home page (src/app/(public)/page.tsx) from hardcoded French to use the i18n `useLanguage()` + `t()` translation system for ALL text content (extending the existing hero/trust bar work).
+
+Work Log:
+- Read worklog.md, page.tsx, and i18n.tsx to inventory the already-translated content (hero badge/title/desc/CTAs/trust bar) and the remaining hardcoded FR text.
+- Searched `src/` for existing usages of `about.*` and `section.*` keys to confirm they were not referenced anywhere else (only defined in i18n.tsx), so I could safely extend them.
+- Added new keys to BOTH the FR and EN dictionaries in `src/lib/i18n.tsx`:
+  * About section: `about.title1`, `about.title2` (split for the gradient span), `about.desc1.pre` + `about.desc1.post` (split around the `<strong>` company-name tag), `about.desc2`, `about.ministat1`/`2`/`3` ("ans d'expérience", "services spécialisés", "sur mesure").
+  * Why-choose array items: `whyus.0..3.title` and `whyus.0..3.desc` for the 4 cards.
+  * Services title split: `section.servicesTitle1`, `section.servicesTitle2`.
+  * Why-us title split: `section.whyUsTitle1`, `section.whyUsTitle2`.
+  * CTA title split (line break): `section.ctaTitle1`, `section.ctaTitle2`.
+  * Kept the original full-string keys (`about.title`, `section.servicesTitle`, etc.) for backward compatibility.
+- Updated `src/app/(public)/page.tsx` to replace every remaining hardcoded French string with `t()` calls:
+  * About section: badge, title (split with gradient), 2 paragraphs (with company name kept as a literal `<strong>`), 3 mini-stat labels, CTA button.
+  * Services section: badge, split title, description, "Voir tous nos services" button.
+  * Process section: badge, title, description, and per-step title/desc rendered via `t(\`process.${i+1}\`)` / `t(\`process.${i+1}.desc\`)`.
+  * Why Us section: badge, split title, description, "Découvrir nos atouts" button, and per-card title/desc rendered via `t(\`whyus.${i}.title\`)` / `t(\`whyus.${i}.desc\`)`.
+  * Countries section: badge, title, "Base" pill label.
+  * CTA section: split title (with `<br />`), description, "Demander un devis" button, "Nous appeler" call button (formatted as `{t("section.ctaCall")}: +221 33 821 11 31`).
+- Kept the `WHY_CHOOSE` and `PROCESS_STEPS` constant arrays as-is (their FR `title`/`desc` properties are no longer read by the JSX; `title` still serves as a stable React key for WHY_CHOOSE, and `num` is the key for PROCESS_STEPS). Icons/nums are unchanged.
+- Ran `bunx eslint "src/app/(public)/page.tsx" src/lib/i18n.tsx` — exit code 0, no warnings/errors.
+- Also ran `bunx tsc --noEmit`; no errors in either modified file (pre-existing unrelated errors in `src/lib/imap.ts` and `src/app/dashboard/email/page.tsx` are out of scope).
+
+Files Modified:
+- `src/lib/i18n.tsx` — added ~24 new FR + 24 new EN keys (about desc/ministats, whyus.* array, split titles for services/whyus/cta).
+- `src/app/(public)/page.tsx` — replaced all remaining hardcoded FR strings in About, Services, Process, Why Us, Countries, and CTA sections with `t()` calls.
+
+Notes / Out of scope (left as hardcoded FR, not listed in task):
+- CTA floating badge "Devis gratuit sous 24h ouvrées".
+- Services card hover label "En savoir plus".
+- About floating badges "Depuis / Janvier 2019 / Couverture / 6 pays / Afrique de l'Ouest".
+- The `WHY_CHOOSE` and `PROCESS_STEPS` arrays still contain FR strings in their `title`/`desc` properties (kept as-is per the task's "keep the arrays as-is" instruction; they are now only used as React keys / numeric labels).
+- The `lang` variable destructured from `useLanguage()` is unused in this page but kept as-is (pre-existing state; eslint config has `no-unused-vars` set to off).
+
+Next actions:
+- Optional: add the out-of-scope strings above to i18n dictionaries if a full FR→EN pass is desired.
+- Optional: remove unused `lang` from the destructure once it's actually needed elsewhere or eslint tightens.
+- Manually verify both FR and EN renders in the browser (toggle language switcher) to confirm visual fidelity (gradient spans, line breaks).
+
+---
+Task ID: i18n-atouts-partners
+Agent: Sub-agent (general-purpose)
+Task: Translate 2 public pages (/atouts, /partenaires) from hardcoded French to use the i18n system (useLanguage + t)
+
+Work Log:
+- Read worklog.md (project context, prior i18n patterns from maintenance-lang task), `src/lib/i18n.tsx` (existing FR/EN dictionaries + LanguageProvider/useLanguage hook), `src/lib/site-data.ts` (WHY_US, STATS, FAQS, PARTNERS, REFERENCES arrays with hardcoded French), `src/app/(public)/atouts/page.tsx` (173 lines, French hardcoded), `src/app/(public)/partenaires/page.tsx` (162 lines, French hardcoded), `src/app/(public)/page.tsx` (existing i18n-using reference page, destructures `{ t, lang }` without using `lang`), and the eslint config (confirms `@typescript-eslint/no-unused-vars: "off"` so unused `lang` is acceptable).
+- Verified baseline eslint on the 3 target files → clean (0 errors, 0 warnings).
+- Identified existing i18n keys that could be re-used: `stat.founded`, `stat.countries`, `stat.experience`, `stat.services` (already defined FR+EN, match the STATS array labels exactly — used via index lookup in atouts page).
+
+FILE 1 — `src/lib/i18n.tsx`:
+- Added 50 new keys (25 FR + 25 EN), grouped under clearly-commented sections in both FR and EN dictionaries:
+  - `atouts.*` (13 keys): badge, title, subtitle, whyUs.badge, whyUs.title, stat.experience, stat.tailored, stat.reactivity, faq.badge, faq.title, cta.title, cta.desc, cta.btn
+  - `whyUs.N.title` + `whyUs.N.desc` (8 keys, N=1..4) — mirrors the existing `process.N` numbered-key pattern
+  - `faq.N.q` + `faq.N.a` (8 keys, N=1..4)
+  - `partners.*` (13 keys): badge, title, subtitle, ars.role, ars.description, benefit.1..4, quoteBtn, becomeCta.title/desc/btn, references.badge/title/desc
+- All French strings preserved verbatim from the original hardcoded source (including apostrophes like "l'Ouest", "d'expérience", "s'associe" — handled via double-quoted JS strings, no escaping needed).
+- English translations authored to match the existing project bilingual style (concise, professional logistics terminology consistent with the brochure translation already in the project).
+
+FILE 2 — `src/app/(public)/atouts/page.tsx`:
+- Added `import { useLanguage } from "@/lib/i18n";`
+- Added `const { t, lang } = useLanguage();` at top of component (matches the home page pattern; `lang` destructured but unused — eslint config has `no-unused-vars: off`).
+- Defined 3 module-level lookup arrays to bridge data-driven arrays (WHY_US, STATS, FAQS in site-data.ts) to translation keys, since site-data.ts text is hardcoded French (out of scope to modify):
+  - `STAT_KEYS` (4 strings) → maps STATS[i] → `stat.founded/countries/experience/services`
+  - `WHY_US_KEYS` (4 {title, desc} objects) → maps WHY_US[i] → `whyUs.N.title/desc`
+  - `FAQ_KEYS` (4 {q, a} objects) → maps FAQS[i] → `faq.N.q/a`
+- Replaced all hardcoded French strings with `t()` calls:
+  - PageHeader badge/title/subtitle → `t("atouts.badge|title|subtitle")`
+  - Stats card labels → `t(STAT_KEYS[i])` (was `{s.label}`)
+  - "Pourquoi nous choisir" badge → `t("atouts.whyUs.badge")`
+  - "Quatre raisons de faire confiance à ABCD Ltd" → `t("atouts.whyUs.title")`
+  - WHY_US titles/descs → `t(WHY_US_KEYS[i].title|desc)` (was `{w.title}` / `{w.desc}`)
+  - Inline stat labels: "ans d'expérience" → `t("atouts.stat.experience")`, "approche sur mesure" → `t("atouts.stat.tailored")`, "réactivité" → `t("atouts.stat.reactivity")` (the `&apos;` HTML entity for "ans d'expérience" is no longer needed since the apostrophe is now inside the i18n dictionary string)
+  - FAQ badge "FAQ" → `t("atouts.faq.badge")`
+  - "Questions fréquentes" → `t("atouts.faq.title")`
+  - FAQ questions/answers → `t(FAQ_KEYS[i].q|a)` (was `{f.q}` / `{f.a}`)
+  - CTA title "Confiez-nous votre prochaine opération" → `t("atouts.cta.title")`
+  - CTA desc "Discutons de votre projet..." → `t("atouts.cta.desc")`
+  - CTA button "Nous contacter" → `t("atouts.cta.btn")`
+- Preserved the original lucide-react import line (includes `Clock, Globe2, Users, Route` which are unused — was the case in the baseline file as well; eslint config has `no-unused-vars: off`).
+- Preserved all existing JSX structure, Tailwind classes, Reveal animation delays, and React key choices (still keyed on `s.label`/`w.title` — stable French strings from site-data.ts, used purely as React identity which is fine).
+
+FILE 3 — `src/app/(public)/partenaires/page.tsx`:
+- Added `import { useLanguage } from "@/lib/i18n";`
+- Added `const { t, lang } = useLanguage();` at top of component.
+- Defined 2 module-level lookup structures:
+  - `PARTNER_KEYS` array (1 entry for current single partner ARS Rental) → `{ role: "partners.ars.role", description: "partners.ars.description" }`. Future partners can simply append new entries to both `PARTNERS` (site-data) and `PARTNER_KEYS` (page).
+  - `BENEFITS` array (replaces the inline literal array of icon+text) — 4 entries with `{ icon, key }` where `key` is one of `partners.benefit.1..4`.
+- Replaced all hardcoded French strings with `t()` calls:
+  - PageHeader badge/title/subtitle → `t("partners.badge|title|subtitle")`
+  - Partner role badge text "Représentant officiel en Afrique de l'Ouest" → `t(PARTNER_KEYS[i].role)` (was `{p.role}`)
+  - Partner description paragraph → `t(PARTNER_KEYS[i].description)` (was `{p.description}`)
+  - Benefits: 4 strings ("Matériel de dernière génération", "Location ou vente flexible", "Représentant officiel Afrique de l'Ouest", "Engins de manutention et transport") → `t(b.key)` (was `{b.text}`)
+  - "Demander un devis" button → `t("partners.quoteBtn")`
+  - "Nos références" badge → `t("partners.references.badge")`
+  - "Ils nous font confiance" h2 → `t("partners.references.title")`
+  - References desc "Organisations internationales..." → `t("partners.references.desc")` (the original `s&apos;appuient` entity is now inside the i18n dictionary string so JSX no longer needs the entity)
+  - Become-a-partner CTA title "Vous souhaitez devenir partenaire ?" → `t("partners.becomeCta.title")`
+  - Become-a-partner desc "ABCD Ltd développe des partenariats..." → `t("partners.becomeCta.desc")`
+  - "Nous contacter" button → `t("partners.becomeCta.btn")`
+- Also cleaned up 2 stray `{ }` empty JSX expression containers that were artifacts from prior `eslint --fix` runs (one in the partner logo div, one in the reference logo div) — replaced with cleaner JSX directly.
+- Scope note: The REFERENCES array data (ref.name + ref.desc) was left displaying the hardcoded French strings from site-data.ts because (a) the task's explicit translation list did not enumerate reference card text, and (b) the `name` field is a proper noun for most entries. The reference section header (badge/title/desc) IS translated. If full bilingual rendering of reference cards is needed later, the same index-keyed lookup pattern (PARTNER_KEYS) can be replicated for REFERENCES.
+
+Lint / type-check:
+- `bunx eslint "src/app/(public)/atouts/page.tsx" "src/app/(public)/partenaires/page.tsx" src/lib/i18n.tsx 2>&1 | tail -15` → EXIT_CODE=0, 0 errors, 0 warnings (no output).
+- `bunx tsc --noEmit --skipLibCheck` filtered for `atouts|partenaires|i18n` → no type errors (no output).
+
+Stage Summary:
+- 3 files modified:
+  - `src/lib/i18n.tsx` — added 50 new translation entries (25 FR + 25 EN) under 6 clearly-commented sections (Atouts page, WHY_US items, FAQ items, Partenaires page)
+  - `src/app/(public)/atouts/page.tsx` — now uses `useLanguage()` + `t()` for ALL user-facing text; data-driven arrays (WHY_US, STATS, FAQS) bridged via 3 small lookup arrays (STAT_KEYS, WHY_US_KEYS, FAQ_KEYS)
+  - `src/app/(public)/partenaires/page.tsx` — now uses `useLanguage()` + `t()` for ALL user-facing text; partner role/description bridged via PARTNER_KEYS lookup; inline benefits array refactored into a BENEFITS constant with i18n keys
+- All lint-clean and type-clean.
+- Toggling the site language via the existing LanguageToggle component will now flip both pages between French and English instantly (client-side state, persisted to localStorage).
+- The existing i18n keys `stat.founded/countries/experience/services` were reused (they exactly match the STATS array labels in site-data.ts).
+- No changes to `src/lib/site-data.ts` (out of scope); the FR strings in WHY_US/STATS/FAQS/PARTNERS arrays remain there as legacy fallback content. React keys still keyed on the stable French `s.label`/`w.title`/`p.name`/`ref.name` strings — purely internal identity, no UX impact.
+- Next: smoke-test both pages with the Agent Browser (toggle FR ↔ EN) to visually confirm all text flips, then commit + push to GitHub.
+
+---
+Task ID: i18n-pages
+Agent: Sub-agent (general-purpose)
+Task: Translate about+services+contact public pages from hardcoded French to the i18n translation system (useLanguage + t())
+
+Work Log:
+- Read worklog.md for context, `src/lib/i18n.tsx` (full file, 449 lines — confirmed LanguageProvider/useLanguage pattern with FR + EN Dict objects and `t(key)` lookup), the 3 target pages (a-propos 352 lines, services 165 lines, contact 653 lines read in chunks), and `src/lib/site-data.ts` (confirmed shapes of SERVICES, SERVICE_HIGHLIGHTS, COUNTRIES, PROCESS, WHY_US, REFERENCES, COMPANY).
+
+i18n dictionary additions (src/lib/i18n.tsx):
+- Added to BOTH FR and EN dictionaries, organised by section:
+  - About page (new keys): `about.subtitle`, `about.sinceDate`, `about.dakarSenegal`, `about.story.imgAlt`, `about.story.badge`, `about.story.title`, `about.story.p1`, `about.story.p2`, `about.story.p3`, `about.story.partnerTitle`, `about.story.partnerDesc`, `about.story.partnerLink`, `about.story.bullet1`..`bullet4`, `about.geopolitics.badge`, `about.geopolitics.title`, `about.geopolitics.p1`, `about.geopolitics.p2`, `about.atouts.badge`, `about.atouts.title`, `about.atouts.cta`, `about.references.badge`, `about.references.title`, `about.references.desc`
+  - Services page (new keys): `services.service`, `services.offered.badge`, `services.offered.title`, `services.offered.desc`, `services.list.1`..`list.8`, `services.cta.title`, `services.cta.desc`
+  - Contact page (new keys): `contact.coords.badge`, `contact.coords.title`, `contact.coords.desc`, `contact.address.label`, `contact.company`, `contact.rdvDate`, `contact.rdvTime`, `contact.itineraryDesc`, `contact.gpsNote`, `contact.mapTitle`, `contact.errorEmailSuffix`, `contact.errorPhoneSuffix`, `contact.requiredTitle`, `contact.requiredDesc`, `contact.placeholder.name`, `contact.placeholder.subject`, `contact.placeholder.message`, `contact.placeholder.company`, `contact.placeholder.rdvSubject`, `contact.placeholder.timeslot`, `contact.placeholder.rdvMessage`, `contact.rdvBadge`, `contact.rdvIntro`, `contact.rdvBenefit1`..`rdvBenefit4`, `contact.rdvCardDesc`, `contact.rdvSuccess`, `contact.rdvSuccessDesc`
+  - Updated existing keys to reflect new SICAP Liberté 1 address: `contact.address` FR ("Cité keur Gorgui, Sacré Coeur — Dakar" → "SICAP Liberté 1 — Dakar"), `contact.addressDesc` FR (added "au cœur de SICAP Liberté 1" clause + aligned EN value)
+
+File 1 — `src/app/(public)/a-propos/page.tsx`:
+- Added `import { useLanguage } from "@/lib/i18n";` and `const { t, lang } = useLanguage();` at top of `AProposPage()`.
+- Replaced all hardcoded French text via `t()`:
+  - PageHeader: `about.badge`, `about.title`, `about.subtitle`
+  - Warehouse image alt: `about.story.imgAlt`
+  - "Depuis le 12 janvier 2019" / "Dakar, Sénégal" mini-stat card: `about.sinceDate`, `about.dakarSenegal`
+  - Notre histoire: badge `about.story.badge`, h2 `about.story.title`, 3 paragraphs `about.story.p1`/`p2`/`p3`, partner block (title `about.story.partnerTitle` + desc `about.story.partnerDesc` + link `about.story.partnerLink`), 4 bullet items `about.story.bullet1`..`bullet4`
+  - Situation géopolitique: badge `about.geopolitics.badge`, h2 `about.geopolitics.title`, 2 paragraphs `about.geopolitics.p1`/`p2`
+  - Country labels: `c.base ? t("country.base") : t("country.served")` (existing keys reused)
+  - Process: badge `section.process`, h2 `section.processTitle`, desc `section.processDesc`, step titles via `t(\`process.${p.step}\`)` and descs via `t(\`process.${p.step}.desc\`)` (existing keys reused; mapped to short versions that fit the 4-col card layout)
+  - Atouts preview: badge `about.atouts.badge`, h2 `about.atouts.title`, button `about.atouts.cta`
+  - Références: badge `about.references.badge`, h2 `about.references.title`, desc `about.references.desc`
+
+File 2 — `src/app/(public)/services/page.tsx`:
+- Added `import { useLanguage } from "@/lib/i18n";` and `const { t, lang } = useLanguage();` at top of `ServicesPage()`.
+- Replaced:
+  - PageHeader: `section.services`, `section.servicesTitle`, `section.servicesDesc` (existing keys reused)
+  - Image overlay "Service" label: `services.service`
+  - "Ce que nous offrons" / "Une couverture logistique complète" / desc: `services.offered.badge`, `services.offered.title`, `services.offered.desc`
+  - 8 list items: mapped from array of `t("services.list.1")`..`t("services.list.8")`
+  - CTA: title `services.cta.title`, desc `services.cta.desc`, button `section.ctaBtn` (existing key reused)
+
+File 3 — `src/app/(public)/contact/page.tsx`:
+- Added `import { useLanguage } from "@/lib/i18n";` and `const { t, lang } = useLanguage();` at top of `ContactPage()`.
+- Toast strings (both `onSubmit` devis form and `onBookingSubmit` rdv form): now use `t("contact.requiredTitle")`, `t("contact.requiredDesc")`, `t("contact.success")`, `t("contact.successDesc")`, `t("contact.error")`, `t("contact.rdvSuccess")`, `t("contact.rdvSuccessDesc")`. Error descriptions with COMPANY.email / COMPANY.phone interpolation split into `${t("contact.errorDesc")}${t("contact.errorEmailSuffix")}${COMPANY.email}.` and `${t("contact.errorDesc")}${t("contact.errorPhoneSuffix")}${COMPANY.phone}.` (since `t()` has no interpolation support).
+- PageHeader: `contact.badge`, `contact.title`, `contact.desc`
+- "Nos coordonnées" block: badge `contact.coords.badge`, h2 `contact.coords.title`, paragraph `contact.coords.desc`
+- Address / Phone / Email card labels: `contact.address.label`, `contact.phone`, `contact.email`
+- Bilingual banner: `contact.bilingual`
+- Devis form: title `contact.formTitle`, desc `contact.formDesc`, labels `contact.name` / `contact.phone` / `contact.email` / `contact.subject` / `contact.message`, placeholders `contact.placeholder.name` / `contact.placeholder.subject` / `contact.placeholder.message`, button `contact.send`, sending state `contact.sending`
+- "Demande de rendez-vous" section: badge `contact.rdvBadge`, h2 `contact.rdv`, intro `contact.rdvIntro`, 4 benefits `contact.rdvBenefit1`..`rdvBenefit4`, card title `contact.rdvTitle`, card desc `contact.rdvCardDesc`, labels `contact.name` / `contact.email` / `contact.phone` / `contact.company` / `contact.subject` / `contact.rdvDate` / `contact.rdvTime` / `contact.message`, placeholders `contact.placeholder.name` / `contact.placeholder.company` / `contact.placeholder.rdvSubject` / `contact.placeholder.timeslot` / `contact.placeholder.rdvMessage`, button `contact.rdvBtn`
+- "Nous trouver" section: badge `contact.findUs`, h2 `contact.address`, subtitle `contact.addressDesc`, iframe title `contact.mapTitle`, "Obtenir l'itinéraire" h3 `contact.itinerary`, description `contact.itineraryDesc`, Google Maps button `contact.googleMaps`, OpenStreetMap button `contact.openStreet`, GPS card title `contact.gps`, latitude/longitude labels `contact.latitude`/`contact.longitude`, GPS note `contact.gpsNote`
+
+Lint / type-check:
+- `bunx eslint "src/app/(public)/a-propos/page.tsx" "src/app/(public)/services/page.tsx" "src/app/(public)/contact/page.tsx" src/lib/i18n.tsx` → EXIT_CODE=0, 0 errors, 0 warnings.
+- `bunx tsc --noEmit --skipLibCheck` filtered for the changed files → no type errors.
+- Sanity sweep: only remaining French accents in the 3 page files are inside code comments (`{/* Situation géopolitique */}`, `{/* Nos références */}`, `{/* Détail services */}`, `{/* Carte & itinéraire */}`, `{/* Itinéraire & infos */}`) and inside Google Maps URL `q=` / `destination=` search strings (which must remain in French because they are address search queries, not display text).
+
+Stage Summary:
+- All 3 public pages (a-propos, services, contact) now drive 100% of their user-visible text through the `useLanguage()` hook + `t(key)` lookup. Switching the language toggle (already present in the site header) will now translate these pages end-to-end, including PageHeader, section headings, paragraph copy, bullet lists, badges, form labels, placeholders, buttons, toast notifications, and aria/alt attributes.
+- All new translation keys were added to BOTH the FR and EN dictionaries so the fallback chain (`DICTS[lang][key] ?? DICTS.fr[key] ?? key`) always resolves to a real translation rather than the raw key.
+- Existing keys reused wherever the text was identical (e.g. `section.process`, `country.base`/`country.served`, `section.ctaBtn`, `contact.name`/`contact.phone`/`contact.email`/`contact.subject`/`contact.message`) to avoid duplication.
+- Two existing FR entries (`contact.address`, `contact.addressDesc`) were refreshed to reflect the new SICAP Liberté 1 office address (prior FR values still referenced the old "Cité keur Gorgui, Sacré Coeur" location).
+- The `lang` variable from `useLanguage()` is destructured but not actively referenced in these pages (matches the existing pattern on the homepage and is eslint-clean).
+- Files lint-clean and type-clean — ready to commit + push to GitHub.

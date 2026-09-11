@@ -11,15 +11,17 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { PageHeader, Reveal } from "@/components/site/page-header";
+import { useLanguage } from "@/lib/i18n";
 import { SERVICES, SERVICE_HIGHLIGHTS } from "@/lib/site-data";
 
 export default function ServicesPage() {
+  const { t, lang } = useLanguage();
   return (
     <>
       <PageHeader
-        badge="Nos services"
-        title="Un large éventail de solutions logistiques"
-        subtitle="Du transport multimodal au dédouanement, nous couvrons l'ensemble de votre chaîne logistique avec des équipes spécialisées."
+        badge={t("section.services")}
+        title={t("section.servicesTitle")}
+        subtitle={t("section.servicesDesc")}
       />
 
       {/* Services grid with real images */}
@@ -41,7 +43,7 @@ export default function ServicesPage() {
                       <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
                         <div className="inline-flex items-center gap-1.5 rounded-full bg-accent/90 text-accent-foreground px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide backdrop-blur-sm">
                           <s.icon className="h-3 w-3" />
-                          Service
+                          {t("services.service")}
                         </div>
                         <ArrowUpRight className="h-4 w-4 text-white/70 group-hover:text-accent transition-colors" />
                       </div>
@@ -96,32 +98,31 @@ export default function ServicesPage() {
           <div className="max-w-2xl mx-auto text-center mb-14">
             <Reveal>
               <Badge variant="outline" className="mb-4 text-primary border-primary/30">
-                Ce que nous offrons
+                {t("services.offered.badge")}
               </Badge>
             </Reveal>
             <Reveal delay={0.05}>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
-                Une couverture logistique complète
+                {t("services.offered.title")}
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-4 text-base sm:text-lg text-muted-foreground">
-                Chaque service est assuré par des équipes spécialisées avec un suivi
-                dédié, de l&apos;origine à la destination finale.
+                {t("services.offered.desc")}
               </p>
             </Reveal>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
             {[
-              "Transport Aérien, Maritime, Routier, Multimodal & rendu destination finale",
-              "Supply Chain et logistique optimisée",
-              "Transport et Manutention de colis lourd (heavy lift oncarriage)",
-              "Entreposage en magasin ou à ciel ouvert",
-              "Entrepôt sous Douane et gestion d'inventaire",
-              "Dédouanement et formalités douanières",
-              "Freight forwarding avec sous-traitants agréés",
-              "Solutions sur mesure door-to-door vers l'Afrique de l'Ouest",
+              t("services.list.1"),
+              t("services.list.2"),
+              t("services.list.3"),
+              t("services.list.4"),
+              t("services.list.5"),
+              t("services.list.6"),
+              t("services.list.7"),
+              t("services.list.8"),
             ].map((item, i) => (
               <Reveal key={i} delay={i * 0.04}>
                 <div className="flex items-start gap-3 p-4 rounded-xl bg-secondary/50 ring-1 ring-border">
@@ -141,19 +142,18 @@ export default function ServicesPage() {
         <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <Reveal>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-              Besoin d&apos;un service spécifique ?
+              {t("services.cta.title")}
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
             <p className="mt-4 text-base sm:text-lg text-white/85 leading-relaxed">
-              Contactez nos équipes pour élaborer une solution sur mesure adaptée
-              à votre activité.
+              {t("services.cta.desc")}
             </p>
           </Reveal>
           <Reveal delay={0.1}>
             <Button asChild size="lg" className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg">
               <Link href="/contact">
-                Demander un devis <ArrowRight className="ml-2 h-4 w-4" />
+                {t("section.ctaBtn")} <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </Reveal>

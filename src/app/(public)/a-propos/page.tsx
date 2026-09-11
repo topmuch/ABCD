@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { PageHeader, Reveal } from "@/components/site/page-header";
+import { useLanguage } from "@/lib/i18n";
 import {
   COUNTRIES,
   PROCESS,
@@ -26,12 +27,13 @@ import {
 } from "@/lib/site-data";
 
 export default function AProposPage() {
+  const { t, lang } = useLanguage();
   return (
     <>
       <PageHeader
-        badge="À propos d'ABCD Ltd"
-        title="Une expertise logistique ancrée à Dakar"
-        subtitle="Depuis 2019, nous concevons des solutions sur mesure de transit, transport et logistique pour les acteurs de l'Afrique de l'Ouest."
+        badge={t("about.badge")}
+        title={t("about.title")}
+        subtitle={t("about.subtitle")}
       />
 
       {/* Histoire */}
@@ -46,7 +48,7 @@ export default function AProposPage() {
                   { }
                   <img
                     src="/warehouse.jpg"
-                    alt="Entreposage et logistique ABCD Ltd"
+                    alt={t("about.story.imgAlt")}
                     className="w-full h-[300px] sm:h-[460px] object-cover"
                   />
                 </div>
@@ -56,10 +58,10 @@ export default function AProposPage() {
                   </div>
                   <div>
                     <div className="text-sm font-semibold text-foreground">
-                      Depuis le 12 janvier 2019
+                      {t("about.sinceDate")}
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      Dakar, Sénégal
+                      {t("about.dakarSenegal")}
                     </div>
                   </div>
                 </div>
@@ -69,40 +71,27 @@ export default function AProposPage() {
             <div>
               <Reveal>
                 <Badge variant="outline" className="mb-4 text-primary border-primary/30">
-                  Notre histoire
+                  {t("about.story.badge")}
                 </Badge>
               </Reveal>
               <Reveal delay={0.05}>
                 <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
-                  Du transport maritime au transit global
+                  {t("about.story.title")}
                 </h2>
               </Reveal>
               <Reveal delay={0.1}>
                 <p className="mt-5 text-base sm:text-lg text-muted-foreground leading-relaxed">
-                  Depuis sa création le 12 janvier 2019, l&apos;activité d&apos;
-                  <strong className="text-foreground">
-                    African Business Company for Development SARL
-                  </strong>{" "}
-                  (A.B.C.D Ltd) se limitait à effectuer du transport pour le compte
-                  des compagnies maritimes de la place pendant ses 4 premières
-                  années d&apos;existence.
+                  {t("about.story.p1")}
                 </p>
               </Reveal>
               <Reveal delay={0.15}>
                 <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
-                  À présent, en tant qu&apos;établissement de Transit et de
-                  commissionnaire en Douane agréé, ABCD Ltd veut étendre son
-                  portefeuille d&apos;activité au niveau local et dans les pays
-                  voisins. Notre objectif est d&apos;offrir une solution sur mesure
-                  à chaque client depuis l&apos;origine jusqu&apos;à la destination
-                  finale avec à la clef une approche proactive.
+                  {t("about.story.p2")}
                 </p>
               </Reveal>
               <Reveal delay={0.2}>
                 <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
-                  De plus, nous collaborons avec des sous-traitants agréés. Notre
-                  partenariat est basé sur des cahiers de charges avec des
-                  obligations de part et d&apos;autre.
+                  {t("about.story.p3")}
                 </p>
               </Reveal>
               <Reveal delay={0.25}>
@@ -116,13 +105,11 @@ export default function AProposPage() {
                     </div>
                     <div>
                       <p className="text-sm sm:text-base text-foreground/90 leading-relaxed">
-                        <strong className="text-foreground">Nos partenaires stratégiques</strong>
-                        {" — "}ABCD Ltd s&apos;associe à des acteurs de référence pour
-                        vous offrir des solutions complètes de transport, manutention
-                        et location de matériel de dernière génération.
+                        <strong className="text-foreground">{t("about.story.partnerTitle")}</strong>
+                        {" — "}{t("about.story.partnerDesc")}
                       </p>
                       <span className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-accent group-hover:gap-2 transition-all">
-                        Découvrir nos partenaires
+                        {t("about.story.partnerLink")}
                         <ArrowRight className="h-4 w-4" />
                       </span>
                     </div>
@@ -132,10 +119,10 @@ export default function AProposPage() {
               <Reveal delay={0.3}>
                 <ul className="mt-7 space-y-3">
                   {[
-                    "Transit et commissionnaire en douane agréé",
-                    "Solutions sur mesure de l'origine à la destination",
-                    "Réseau de sous-traitants agréés et encadrés",
-                    "Approche proactive et suivi dédié",
+                    t("about.story.bullet1"),
+                    t("about.story.bullet2"),
+                    t("about.story.bullet3"),
+                    t("about.story.bullet4"),
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-3">
                       <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 shrink-0" />
@@ -159,27 +146,22 @@ export default function AProposPage() {
               <Reveal>
                 <Badge className="mb-4 bg-white/10 text-white border border-white/20 hover:bg-white/15">
                   <Globe2 className="mr-1.5 h-3.5 w-3.5 text-accent" />
-                  Situation géopolitique
+                  {t("about.geopolitics.badge")}
                 </Badge>
               </Reveal>
               <Reveal delay={0.05}>
                 <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-                  Dakar, hub stratégique de l&apos;Afrique de l&apos;Ouest
+                  {t("about.geopolitics.title")}
                 </h2>
               </Reveal>
               <Reveal delay={0.1}>
                 <p className="mt-5 text-base sm:text-lg text-white/85 leading-relaxed">
-                  Le Sénégal compte parmi les pays les plus stables d&apos;Afrique de
-                  l&apos;Ouest, doté d&apos;institutions fortes. Sa position
-                  géographique et sa stabilité politique lui confèrent le statut de
-                  l&apos;un des pays les plus industrialisés de la région.
+                  {t("about.geopolitics.p1")}
                 </p>
               </Reveal>
               <Reveal delay={0.15}>
                 <p className="mt-4 text-base sm:text-lg text-white/85 leading-relaxed">
-                  De nombreuses entreprises multinationales, mixtes et privées ont
-                  installé leurs sièges ou bureaux régionaux à Dakar afin
-                  d&apos;interagir avec les pays de la sous-région.
+                  {t("about.geopolitics.p2")}
                 </p>
               </Reveal>
             </div>
@@ -197,7 +179,7 @@ export default function AProposPage() {
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-medium uppercase tracking-wide opacity-80">
-                        {c.base ? "Base" : "Desservi"}
+                        {c.base ? t("country.base") : t("country.served")}
                       </span>
                       <MapPin className="h-4 w-4 opacity-70" />
                     </div>
@@ -216,18 +198,17 @@ export default function AProposPage() {
           <div className="max-w-2xl mb-14">
             <Reveal>
               <Badge variant="outline" className="mb-4 text-primary border-primary/30">
-                Notre méthode
+                {t("section.process")}
               </Badge>
             </Reveal>
             <Reveal delay={0.05}>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
-                De l&apos;origine à la destination finale
+                {t("section.processTitle")}
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-4 text-base sm:text-lg text-muted-foreground">
-                Une démarche structurée et proactive pour sécuriser chacune de vos
-                opérations.
+                {t("section.processDesc")}
               </p>
             </Reveal>
           </div>
@@ -244,10 +225,10 @@ export default function AProposPage() {
                     <ArrowRight className="h-5 w-5 text-accent hidden lg:block" />
                   </div>
                   <h3 className="mt-5 text-lg font-bold text-foreground">
-                    {p.title}
+                    {t(`process.${p.step}`)}
                   </h3>
                   <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                    {p.desc}
+                    {t(`process.${p.step}.desc`)}
                   </p>
                 </div>
               </Reveal>
@@ -262,12 +243,12 @@ export default function AProposPage() {
           <div className="max-w-2xl mx-auto text-center mb-12">
             <Reveal>
               <Badge variant="outline" className="mb-4 text-primary border-primary/30">
-                Nos atouts
+                {t("about.atouts.badge")}
               </Badge>
             </Reveal>
             <Reveal delay={0.05}>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
-                Des équipes confirmées
+                {t("about.atouts.title")}
               </h2>
             </Reveal>
           </div>
@@ -295,7 +276,7 @@ export default function AProposPage() {
           <div className="mt-10 text-center">
             <Button asChild variant="outline">
               <Link href="/atouts">
-                Voir tous nos atouts <ArrowRight className="ml-2 h-4 w-4" />
+                {t("about.atouts.cta")} <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>
@@ -309,18 +290,17 @@ export default function AProposPage() {
             <Reveal>
               <Badge variant="outline" className="mb-4 text-primary border-primary/30">
                 <Star className="mr-1.5 h-3.5 w-3.5 text-accent" />
-                Nos références
+                {t("about.references.badge")}
               </Badge>
             </Reveal>
             <Reveal delay={0.05}>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
-                Ils nous font confiance
+                {t("about.references.title")}
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-4 text-base sm:text-lg text-muted-foreground">
-                Ils s&apos;appuient sur notre expertise logistique pour leurs
-                opérations en Afrique de l&apos;Ouest.
+                {t("about.references.desc")}
               </p>
             </Reveal>
           </div>

@@ -113,7 +113,7 @@ export function SiteHeader() {
               </Link>
             </Button>
 
-            <LanguageToggle />
+            <LanguageToggle variant={scrolled || !isHome ? "light-header" : "dark-header"} />
             <ThemeToggle variant={scrolled || !isHome ? "light-header" : "dark-header"} />
 
             <button

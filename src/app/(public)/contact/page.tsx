@@ -37,10 +37,12 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { PageHeader, Reveal } from "@/components/site/page-header";
+import { useLanguage } from "@/lib/i18n";
 import { COMPANY } from "@/lib/site-data";
 
 export default function ContactPage() {
   const { toast } = useToast();
+  const { t, lang } = useLanguage();
   const [submitting, setSubmitting] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -58,8 +60,8 @@ export default function ContactPage() {
     if (!payload.name || !payload.email || !payload.message) {
       toast({
         variant: "destructive",
-        title: "Champs requis",
-        description: "Merci de renseigner votre nom, votre email et votre message.",
+        title: t("contact.requiredTitle"),
+        description: t("contact.requiredDesc"),
       });
       return;
     }
@@ -73,17 +75,16 @@ export default function ContactPage() {
       });
       if (!res.ok) throw new Error("Request failed");
       toast({
-        title: "Message envoyé",
-        description:
-          "Merci ! Votre demande a bien été transmise. Nos équipes vous recontacteront rapidement.",
+        title: t("contact.success"),
+        description: t("contact.successDesc"),
       });
       form.reset();
     } catch {
       toast({
         variant: "destructive",
-        title: "Erreur d'envoi",
+        title: t("contact.error"),
         description:
-          `Une erreur est survenue. Vous pouvez nous écrire directement à ${COMPANY.email}.`,
+          `${t("contact.errorDesc")}${t("contact.errorEmailSuffix")}${COMPANY.email}.`,
       });
     } finally {
       setSubmitting(false);
@@ -111,9 +112,8 @@ export default function ContactPage() {
     if (!payload.name || !payload.email || !payload.message) {
       toast({
         variant: "destructive",
-        title: "Champs requis",
-        description:
-          "Merci de renseigner votre nom, votre email et votre message.",
+        title: t("contact.requiredTitle"),
+        description: t("contact.requiredDesc"),
       });
       return;
     }
@@ -127,18 +127,17 @@ export default function ContactPage() {
       });
       if (!res.ok) throw new Error("Request failed");
       toast({
-        title: "Demande envoyée",
-        description:
-          "Votre demande de rendez-vous a bien été transmise. Nous vous contacterons pour confirmer le créneau.",
+        title: t("contact.rdvSuccess"),
+        description: t("contact.rdvSuccessDesc"),
       });
       form.reset();
       setPrefTime("");
     } catch {
       toast({
         variant: "destructive",
-        title: "Erreur d'envoi",
+        title: t("contact.error"),
         description:
-          `Une erreur est survenue. Vous pouvez nous appeler au ${COMPANY.phone}.`,
+          `${t("contact.errorDesc")}${t("contact.errorPhoneSuffix")}${COMPANY.phone}.`,
       });
     } finally {
       setBooking(false);
@@ -148,9 +147,9 @@ export default function ContactPage() {
   return (
     <>
       <PageHeader
-        badge="Contact"
-        title="Parlons de votre prochain envoi"
-        subtitle="Une question, un besoin de transit, de transport ou d'entreposage ? Notre équipe vous répond avec une solution sur mesure."
+        badge={t("contact.badge")}
+        title={t("contact.title")}
+        subtitle={t("contact.desc")}
       />
 
       <section className="py-20 sm:py-28 bg-secondary/40">
@@ -160,19 +159,17 @@ export default function ContactPage() {
             <div>
               <Reveal>
                 <Badge variant="outline" className="mb-4 text-primary border-primary/30">
-                  Nos coordonnées
+                  {t("contact.coords.badge")}
                 </Badge>
               </Reveal>
               <Reveal delay={0.05}>
                 <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
-                  Joignez ABCD Ltd
+                  {t("contact.coords.title")}
                 </h2>
               </Reveal>
               <Reveal delay={0.1}>
                 <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
-                  Nous sommes basés à Dakar, au cœur de SICAP Liberté 1. Nos équipes
-                  sont disponibles pour étudier votre demande et vous proposer
-                  une solution adaptée.
+                  {t("contact.coords.desc")}
                 </p>
               </Reveal>
 
@@ -189,7 +186,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <div className="text-sm font-semibold text-foreground">
-                        Adresse
+                        {t("contact.address.label")}
                       </div>
                       <div className="text-sm text-muted-foreground mt-0.5">
                         {COMPANY.addressLine1}
@@ -208,7 +205,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <div className="text-sm font-semibold text-foreground">
-                        Téléphone
+                        {t("contact.phone")}
                       </div>
                       <div className="text-sm text-muted-foreground mt-0.5">
                         <a href={`tel:${COMPANY.phoneHref}`} className="hover:text-accent transition-colors block">
@@ -230,7 +227,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <div className="text-sm font-semibold text-foreground">
-                        Email
+                        {t("contact.email")}
                       </div>
                       <div className="text-sm text-muted-foreground mt-0.5">
                         {COMPANY.email}
@@ -244,8 +241,7 @@ export default function ContactPage() {
                 <div className="mt-6 flex items-center gap-3 p-4 rounded-xl bg-primary text-primary-foreground">
                   <Languages className="h-5 w-5 text-accent shrink-0" />
                   <p className="text-sm">
-                    <span className="font-semibold">Bilingue</span> — nous
-                    accompagnons nos clients en français et en anglais.
+                    {t("contact.bilingual")}
                   </p>
                 </div>
               </Reveal>
@@ -255,10 +251,9 @@ export default function ContactPage() {
             <Reveal delay={0.1}>
               <Card className="shadow-xl border-border/80">
                 <CardHeader>
-                  <CardTitle className="text-xl">Demande de devis</CardTitle>
+                  <CardTitle className="text-xl">{t("contact.formTitle")}</CardTitle>
                   <CardDescription>
-                    Réponse sous 24h ouvrées. Vos informations restent
-                    confidentielles.
+                    {t("contact.formDesc")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -266,18 +261,18 @@ export default function ContactPage() {
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="name">
-                          Nom complet <span className="text-destructive">*</span>
+                          {t("contact.name")} <span className="text-destructive">*</span>
                         </Label>
                         <Input
                           id="name"
                           name="name"
-                          placeholder="Votre nom"
+                          placeholder={t("contact.placeholder.name")}
                           autoComplete="name"
                           required
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="phone">Téléphone</Label>
+                        <Label htmlFor="phone">{t("contact.phone")}</Label>
                         <Input
                           id="phone"
                           name="phone"
@@ -289,7 +284,7 @@ export default function ContactPage() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">
-                        Email <span className="text-destructive">*</span>
+                        {t("contact.email")} <span className="text-destructive">*</span>
                       </Label>
                       <Input
                         id="email"
@@ -301,22 +296,22 @@ export default function ContactPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="subject">Sujet</Label>
+                      <Label htmlFor="subject">{t("contact.subject")}</Label>
                       <Input
                         id="subject"
                         name="subject"
-                        placeholder="Ex : Transit import, fret maritime..."
+                        placeholder={t("contact.placeholder.subject")}
                       />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="message">
-                        Message <span className="text-destructive">*</span>
+                        {t("contact.message")} <span className="text-destructive">*</span>
                       </Label>
                       <Textarea
                         id="message"
                         name="message"
                         rows={5}
-                        placeholder="Décrivez votre besoin : nature de la marchandise, origine, destination, volume, délai..."
+                        placeholder={t("contact.placeholder.message")}
                         required
                       />
                     </div>
@@ -329,11 +324,11 @@ export default function ContactPage() {
                       {submitting ? (
                         <>
                           <span className="h-4 w-4 mr-2 rounded-full border-2 border-accent-foreground/40 border-t-accent-foreground animate-spin" />
-                          Envoi en cours...
+                          {t("contact.sending")}
                         </>
                       ) : (
                         <>
-                          Envoyer la demande <Send className="ml-2 h-4 w-4" />
+                          {t("contact.send")} <Send className="ml-2 h-4 w-4" />
                         </>
                       )}
                     </Button>
@@ -356,24 +351,21 @@ export default function ContactPage() {
             <Reveal>
               <Badge className="mb-4 bg-white/10 text-white border border-white/20 hover:bg-white/15">
                 <CalendarDays className="mr-1.5 h-3.5 w-3.5" />
-                Rendez-vous
+                {t("contact.rdvBadge")}
               </Badge>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-                Prendre rendez-vous
+                {t("contact.rdv")}
               </h2>
               <p className="mt-4 text-base sm:text-lg text-white/80 leading-relaxed">
-                Planifiez un échange avec nos experts logistiques. Choisissez un
-                créneau et décrivez votre besoin : nous vous recontactons pour
-                confirmer le rendez-vous (en visio, par téléphone ou à notre
-                bureau de Dakar).
+                {t("contact.rdvIntro")}
               </p>
 
               <div className="mt-8 space-y-3">
                 {[
-                  { icon: Clock, text: "Réponse sous 24h ouvrées" },
-                  { icon: User, text: "Échange avec un conseiller dédié" },
-                  { icon: Building2, text: "Sur place, en visio ou par téléphone" },
-                  { icon: Calendar, text: "Créneau confirmé par email" },
+                  { icon: Clock, text: t("contact.rdvBenefit1") },
+                  { icon: User, text: t("contact.rdvBenefit2") },
+                  { icon: Building2, text: t("contact.rdvBenefit3") },
+                  { icon: Calendar, text: t("contact.rdvBenefit4") },
                 ].map((b) => (
                   <div
                     key={b.text}
@@ -394,10 +386,10 @@ export default function ContactPage() {
                 <CardHeader>
                   <CardTitle className="text-xl flex items-center gap-2">
                     <CalendarDays className="h-5 w-5 text-primary" />
-                    Demande de rendez-vous
+                    {t("contact.rdvTitle")}
                   </CardTitle>
                   <CardDescription>
-                    Les champs marqués d&apos;un astérisque (*) sont obligatoires.
+                    {t("contact.rdvCardDesc")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -405,19 +397,19 @@ export default function ContactPage() {
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="rdv-name">
-                          Nom complet <span className="text-destructive">*</span>
+                          {t("contact.name")} <span className="text-destructive">*</span>
                         </Label>
                         <Input
                           id="rdv-name"
                           name="rdv-name"
-                          placeholder="Votre nom"
+                          placeholder={t("contact.placeholder.name")}
                           autoComplete="name"
                           required
                         />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="rdv-email">
-                          Email <span className="text-destructive">*</span>
+                          {t("contact.email")} <span className="text-destructive">*</span>
                         </Label>
                         <Input
                           id="rdv-email"
@@ -431,7 +423,7 @@ export default function ContactPage() {
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="rdv-phone">Téléphone</Label>
+                        <Label htmlFor="rdv-phone">{t("contact.phone")}</Label>
                         <Input
                           id="rdv-phone"
                           name="rdv-phone"
@@ -441,26 +433,26 @@ export default function ContactPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="rdv-company">Société</Label>
+                        <Label htmlFor="rdv-company">{t("contact.company")}</Label>
                         <Input
                           id="rdv-company"
                           name="rdv-company"
-                          placeholder="Nom de votre entreprise"
+                          placeholder={t("contact.placeholder.company")}
                           autoComplete="organization"
                         />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="rdv-subject">Sujet</Label>
+                      <Label htmlFor="rdv-subject">{t("contact.subject")}</Label>
                       <Input
                         id="rdv-subject"
                         name="rdv-subject"
-                        placeholder="Ex : Fret maritime, transit, entreposage..."
+                        placeholder={t("contact.placeholder.rdvSubject")}
                       />
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="rdv-date">Date souhaitée</Label>
+                        <Label htmlFor="rdv-date">{t("contact.rdvDate")}</Label>
                         <Input
                           id="rdv-date"
                           name="rdv-date"
@@ -468,10 +460,10 @@ export default function ContactPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="rdv-time">Heure souhaitée</Label>
+                        <Label htmlFor="rdv-time">{t("contact.rdvTime")}</Label>
                         <Select value={prefTime} onValueChange={setPrefTime}>
                           <SelectTrigger id="rdv-time">
-                            <SelectValue placeholder="Sélectionner un créneau" />
+                            <SelectValue placeholder={t("contact.placeholder.timeslot")} />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="09:00">09:00</SelectItem>
@@ -488,13 +480,13 @@ export default function ContactPage() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="rdv-message">
-                        Message <span className="text-destructive">*</span>
+                        {t("contact.message")} <span className="text-destructive">*</span>
                       </Label>
                       <Textarea
                         id="rdv-message"
                         name="rdv-message"
                         rows={4}
-                        placeholder="Décrivez l'objet du rendez-vous : nature du besoin, contexte, points à aborder..."
+                        placeholder={t("contact.placeholder.rdvMessage")}
                         required
                       />
                     </div>
@@ -507,11 +499,11 @@ export default function ContactPage() {
                       {booking ? (
                         <>
                           <span className="h-4 w-4 mr-2 rounded-full border-2 border-accent-foreground/40 border-t-accent-foreground animate-spin" />
-                          Envoi en cours...
+                          {t("contact.sending")}
                         </>
                       ) : (
                         <>
-                          Demander un rendez-vous{" "}
+                          {t("contact.rdvBtn")}{" "}
                           <CalendarDays className="ml-2 h-4 w-4" />
                         </>
                       )}
@@ -531,14 +523,13 @@ export default function ContactPage() {
             <div className="text-center mb-10">
               <Badge variant="outline" className="mb-4 text-primary border-primary/30">
                 <Navigation className="mr-1.5 h-3.5 w-3.5" />
-                Nous trouver
+                {t("contact.findUs")}
               </Badge>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
-                SICAP Liberté 1 — Dakar
+                {t("contact.address")}
               </h2>
               <p className="mt-3 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-                Notre bureau est situé à Dakar, au cœur de SICAP Liberté 1. Utilisez
-                la carte ci-dessous pour vous rendre chez nous.
+                {t("contact.addressDesc")}
               </p>
             </div>
           </Reveal>
@@ -549,7 +540,7 @@ export default function ContactPage() {
               <div className="lg:col-span-2">
                 <div className="relative rounded-2xl overflow-hidden ring-1 ring-border shadow-lg h-[380px] sm:h-[460px] bg-secondary">
                   <iframe
-                    title="Carte ABCD Ltd - SICAP Liberté 1, Dakar"
+                    title={t("contact.mapTitle")}
                     src="https://www.openstreetmap.org/export/embed.html?bbox=-17.4680%2C14.6880%2C-17.4280%2C14.7080&layer=mapnik&marker=14.6980%2C-17.4480"
                     className="absolute inset-0 h-full w-full"
                     style={{ border: 0 }}
@@ -579,11 +570,10 @@ export default function ContactPage() {
                       </div>
                       <div>
                         <h3 className="text-base font-bold text-foreground">
-                          Obtenir l&apos;itinéraire
+                          {t("contact.itinerary")}
                         </h3>
                         <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
-                          Cliquez ci-dessous pour ouvrir l&apos;itinéraire vers
-                          notre bureau depuis votre position.
+                          {t("contact.itineraryDesc")}
                         </p>
                       </div>
                     </div>
@@ -597,7 +587,7 @@ export default function ContactPage() {
                         rel="noopener noreferrer"
                       >
                         <Navigation className="mr-2 h-4 w-4" />
-                        Itinéraire Google Maps
+                        {t("contact.googleMaps")}
                         <ExternalLink className="ml-2 h-3.5 w-3.5" />
                       </a>
                     </Button>
@@ -612,7 +602,7 @@ export default function ContactPage() {
                         rel="noopener noreferrer"
                       >
                         <MapPin className="mr-2 h-4 w-4" />
-                        Voir sur OpenStreetMap
+                        {t("contact.openStreet")}
                         <ExternalLink className="ml-2 h-3.5 w-3.5" />
                       </a>
                     </Button>
@@ -623,22 +613,21 @@ export default function ContactPage() {
                   <CardContent className="pt-6">
                     <h3 className="text-sm font-semibold uppercase tracking-wide text-white/80 flex items-center gap-2">
                       <MapPin className="h-4 w-4 text-accent" />
-                      Coordonnées GPS
+                      {t("contact.gps")}
                     </h3>
                     <div className="mt-3 space-y-2 text-sm">
                       <div className="flex items-center justify-between">
-                        <span className="text-white/70">Latitude</span>
+                        <span className="text-white/70">{t("contact.latitude")}</span>
                         <span className="font-mono font-medium">14.6980° N</span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-white/70">Longitude</span>
+                        <span className="text-white/70">{t("contact.longitude")}</span>
                         <span className="font-mono font-medium">17.4480° W</span>
                       </div>
                     </div>
                     <div className="mt-4 pt-4 border-t border-white/15">
                       <p className="text-xs text-white/70 leading-relaxed">
-                        Le Sénégal (UTM/GMT) est dans le fuseau horaire GMT+0.
-                        Nos bureaux sont ouverts du lundi au vendredi.
+                        {t("contact.gpsNote")}
                       </p>
                     </div>
                   </CardContent>
