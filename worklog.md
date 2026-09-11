@@ -397,3 +397,63 @@ Next Actions:
 - The dashboard sidebar (`src/app/dashboard/layout.tsx`) does not currently include a "Messagerie" link — to surface this page in the admin UI, add a nav item like `{ href: "/dashboard/messagerie", label: "Messagerie", icon: Inbox }` (or reuse `Mail`). Out of scope for this task but recommended.
 - Optionally add a download endpoint for attachments (current page lists them display-only as specified).
 - Optionally persist the selected email across inbox refreshes by re-fetching detail after `fetchInbox` if `selectedUid` still exists in the new list.
+
+---
+Task ID: maintenance-lang
+Agent: Sub-agent (general-purpose)
+Task: Build the public maintenance page (/maintenance), the dashboard maintenance config page (/dashboard/maintenance), and a shared LanguageToggle component
+
+Work Log:
+- Read `worklog.md` for project context (brand palette, dashboard layout conventions, prior SEO/Email/Messagerie dashboard pages pattern), the `/api/maintenance` GET/PUT route (returns `{ ok, data: { enabled, messageFr, messageEn, endTime, updatedAt } }`), `src/lib/i18n.tsx` (LanguageProvider + `useLanguage` hook with `lang`/`toggleLang`/`t`, with `maintenance.days/hours/minutes/seconds` keys already defined FR+EN), `src/components/theme-toggle.tsx` (accepts `variant: "light-header" | "dark-header"`), and `src/app/dashboard/seo/page.tsx` + `src/app/dashboard/email/page.tsx` for dashboard card + sticky-save-bar styling patterns.
+- Confirmed `src/app/dashboard/layout.tsx` already ships a "Maintenance" sidebar entry (Wrench icon → `/dashboard/maintenance`), so no layout changes were required.
+- Verified `globals.css` already defines the `.glass-card` utility (rgba white + backdrop-blur) — reused directly on the countdown cards and the top-corner control chips on the public page.
+- Created three files (no other files modified, no tests created).
+
+FILE 1 — `/home/z/my-project/src/app/maintenance/page.tsx` (public, full-screen, OUTSIDE the `(public)` route group → no header/footer):
+- `"use client"` standalone page; uses `useLanguage`, `ThemeToggle`, `LanguageToggle`, `motion`, `Mail`/`Clock`/`Globe` from lucide-react, `Button`.
+- Full-screen dark navy gradient background `bg-gradient-to-b from-[#0c1f4a] via-[#14306e] to-[#0c1f4a]` with two decorative blur orbs (amber top-left, blue bottom-right).
+- Top-right controls (z-20): `LanguageToggle` and `ThemeToggle variant="dark-header"` each wrapped in a `glass-card rounded-full` chip so they read against the dark background. Top-left shows the current language ("Français"/"English") in another glass chip with a Globe icon (hidden on mobile).
+- Centered logo: 24/28 (h/w) rounded-2xl white container with `ring-1 ring-white/40 shadow-2xl` holding `/logo-abcd-transparent.png`.
+- Title rendered bilingually from `lang`: "Maintenance en cours" / "Maintenance in progress".
+- Maintenance message pulled from `/api/maintenance` (GET, `cache: "no-store"`) — falls back to the API defaults on error.
+- Countdown: 4 glass cards (Days / Hours / Minutes / Seconds) with big tabular-nums numbers using a gold gradient text fill (`background-clip: text`), `ring-1 ring-amber-300/30`, labels uppercased via `t("maintenance.days|hours|minutes|seconds")` so they stay in sync with the i18n dictionary.
+- When `endTime` is null the countdown section is omitted entirely; when the remaining time hits 0 a single glass card with a Clock icon ring shows "Nous sommes de retour !" / "We are back!".
+- "Contactez-nous" / "Contact us" outline button with Mail icon links to `mailto:abcdev@gmail.com`.
+- Footer hint "ABCD Ltd — Dakar, Sénégal".
+- Framer Motion: staggered entrance animations (opacity + y/scale) on logo, title, message, countdown block, contact button, and footer hint.
+- COUNTDOWN IMPLEMENTATION: Refactored to avoid `react-hooks/set-state-in-effect` lint error. Uses a `now` state that ticks every second via `setInterval` (effect only subscribes to an external timer — no synchronous `setState` in effect body). `timeLeft` and `done` are DERIVED each render from `data.endTime` + `now` via a pure `computeTimeLeft(endTime, now)` helper (not stored in state). The interval only runs when `data.endTime` is set.
+
+FILE 2 — `/home/z/my-project/src/app/dashboard/maintenance/page.tsx`:
+- `"use client"` page rendering `<main className="flex-1 mx-auto max-w-4xl w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">` (matches SEO/email page wrapper, max-w-4xl per task spec).
+- Header: Wrench icon chip + "Maintenance" title + subtitle; right side shows a status Badge (emerald "Site actif" / destructive "Maintenance activée" with AlertTriangle/CheckCircle2 icons) and an "Actualiser" outline button with spinning RefreshCw.
+- Amber warning banner: "Quand la maintenance est activée, les visiteurs du site sont redirigés vers la page de maintenance. Le tableau de bord reste accessible aux administrateurs connectés."
+- Card 1 — "Mode maintenance": shadcn `Switch` bound to `data.enabled`; toggling PUTs `{ enabled }` to `/api/maintenance` with optimistic update + revert on failure + success/info toast ("Maintenance activée" / "Maintenance désactivée").
+- Card 2 — "Messages affichés": two `Textarea`s (FR / EN) with FR/EN pill chips on the labels; placeholders are the API defaults.
+- Card 3 — "Fin de maintenance": `Input type="datetime-local"` bound to a local `endTimeInput` string state (preserves partial entry); helper shows a localized (`fr-FR`) preview of the chosen time. Empty value = no countdown.
+- Card 4 — "Aperçu de la page publique": mini browser-frame preview of the maintenance page (top bar with FR/EN + Maintenance/Site actif chips, body with the navy gradient, mini logo, title, message in current dashboard language, optional end-time pill, contact button). Reflects `useLanguage().lang` and the live message fields.
+- Sticky save bar (fixed bottom, full-width, `bg-background/95 backdrop-blur`, max-w-4xl inner): shows last-modified timestamp (or "Aucune modification enregistrée"), "Réinitialiser" outline button (re-fetches), and "Enregistrer" accent-gold button. Save PUTs `{ enabled, messageFr, messageEn, endTime }` (endTime converted via `new Date(endTimeInput).toISOString()` or null when empty). Form submit handler validates both messages non-empty.
+- `toLocalInputValue(iso)` helper converts the stored ISO `endTime` into the `YYYY-MM-DDTHH:MM` format expected by `datetime-local` inputs.
+- All toasts via `useToast()`; loading/saving/toggling flags drive disabled states and spinners.
+- Imports: `useEffect, useState, useCallback` from react; shadcn Card/CardHeader/CardTitle/CardDescription/CardContent, Switch, Input, Textarea, Label, Button, Badge; lucide Wrench, Save, RefreshCw, CheckCircle2, AlertTriangle, Globe, Clock, Eye; `useToast` from `@/hooks/use-toast`; `useLanguage` from `@/lib/i18n`. (A tiny inline `MailIcon` SVG is used only inside the preview to avoid an extra lucide import for a 12px decorative icon.)
+
+FILE 3 — `/home/z/my-project/src/components/language-toggle.tsx`:
+- Exact spec from the task: ghost Button with Globe icon + `lang.toUpperCase()` label, calls `toggleLang` from `useLanguage`. Reusable from any page (used here by the public maintenance page's top-right chip).
+
+Lint / type-check:
+- First eslint run flagged 3 issues:
+  1. `react-hooks/set-state-in-effect` error on the public page's countdown effect (synchronous `setTimeLeft`/`setDone` inside `useEffect`).
+  2. Unused `eslint-disable-next-line @next/next/no-img-element` directives on the `<img>` tags in both pages (the project's eslint config does NOT flag plain `<img>` — same finding as Task about-update).
+- Fix 1: Refactored the countdown to derive `timeLeft`/`done` from a ticking `now` state instead of storing them. `computeTimeLeft(endTime, now)` is now a pure helper called during render; the only effect just sets up `setInterval` to bump `now` — no synchronous `setState` in the effect body. `now` is referenced by `computeTimeLeft(data.endTime, now)` so it isn't an unused var.
+- Fix 2: Removed the unnecessary `eslint-disable-next-line` comments before both `<img>` tags (public page logo + dashboard preview logo).
+- Final `bunx eslint src/app/maintenance/page.tsx src/app/dashboard/maintenance/page.tsx src/components/language-toggle.tsx` → EXIT=0, 0 errors, 0 warnings (no output).
+- `bunx tsc --noEmit --skipLibCheck` filtered for the new files → no errors.
+
+Stage Summary:
+- 3 new files created (no existing files modified):
+  - `src/components/language-toggle.tsx` (20 lines)
+  - `src/app/maintenance/page.tsx` (258 lines) — standalone full-screen bilingual maintenance page with countdown + glassmorphism cards
+  - `src/app/dashboard/maintenance/page.tsx` (488 lines) — admin config: enable Switch + FR/EN messages + datetime-local end time + live preview + sticky save bar
+- All three lint-clean (0 errors / 0 warnings) and type-clean.
+- The dashboard sidebar already links to `/dashboard/maintenance`; no nav change needed.
+- When `enabled=true` is saved in the dashboard, the middleware will redirect public visitors to `/maintenance` (the redirect behavior lives in `src/middleware.ts`, already in place per prior worklog entries).
+- Recommended next: smoke-test the full flow with the Agent Browser — toggle maintenance on from `/dashboard/maintenance`, visit `/` as an anonymous visitor to confirm the redirect + countdown render correctly, then toggle off. Then commit + push to GitHub.

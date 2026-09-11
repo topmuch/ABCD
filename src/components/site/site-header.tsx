@@ -8,6 +8,7 @@ import { Menu, X, ArrowRight, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NAV_LINKS } from "@/lib/site-data";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageToggle } from "@/components/language-toggle";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -104,6 +105,7 @@ export function SiteHeader() {
             </Button>
 
             {/* Dark mode toggle */}
+            <LanguageToggle />
             <ThemeToggle variant={scrolled || !isHome ? "light-header" : "dark-header"} />
 
             {/* Mobile toggle */}

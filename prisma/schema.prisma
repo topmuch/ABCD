@@ -138,3 +138,13 @@ model EmailSettings {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
+
+model MaintenanceSettings {
+  id              String   @id @default("singleton")
+  enabled         Boolean  @default(false)
+  messageFr       String   @default("Site en maintenance. Nous serons de retour très bientôt.")
+  messageEn       String   @default("Site under maintenance. We will be back very soon.")
+  endTime         DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

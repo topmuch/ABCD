@@ -16,11 +16,13 @@ import {
   CalendarDays,
   Bell,
   Inbox,
+  Wrench,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { UserMenu, LogoutButton } from "@/components/dashboard/user-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageToggle } from "@/components/language-toggle";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Vue d'ensemble", icon: LayoutDashboard, exact: true },
@@ -32,6 +34,7 @@ const NAV_ITEMS = [
   { href: "/dashboard/rendez-vous", label: "Rendez-vous", icon: CalendarDays },
   { href: "/dashboard/email", label: "Email & Notifications", icon: Bell },
   { href: "/dashboard/seo", label: "Paramètres SEO", icon: Settings },
+  { href: "/dashboard/maintenance", label: "Maintenance", icon: Wrench },
 ];
 
 function SidebarLink({
@@ -95,7 +98,10 @@ export default function DashboardLayout({
               </div>
             </div>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-1">
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
         </div>
 
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
