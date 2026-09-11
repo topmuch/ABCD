@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/i18n";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { motion } from "framer-motion";
-import { Mail, Clock, Globe } from "lucide-react";
+import { Mail, Clock, Globe, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "@/components/language-toggle";
 
@@ -224,12 +224,12 @@ export default function MaintenancePage() {
           </motion.div>
         )}
 
-        {/* Contact link */}
+        {/* Contact + Login buttons */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.45, ease: "easeOut" }}
-          className="mt-10"
+          className="mt-10 flex flex-wrap items-center justify-center gap-3"
         >
           <Button
             asChild
@@ -239,6 +239,15 @@ export default function MaintenancePage() {
             <a href="mailto:abcdev@gmail.com">
               <Mail className="h-4 w-4" />
               {contactLabel}
+            </a>
+          </Button>
+          <Button
+            asChild
+            className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90 shadow-md shadow-accent/20"
+          >
+            <a href="/login">
+              <LogIn className="h-4 w-4" />
+              {lang === "fr" ? "Connexion" : "Login"}
             </a>
           </Button>
         </motion.div>
