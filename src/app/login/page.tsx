@@ -109,12 +109,11 @@ function LoginForm() {
           {/* Logo + back */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="h-14 w-14 rounded-xl overflow-hidden bg-white p-1.5 shadow-lg">
-                { }
+              <div className="rounded-xl overflow-hidden bg-white p-2 shadow-lg">
                 <img
                   src="/logo-abcd-transparent.png"
                   alt="Logo ABCD Ltd"
-                  className="h-full w-full object-contain"
+                  className="h-20 w-auto sm:h-24 object-contain"
                 />
               </div>
               <div className="text-xs text-white/60 uppercase tracking-widest">
@@ -183,12 +182,11 @@ function LoginForm() {
 
         {/* Mobile top bar */}
         <div className="lg:hidden flex items-center justify-between p-5 relative z-10">
-          <div className="h-12 w-12 rounded-xl overflow-hidden bg-white p-1 ring-1 ring-border shadow">
-            { }
+          <div className="rounded-xl overflow-hidden bg-white p-1.5 ring-1 ring-border shadow">
             <img
               src="/logo-abcd-transparent.png"
               alt="Logo ABCD Ltd"
-              className="h-full w-full object-contain"
+              className="h-16 w-auto object-contain"
             />
           </div>
           <ThemeToggle />

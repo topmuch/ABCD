@@ -34,11 +34,11 @@ export function SiteFooter() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3">
-              <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-lg overflow-hidden bg-white p-1">
+              <div className="rounded-lg overflow-hidden bg-white p-1.5 shrink-0">
                 <img
                   src="/logo-abcd-transparent.png"
                   alt="Logo ABCD Ltd"
-                  className="h-full w-full object-contain"
+                  className="h-16 w-auto sm:h-20 object-contain"
                 />
               </div>
               <div className="text-xs text-white/60">
